@@ -13,6 +13,9 @@ CREATE TABLE `Account`
     PRIMARY KEY (`userId`)
 );
 
+# INSERT INTO `Account` (`userName`, `email`, `password`)
+# VALUES ('user1', 'user1@example.com', 'password1');
+
 CREATE TABLE `Movie`
 (
     `movieId`     INT       NOT NULL AUTO_INCREMENT,

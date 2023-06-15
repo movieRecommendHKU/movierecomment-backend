@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.movie.mapper.AccountMapper">
+
+    <!-- 插入新用户信息 -->
+    <insert id="insertAccount" parameterType="com.project.movie.domain.User" useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO User (userName, email, password) VALUES (#{userName}, #{email}, #{password})
+    </insert>
+
+
+    <select id="findByEmail" parameterType="String" resultType="com.project.movie.domain.User">
+        SELECT * FROM User WHERE email = #{email}
+    </select>
+
+
+</mapper>
