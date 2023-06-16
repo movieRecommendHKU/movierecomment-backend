@@ -64,25 +64,38 @@ CREATE TABLE `ActorInter`
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Action`
+--收藏
+CREATE TABLE `Star`
 (
-    `actionId`  INT       NOT NULL AUTO_INCREMENT,
+    `starId`  INT       NOT NULL AUTO_INCREMENT,
     `userId`    INT       NOT NULL,
     `movieId`   INT       NOT NULL,
     `actorName` CHAR(255) NOT NULL,
-    PRIMARY KEY (`actionId`),
+    PRIMARY KEY (`starId`),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Content`
+CREATE TABLE `Dislike`
 (
-    `contentId` INT NOT NULL AUTO_INCREMENT,
+    `dislikeId`  INT       NOT NULL AUTO_INCREMENT,
+    `userId`    INT       NOT NULL,
+    `movieId`   INT       NOT NULL,
+    `actorName` CHAR(255) NOT NULL,
+    PRIMARY KEY (`dislikeId`),
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
+    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE `Comment`
+(
+    `commentId` INT NOT NULL AUTO_INCREMENT,
     `userId`    INT NOT NULL,
     `movieId`   INT NOT NULL,
     `timestamp` DATE,
     `content`   CHAR(255),
-    PRIMARY KEY (`contentId`),
+    PRIMARY KEY (`commentId`),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
