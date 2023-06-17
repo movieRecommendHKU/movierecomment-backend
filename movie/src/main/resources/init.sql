@@ -17,10 +17,10 @@ CREATE TABLE `Movie`
 (
     `movieId`     INT       NOT NULL AUTO_INCREMENT,
     `movieName`   CHAR(255) NOT NULL,
-    `overview`    CHAR(255),
+    `overview`    blob,
     `director`    CHAR(255),
     `producer`    CHAR(255),
-    `rating`      FLOAT,
+    `rating`      double,
     `releaseDate` DATE,
     PRIMARY KEY (`movieId`)
 );
@@ -32,15 +32,21 @@ CREATE TABLE `KeyWord`
     PRIMARY KEY (`keyId`)
 );
 
-CREATE TABLE `KeyWordInter`
+CREATE TABLE MovieKeyWord
 (
-    `keyWordInterId` INT       NOT NULL AUTO_INCREMENT,
-    `keyId`          INT       NOT NULL,
-    `keyName`        CHAR(255) NOT NULL,
-    `movieId`        INT       NOT NULL,
-    PRIMARY KEY (`keyWordInterId`),
+    `keyId`   INT       NOT NULL,
+    `keyName` CHAR(255) NOT NULL,
+    `movieId` INT       NOT NULL,
     FOREIGN KEY (`keyId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Preference`
+(
+    `userId` INT NOT NULL,
+    `keyId`  INT NOT NULL,
+    FOREIGN KEY (`keyId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Actor`
@@ -50,63 +56,79 @@ CREATE TABLE `Actor`
     PRIMARY KEY (`actorId`)
 );
 
-CREATE TABLE `ActorInter`
+CREATE TABLE MovieActor
 (
-    `actorInterId` INT       NOT NULL AUTO_INCREMENT,
-    `actorId`      INT       NOT NULL,
-    `movieId`      INT       NOT NULL,
-    `actorName`    CHAR(255) NOT NULL,
-    PRIMARY KEY (`actorInterId`),
+    `actorId`   INT       NOT NULL,
+    `movieId`   INT       NOT NULL,
+    `actorName` CHAR(255) NOT NULL,
     FOREIGN KEY (`actorId`) REFERENCES `Actor` (`actorId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Action`
+CREATE TABLE Collect
 (
-    `actionId`  INT       NOT NULL AUTO_INCREMENT,
-    `userId`    INT       NOT NULL,
-    `movieId`   INT       NOT NULL,
-    `actorName` CHAR(255) NOT NULL,
-    PRIMARY KEY (`actionId`),
+    collectId INT NOT NULL AUTO_INCREMENT,
+    `userId`  INT NOT NULL,
+    `movieId` INT NOT NULL,
+    PRIMARY KEY (collectId),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Content`
+CREATE TABLE Dislike
 (
-    `contentId` INT NOT NULL AUTO_INCREMENT,
+    dislikeId INT NOT NULL AUTO_INCREMENT,
+    `userId`  INT NOT NULL,
+    `movieId` INT NOT NULL,
+    PRIMARY KEY (dislikeId),
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
+    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
+);
+
+CREATE TABLE Comment
+(
+    `comment`   INT NOT NULL AUTO_INCREMENT,
     `userId`    INT NOT NULL,
     `movieId`   INT NOT NULL,
     `timestamp` DATE,
-    `content`   CHAR(255),
-    PRIMARY KEY (`contentId`),
+    `content`   blob,
+    PRIMARY KEY (comment),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Rating`
 (
-    `contentId` INT NOT NULL AUTO_INCREMENT,
+    `ratingId`  INT NOT NULL AUTO_INCREMENT,
     `userId`    INT NOT NULL,
     `movieId`   INT NOT NULL,
     `timestamp` DATE,
-    `rating`    FLOAT,
-    PRIMARY KEY (`contentId`),
+    `rating`    double,
+    PRIMARY KEY (ratingId),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
 
-CREATE TABLE `Transaction`
+CREATE TABLE SearchHistory
 (
-    `searchId`  INT AUTO_INCREMENT,
-    `userId`    INT       NOT NULL,
-    `timestamp` DATE      NOT NULL,
-    `keywords`  CHAR(255) NOT NULL,
-    `results`   CHAR(255),
-    `clickeds`  INT       NOT NULL,
+    `searchId`    INT AUTO_INCREMENT,
+    `userId`      INT       NOT NULL,
+    `timestamp`   DATE      NOT NULL,
+    `searchType`  INT       NOT NULL,
+    `searchWords` CHAR(255) NOT NULL,
     PRIMARY KEY (`searchId`),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
+);
+
+CREATE TABLE SearchClickedHistory
+(
+    `searchId`  INT  NOT NULL,
+    `clickedId` INT  NOT NULL,
+    `userId`    INT  NOT NULL,
+    `timestamp` DATE NOT NULL,
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
+    FOREIGN KEY (`searchId`) REFERENCES `SearchHistory` (`searchId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `OuterMovieDb`
@@ -115,20 +137,18 @@ CREATE TABLE `OuterMovieDb`
     `ImdbId`  INT,
     `tmdbId`  INT,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
-#     FOREIGN KEY (`imdbId`) REFERENCES `IMDB` (`imdbId`) ON DELETE CASCADE,
-#     FOREIGN KEY (`tmdbId`) REFERENCES `TMDB` (`tmdbId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `MovieSimilarity`
 (
-    `movieId`       INT,
-    `similarMovies` INT,
-    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`)
+    `movieId`         INT,
+    `similarMovieIds` char(255),
+    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `UserSimilarity`
 (
-    `userId`       INT,
-    `similarUsers` INT,
-    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`)
+    `userId`         INT,
+    `similarUserIds` char(255),
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
