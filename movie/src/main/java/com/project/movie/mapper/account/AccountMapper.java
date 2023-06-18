@@ -1,6 +1,6 @@
-package com.project.movie.mapper;
+package com.project.movie.mapper.account;
 
-import com.project.movie.domain.User;
+import com.project.movie.domain.DO.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

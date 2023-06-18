@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UserLoginVO {
-    private Long userId;
+    private Integer userId;
 
     private String userName;
 

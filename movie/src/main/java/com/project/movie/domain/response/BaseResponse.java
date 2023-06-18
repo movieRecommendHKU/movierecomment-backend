@@ -1,11 +1,13 @@
-package com.project.movie.domain;
+package com.project.movie.domain.response;
 
 import org.springframework.http.HttpStatus;
 
+import java.io.Serial;
 import java.util.HashMap;
 
-public class AjaxResult extends HashMap<String, Object>
+public class BaseResponse extends HashMap<String, Object>
 {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /** 状态码 */
@@ -18,32 +20,32 @@ public class AjaxResult extends HashMap<String, Object>
     public static final String DATA_TAG = "data";
 
     /**
-     * 初始化一个新创建的 AjaxResult 对象，使其表示一个空消息。
+     * 初始化一个新创建的 BaseResponse 对象，使其表示一个空消息。
      */
-    public AjaxResult()
+    public BaseResponse()
     {
     }
 
     /**
-     * 初始化一个新创建的 AjaxResult 对象
+     * 初始化一个新创建的 BaseResponse 对象
      *
      * @param code 状态码
      * @param msg 返回内容
      */
-    public AjaxResult(int code, String msg)
+    public BaseResponse(int code, String msg)
     {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
     }
 
     /**
-     * 初始化一个新创建的 AjaxResult 对象
+     * 初始化一个新创建的 BaseResponse 对象
      *
      * @param code 状态码
      * @param msg 返回内容
      * @param data 数据对象
      */
-    public AjaxResult(int code, String msg, Object data)
+    public BaseResponse(int code, String msg, Object data)
     {
         super.put(CODE_TAG, code);
         super.put(MSG_TAG, msg);
@@ -53,7 +55,7 @@ public class AjaxResult extends HashMap<String, Object>
 //        }
     }
 
-    public AjaxResult(HttpStatus error, String msg, Object data){
+    public BaseResponse(HttpStatus error, String msg, Object data){
         super.put(CODE_TAG, error);
         super.put(MSG_TAG, msg);
         super.put(DATA_TAG, data);
@@ -64,9 +66,9 @@ public class AjaxResult extends HashMap<String, Object>
      *
      * @return 成功消息
      */
-    public static AjaxResult success()
+    public static BaseResponse success()
     {
-        return AjaxResult.success("操作成功");
+        return BaseResponse.success("操作成功");
     }
 
     /**
@@ -74,9 +76,9 @@ public class AjaxResult extends HashMap<String, Object>
      *
      * @return 成功消息
      */
-    public static AjaxResult success(Object data)
+    public static BaseResponse success(Object data)
     {
-        return AjaxResult.success("操作成功", data);
+        return BaseResponse.success("操作成功", data);
     }
 
     /**
@@ -85,9 +87,9 @@ public class AjaxResult extends HashMap<String, Object>
      * @param msg 返回内容
      * @return 成功消息
      */
-    public static AjaxResult success(String msg)
+    public static BaseResponse success(String msg)
     {
-        return AjaxResult.success(msg, null);
+        return BaseResponse.success(msg, null);
     }
 
     /**
@@ -97,9 +99,9 @@ public class AjaxResult extends HashMap<String, Object>
      * @param data 数据对象
      * @return 成功消息
      */
-    public static AjaxResult success(String msg, Object data)
+    public static BaseResponse success(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.OK, msg, data);
+        return new BaseResponse(HttpStatus.OK, msg, data);
     }
 
     /**
@@ -107,9 +109,9 @@ public class AjaxResult extends HashMap<String, Object>
      *
      * @return
      */
-    public static AjaxResult error()
+    public static BaseResponse error()
     {
-        return AjaxResult.error("操作失败");
+        return BaseResponse.error("操作失败");
     }
 
     /**
@@ -118,9 +120,9 @@ public class AjaxResult extends HashMap<String, Object>
      * @param msg 返回内容
      * @return 警告消息
      */
-    public static AjaxResult error(String msg)
+    public static BaseResponse error(String msg)
     {
-        return AjaxResult.error(msg, null);
+        return BaseResponse.error(msg, null);
     }
 
     /**
@@ -130,9 +132,9 @@ public class AjaxResult extends HashMap<String, Object>
      * @param data 数据对象
      * @return 警告消息
      */
-    public static AjaxResult error(String msg, Object data)
+    public static BaseResponse error(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.INTERNAL_SERVER_ERROR, msg, data);
+        return new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR, msg, data);
     }
 
     /**
@@ -142,8 +144,8 @@ public class AjaxResult extends HashMap<String, Object>
      * @param msg 返回内容
      * @return 警告消息
      */
-    public static AjaxResult error(int code, String msg)
+    public static BaseResponse error(int code, String msg)
     {
-        return new AjaxResult(code, msg, null);
+        return new BaseResponse(code, msg, null);
     }
 }

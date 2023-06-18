@@ -87,12 +87,12 @@ CREATE TABLE Dislike
 
 CREATE TABLE Comment
 (
-    `comment`   INT NOT NULL AUTO_INCREMENT,
+    commentId   INT NOT NULL AUTO_INCREMENT,
     `userId`    INT NOT NULL,
     `movieId`   INT NOT NULL,
     `timestamp` DATE,
     `content`   blob,
-    PRIMARY KEY (comment),
+    PRIMARY KEY (commentId),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );

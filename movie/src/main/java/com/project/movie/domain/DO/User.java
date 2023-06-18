@@ -1,4 +1,4 @@
-package com.project.movie.domain;
+package com.project.movie.domain.DO;
 
 import lombok.Data;
 import lombok.ToString;
@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 public class User {
-    private Long userId;
+    private Integer userId;
 
     private String password;
 
