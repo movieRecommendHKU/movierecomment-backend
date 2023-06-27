@@ -1,40 +1,39 @@
 //package com.project.movie.config;
 //
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.web.SecurityFilterChain;
 //
 //@Configuration
-//public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+//@EnableWebSecurity
+//public class WebSecurityConfig {
 //
-////    @Override
-////    public void configure(HttpSecurity http) throws Exception {
-////        http.authorizeRequests(authorizeRequests ->
-////                // 所有请求均放过, spring security 就没有什么用了
-////                // anyRequest() 限定任意的请求
-////                // permitAll() 无条件允许访问
-////                authorizeRequests.anyRequest().permitAll()
-////        );
-////    }
+//	@Bean
+//	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//		http
+//				.csrf().disable()
+//				.authorizeHttpRequests(requests ->
+//						requests
+//								.requestMatchers("/").permitAll()
+//								.requestMatchers("/account/register").permitAll()
+//								.requestMatchers("/account/**")
+//				)
+//				.authorizeHttpRequests()
+//				.anyRequest().authenticated()
+//				.and()
+//				.formLogin()
+//				.loginProcessingUrl("/account/login")
+//				.and()
+//				.logout()
+//				.logoutUrl("/account/logout");
 //
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .cors().and()
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/user/**").hasRole("USER")
-//                .and()
-//                .formLogin().loginPage("/login").defaultSuccessUrl("/hello")
-//                .and()
-//                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
-//    }
+//		return http.build();
+//	}
 //}
