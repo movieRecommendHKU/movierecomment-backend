@@ -21,7 +21,7 @@ CREATE TABLE `Movie`
     `director`    CHAR(255),
     `producer`    CHAR(255),
     `rating`      double,
-    `releaseDate` DATE,
+    `releaseDate` CHAR(255),
     PRIMARY KEY (`movieId`)
 );
 
