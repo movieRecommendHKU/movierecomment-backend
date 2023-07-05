@@ -22,22 +22,27 @@ CREATE TABLE `Movie`
     `producer`    CHAR(255),
     `rating`      double,
     `releaseDate` CHAR(255),
+    `popularity`  double,
+    `posterPath`  CHAR(255),
+    `voteCount`   INT,
     PRIMARY KEY (`movieId`)
 );
 
-CREATE TABLE `KeyWord`
+CREATE TABLE `Genre`
 (
-    `keyId`   INT       NOT NULL AUTO_INCREMENT,
-    `keyName` CHAR(255) NOT NULL,
+    `genreId`   INT       NOT NULL AUTO_INCREMENT,
+    `genreName` CHAR(255) NOT NULL,
     PRIMARY KEY (`keyId`)
 );
 
-CREATE TABLE MovieKeyWord
+CREATE TABLE `MovieGenre`
 (
-    `keyId`   INT       NOT NULL,
-    `keyName` CHAR(255) NOT NULL,
+    `id`   INT       NOT NULL AUTO_INCREMENT,
+    `genreId`   INT       NOT NULL,
+    `genreName` CHAR(255) NOT NULL,
     `movieId` INT       NOT NULL,
-    FOREIGN KEY (`keyId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`genreId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
@@ -49,20 +54,26 @@ CREATE TABLE `Preference`
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Actor`
+CREATE TABLE `Cast`
 (
     `actorId`   INT       NOT NULL AUTO_INCREMENT,
     `actorName` CHAR(255) NOT NULL,
+    `gender`    INT,
+    `profilePath` CHAR(255),
     PRIMARY KEY (`actorId`)
 );
 
-CREATE TABLE MovieActor
+CREATE TABLE MovieCast
 (
-    `actorId`   INT       NOT NULL,
+    `id`        INT       NOT NULL AUTO_INCREMENT,
     `movieId`   INT       NOT NULL,
-    `actorName` CHAR(255) NOT NULL,
-    FOREIGN KEY (`actorId`) REFERENCES `Actor` (`actorId`) ON DELETE CASCADE,
-    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
+    `castId`   INT        NOT NULL,
+    `castOrder` INT,
+    `character` CHAR(255),
+    `castName`  CHAR(255)
+    PRIMARY KEY(`id`)
+    FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE,
+    FOREIGN KEY (`castId`) REFERENCES `Cast` (`castId`) ON DELETE CASCADE
 );
 
 CREATE TABLE Collect
