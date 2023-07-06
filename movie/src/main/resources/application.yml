@@ -9,6 +9,11 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+  neo4j:
+    authentication:
+      username: neo4j
+      password: password
+
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
 

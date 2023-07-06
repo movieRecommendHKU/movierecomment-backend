@@ -13,11 +13,11 @@ public class AccountServiceImpl implements AccountService {
     @Resource
     private AccountMapper accountMapper;
 
-    final private static String EMPTY_ACCOUNT = "账号不存在！";
+    final private static String EMPTY_ACCOUNT = "Account not exist！";
 
-    final private static String PASSWORD_ERROR = "账号或密码错误！";
+    final private static String PASSWORD_ERROR = "Wrong account or password！";
 
-    final private static String ACCOUNT_EXIST = "账号已存在！";
+    final private static String ACCOUNT_EXIST = "Account existed！";
 
     @Override
     public BaseResponse login(String email, String password) {

@@ -32,7 +32,7 @@ CREATE TABLE `Genre`
 (
     `genreId`   INT       NOT NULL AUTO_INCREMENT,
     `genreName` CHAR(255) NOT NULL,
-    PRIMARY KEY (`keyId`)
+    PRIMARY KEY (`genreId`)
 );
 
 CREATE TABLE `MovieGenre`
@@ -42,15 +42,15 @@ CREATE TABLE `MovieGenre`
     `genreName` CHAR(255) NOT NULL,
     `movieId` INT       NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`genreId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
+    FOREIGN KEY (`genreId`) REFERENCES `Genre` (`genreId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Preference`
 (
     `userId` INT NOT NULL,
-    `keyId`  INT NOT NULL,
-    FOREIGN KEY (`keyId`) REFERENCES `KeyWord` (`keyId`) ON DELETE CASCADE,
+    `genreId`  INT NOT NULL,
+    FOREIGN KEY (`genreId`) REFERENCES `Genre` (`genreId`) ON DELETE CASCADE,
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
 
@@ -70,10 +70,10 @@ CREATE TABLE MovieCast
     `castId`   INT        NOT NULL,
     `castOrder` INT,
     `character` CHAR(255),
-    `castName`  CHAR(255)
-    PRIMARY KEY(`id`)
+    `castName`  CHAR(255),
+    PRIMARY KEY(`id`),
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE,
-    FOREIGN KEY (`castId`) REFERENCES `Cast` (`castId`) ON DELETE CASCADE
+    FOREIGN KEY (`castId`) REFERENCES `Cast` (`actorId`) ON DELETE CASCADE
 );
 
 CREATE TABLE Collect
