@@ -56,11 +56,11 @@ CREATE TABLE `Preference`
 
 CREATE TABLE `Cast`
 (
-    `actorId`   INT       NOT NULL AUTO_INCREMENT,
-    `actorName` CHAR(255) NOT NULL,
+    `castId`   INT       NOT NULL AUTO_INCREMENT,
+    `castName` CHAR(255) NOT NULL,
     `gender`    INT,
     `profilePath` CHAR(255),
-    PRIMARY KEY (`actorId`)
+    PRIMARY KEY (`castId`)
 );
 
 CREATE TABLE MovieCast
