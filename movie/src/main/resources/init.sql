@@ -46,6 +46,7 @@ CREATE TABLE `MovieGenre`
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
 );
 
+drop table Preference;
 CREATE TABLE `Preference`
 (
     `userId` INT NOT NULL,
@@ -73,7 +74,7 @@ CREATE TABLE MovieCast
     `castName`  CHAR(255),
     PRIMARY KEY(`id`),
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE,
-    FOREIGN KEY (`castId`) REFERENCES `Cast` (`actorId`) ON DELETE CASCADE
+    FOREIGN KEY (`castId`) REFERENCES `Cast` (`castId`) ON DELETE CASCADE
 );
 
 CREATE TABLE Collect

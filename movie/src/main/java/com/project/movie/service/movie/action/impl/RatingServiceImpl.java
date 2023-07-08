@@ -1,8 +1,8 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.action.impl;
 
 import com.project.movie.domain.DO.Rating;
 import com.project.movie.mapper.movie.RatingMapper;
-import com.project.movie.service.movie.RatingService;
+import com.project.movie.service.movie.action.RatingService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

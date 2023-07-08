@@ -1,16 +1,14 @@
-package com.project.movie.controller.movie;
+package com.project.movie.controller.movie.action;
 
 import com.github.pagehelper.PageInfo;
-import com.project.movie.domain.DO.Collect;
 import com.project.movie.domain.DO.Comment;
 import com.project.movie.domain.response.BaseResponse;
-import com.project.movie.service.movie.CommentService;
+import com.project.movie.service.movie.action.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movie/action/comment")
 public class CommentController {
 
     @Autowired

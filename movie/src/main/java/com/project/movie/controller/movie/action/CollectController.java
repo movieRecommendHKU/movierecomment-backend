@@ -1,18 +1,16 @@
-package com.project.movie.controller.movie;
+package com.project.movie.controller.movie.action;
 
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
-import com.project.movie.domain.DO.Movie;
-import com.project.movie.domain.DO.User;
 import com.project.movie.domain.response.BaseResponse;
-import com.project.movie.service.movie.CollectService;
-import com.project.movie.service.movie.GraphService;
+import com.project.movie.service.movie.action.CollectService;
+import com.project.movie.service.movie.kg.GraphService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movie/action/collect")
 @Slf4j
 public class CollectController {
     @Autowired

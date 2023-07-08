@@ -1,8 +1,7 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.kg.impl;
 
-import com.project.movie.domain.DO.Movie;
 import com.project.movie.domain.DO.User;
-import com.project.movie.service.movie.GraphService;
+import com.project.movie.service.movie.kg.GraphService;
 import com.project.movie.utils.Neo4jUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

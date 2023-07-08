@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/account")
-public class AccountController {
+@RequestMapping("/preference")
+public class PreferenceController {
     @Autowired
     private AccountService accountService;
 
 
-    @PostMapping("/login")
-    public BaseResponse login(@RequestParam String email, @RequestParam String password) {
-        return accountService.login(email, password);
+    @PostMapping("/get_preference")
+    public BaseResponse getPreference(@RequestParam Integer userId) {
+        return null;
     }
 
     @PostMapping("/register")

@@ -1,10 +1,10 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.action.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
 import com.project.movie.mapper.movie.CollectMapper;
-import com.project.movie.service.movie.CollectService;
+import com.project.movie.service.movie.action.CollectService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

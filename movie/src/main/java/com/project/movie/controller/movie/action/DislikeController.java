@@ -1,10 +1,9 @@
-package com.project.movie.controller.movie;
+package com.project.movie.controller.movie.action;
 
-import com.project.movie.domain.DO.Comment;
 import com.project.movie.domain.DO.Dislike;
 import com.project.movie.domain.response.BaseResponse;
-import com.project.movie.service.movie.DislikeService;
-import com.project.movie.service.movie.GraphService;
+import com.project.movie.service.movie.action.DislikeService;
+import com.project.movie.service.movie.kg.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movie/action/dislike")
 public class DislikeController {
     @Autowired
     DislikeService dislikeService;

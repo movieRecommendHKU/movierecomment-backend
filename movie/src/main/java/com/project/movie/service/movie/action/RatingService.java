@@ -1,4 +1,4 @@
-package com.project.movie.service.movie;
+package com.project.movie.service.movie.action;
 
 import com.project.movie.domain.DO.Rating;
 import org.springframework.stereotype.Service;
