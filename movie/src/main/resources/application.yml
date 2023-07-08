@@ -22,3 +22,8 @@ mybatis:
 
 server:
   port: 8089
+
+common:
+  rate:
+    low: 5
+    high: 7

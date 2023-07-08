@@ -22,9 +22,12 @@ public class DislikeController {
 
     @PostMapping("/dislike")
     public BaseResponse dislike(@RequestBody Dislike dislike) {
-        Integer id = dislikeService.dislike(dislike);
-        graphService.takeAction(dislike.getUserId(), dislike.getMovieId(), GraphService.REL_DISLIKE);
-        return id != null ?
+        boolean dbRes = null != dislikeService.dislike(dislike);
+        boolean kgRes = graphService.takeAction(
+                dislike.getUserId(),
+                dislike.getMovieId(),
+                GraphService.REL_DISLIKE);
+        return dbRes && kgRes ?
                 new BaseResponse().setStatus(true).setContent("Dislike successfully.") :
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");
     }
