@@ -1,12 +1,8 @@
 package com.project.movie.service.movie;
 
-import com.project.movie.domain.DO.Actor;
-import com.project.movie.domain.DO.Director;
 import com.project.movie.domain.DO.Movie;
 import com.project.movie.domain.DO.User;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface GraphService {

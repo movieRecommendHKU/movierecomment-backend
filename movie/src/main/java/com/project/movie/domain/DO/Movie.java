@@ -13,8 +13,8 @@ public class Movie {
     private Integer movieId;
     private String movieName;
     private String overview;
-    private Integer director; // 暂时先将导演id存在数据库表中
-    private String producer;
+    private Integer director; // directorId
+    private Integer producer; // producerId
     private Double rating;
     private String releaseDate;
     private Double popularity;

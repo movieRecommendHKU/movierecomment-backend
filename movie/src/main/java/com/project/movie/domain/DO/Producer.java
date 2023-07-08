@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @Accessors(chain = true)
-public class Actor {
-    private Integer actorId;
-    private String actorName;
+public class Producer {
+	private Integer producerId;
+	private String producerName;
 }
