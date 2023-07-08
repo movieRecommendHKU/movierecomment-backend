@@ -5,8 +5,10 @@ import com.project.movie.domain.DO.User;
 import com.project.movie.domain.VO.UserLoginVO;
 import com.project.movie.mapper.account.AccountMapper;
 import com.project.movie.service.account.AccountService;
-import jakarta.annotation.Resource;
+//import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 @Service
 public class AccountServiceImpl implements AccountService {
