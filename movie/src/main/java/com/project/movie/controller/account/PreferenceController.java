@@ -18,8 +18,8 @@ public class PreferenceController {
         return null;
     }
 
-    @PostMapping("/register")
-    public BaseResponse register(@RequestBody UserLoginVO vo) {
-        return accountService.register(vo);
-    }
+//    @PostMapping("/register")
+//    public BaseResponse register(@RequestBody UserLoginVO vo) {
+//        return accountService.register(vo);
+//    }
 }

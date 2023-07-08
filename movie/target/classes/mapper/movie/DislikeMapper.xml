@@ -22,6 +22,7 @@
         SELECT *
         FROM Dislike
         WHERE userId = #{userId}
+        ORDER BY dislikeId DESC
     </select>
 
 

@@ -7,15 +7,18 @@ import com.project.movie.mapper.movie.CommentMapper;
 import com.project.movie.service.movie.action.CommentService;
 //import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 @Slf4j
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Resource
+    @Qualifier
     CommentMapper commentMapper;
 
     @Override

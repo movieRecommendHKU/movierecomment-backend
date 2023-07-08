@@ -3,13 +3,14 @@ package com.project.movie.service.movie.action.impl;
 import com.project.movie.domain.DO.Rating;
 import com.project.movie.mapper.movie.RatingMapper;
 import com.project.movie.service.movie.action.RatingService;
-//import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 @Service
 public class RatingServiceImpl implements RatingService {
 
-    @Resource
+    @Qualifier
     RatingMapper ratingMapper;
 
     @Override

@@ -22,12 +22,14 @@
         SELECT *
         FROM Comment
         WHERE movieId = #{movieId}
+        ORDER BY commentId DESC
     </select>
 
     <select id="getCommentsByUser" parameterType="Integer" resultType="com.project.movie.domain.DO.Comment">
         SELECT *
         FROM Comment
         WHERE userId = #{userId}
+        ORDER BY commentId DESC
     </select>
 
 

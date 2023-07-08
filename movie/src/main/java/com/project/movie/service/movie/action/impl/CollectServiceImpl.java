@@ -5,17 +5,18 @@ import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
 import com.project.movie.mapper.movie.CollectMapper;
 import com.project.movie.service.movie.action.CollectService;
-//import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 @Slf4j
 @Service
 public class CollectServiceImpl implements CollectService {
 
-    @Resource
+    @Qualifier
     CollectMapper collectMapper;
 
     @Override

@@ -5,12 +5,14 @@ import com.project.movie.service.movie.kg.GraphService;
 import com.project.movie.utils.Neo4jUtil;
 //import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 @Slf4j
 @Service
 public class GraphServiceImpl implements GraphService {
-    @Resource
+    @Qualifier
     Neo4jUtil neo4jUtil;
 
     @Override

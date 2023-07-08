@@ -5,12 +5,15 @@ import com.project.movie.domain.DO.User;
 import com.project.movie.domain.VO.UserLoginVO;
 import com.project.movie.mapper.account.AccountMapper;
 import com.project.movie.service.account.AccountService;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+//import javax.annotation.Resource;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    @Resource
+    @Qualifier
     private AccountMapper accountMapper;
 
     @Override

@@ -10,22 +10,24 @@ import com.project.movie.mapper.director.DirectorMapper;
 import com.project.movie.mapper.movie.MovieMapper;
 import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.MovieService;
-import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+//import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieServiceImpl implements MovieService {
-	@Resource
+	@Qualifier
 	MovieMapper movieMapper;
 
-	@Resource
+	@Qualifier
 	CastMapper castMapper;
 
-	@Resource
+	@Qualifier
 	DirectorMapper directorMapper;
 
-	@Resource
+	@Qualifier
 	ProducerMapper producerMapper;
 
 	/*
