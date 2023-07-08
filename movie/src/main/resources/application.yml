@@ -12,8 +12,13 @@ spring:
   neo4j:
     authentication:
       username: neo4j
-      password: password
-    uri:
+      password: 7507chyfbjhcdwtc_hku
+    uri: bolt://121.43.150.228:7687
+  elasticsearch:
+    rest:
+      uris: localhost:9200
+      username:
+      password:
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
@@ -27,3 +32,8 @@ pagehelper:
 
 server:
   port: 8089
+
+common:
+  rate:
+    low: 5
+    high: 7

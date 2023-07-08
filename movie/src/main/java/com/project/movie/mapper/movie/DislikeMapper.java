@@ -10,7 +10,5 @@ import java.util.List;
 public interface DislikeMapper {
     int dislike(Dislike dislike);
 
-    int removeDislike(Integer dislikeId);
-
     List<Dislike> getDislikesByUser(Integer userId);
 }

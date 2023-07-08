@@ -8,13 +8,9 @@ import java.util.List;
 
 @Repository
 public interface RatingMapper {
-    int rate(Rating rating);
+    Integer rate(Rating rating);
 
-    int changeRating(Rating rating);
+    Integer changeRating(Rating rating);
 
-    double getMovieRatingByUser(Integer userId, Integer movieId);
-
-    double getMovieAvgRating(Integer movieId);
-
-    List<Rating> getAllMovieAvgRating();
+    double getUserMovieRating(Integer userId, Integer movieId);
 }

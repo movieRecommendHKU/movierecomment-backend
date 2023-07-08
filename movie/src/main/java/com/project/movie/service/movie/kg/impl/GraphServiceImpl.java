@@ -1,13 +1,14 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.kg.impl;
 
-import com.project.movie.domain.DO.Movie;
 import com.project.movie.domain.DO.User;
-import com.project.movie.service.movie.GraphService;
+import com.project.movie.service.movie.kg.GraphService;
 import com.project.movie.utils.Neo4jUtil;
-import jakarta.annotation.Resource;
+//import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 @Slf4j
+@Service
 public class GraphServiceImpl implements GraphService {
     @Resource
     Neo4jUtil neo4jUtil;
@@ -31,7 +32,7 @@ public class GraphServiceImpl implements GraphService {
 
 
     @Override
-    public boolean takeAction(User user, Movie movie, String action) {
+    public boolean takeAction(Integer userId, Integer movieId, String action) {
         try {
             String cql = "MATCH (e1: %s), (e2: %s) "
                     + "WHERE e1.%s=%d AND e2.%s=%d "
@@ -40,9 +41,9 @@ public class GraphServiceImpl implements GraphService {
                     TAG_USER,
                     TAG_MOVIE,
                     PROP_USER_ID,
-                    user.getUserId(),
+                    userId,
                     PROP_MOVIE_ID,
-                    movie.getMovieId(),
+                    movieId,
                     action);
             log.info("takeAction: {}", cql);
             neo4jUtil.executeCypherSql(cql);
@@ -54,7 +55,7 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public boolean deleteAction(User user, Movie movie, String action) {
+    public boolean deleteAction(Integer userId, Integer movieId, String action) {
         try {
             String cql = "MATCH (e1: %s)-[r:%s]->(e2: %s) "
                     + "WHERE e1.%s=%d AND e2.%s=%d "
@@ -64,9 +65,9 @@ public class GraphServiceImpl implements GraphService {
                     action,
                     TAG_MOVIE,
                     PROP_USER_ID,
-                    user.getUserId(),
+                    userId,
                     PROP_MOVIE_ID,
-                    movie.getMovieId());
+                    movieId);
             log.info("deleteAction: {}", cql);
             neo4jUtil.executeCypherSql(cql);
             return true;

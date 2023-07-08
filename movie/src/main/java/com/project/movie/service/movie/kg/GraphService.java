@@ -1,6 +1,6 @@
-package com.project.movie.service.movie;
+package com.project.movie.service.movie.kg;
 
-import com.project.movie.domain.DO.Movie;
+import com.project.movie.config.Common;
 import com.project.movie.domain.DO.User;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,13 @@ public interface GraphService {
 
     boolean insertUser(User user);
 
-    boolean takeAction(User user, Movie movie, String action);
+    boolean takeAction(Integer userId, Integer movieId, String action);
 
-    boolean deleteAction(User user, Movie movie, String action);
+    boolean deleteAction(Integer userId, Integer movieId, String action);
+
+    static String getRateRelName(double rate) {
+        if (rate >= Common.HIGH_RATING) return REL_HIGH_RATE;
+        else if (rate <= Common.LOW_RATING) return REL_LOW_RATE;
+        else return null;
+    }
 }

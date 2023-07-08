@@ -18,24 +18,12 @@
         WHERE ratingId = #{ratingId}
     </update>
 
-    <select id="getMovieRatingByUser" parameterType="Integer">
+    <select id="getUserMovieRating" parameterType="Integer">
         SELECT rating
         FROM Rating
         WHERE userId = #{userId}
           AND movieId = #{movieId}
     </select>
 
-
-    <select id="getMovieAvgRating" parameterType="Integer" resultType="Double">
-        SELECT avg(rating)
-        FROM Rating
-        WHERE movieId = #{movieId}
-    </select>
-
-    <select id="getAllMovieAvgRating" resultType="com.project.movie.domain.DO.Rating">
-        SELECT movieId, userId, avg(rating) as rating
-        FROM Rating
-        GROUP BY movieId
-    </select>
 
 </mapper>

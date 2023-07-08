@@ -1,22 +1,22 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.action.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
 import com.project.movie.mapper.movie.CollectMapper;
-import com.project.movie.service.movie.CollectService;
-import com.project.movie.utils.Neo4jUtil;
-import jakarta.annotation.Resource;
+import com.project.movie.service.movie.action.CollectService;
+//import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import javax.annotation.Resource;
+@Slf4j
+@Service
 public class CollectServiceImpl implements CollectService {
 
     @Resource
     CollectMapper collectMapper;
-
-    @Resource
-    Neo4jUtil neo4jUtil;
 
     @Override
     public Collect collect(Collect collect) {
@@ -36,7 +36,7 @@ public class CollectServiceImpl implements CollectService {
             List<Collect> collectList = collectMapper.getCollectionsByUser(userId);
             return new PageInfo<>(collectList);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return null;
         }
     }
