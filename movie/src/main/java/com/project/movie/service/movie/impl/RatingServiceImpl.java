@@ -4,7 +4,9 @@ import com.project.movie.domain.DO.Rating;
 import com.project.movie.mapper.movie.RatingMapper;
 import com.project.movie.service.movie.RatingService;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RatingServiceImpl implements RatingService {
 
     @Resource

@@ -4,9 +4,11 @@ import com.project.movie.domain.DO.Dislike;
 import com.project.movie.mapper.movie.DislikeMapper;
 import com.project.movie.service.movie.DislikeService;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DislikeServiceImpl implements DislikeService {
 
     @Resource

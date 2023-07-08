@@ -6,8 +6,10 @@ import com.project.movie.service.movie.GraphService;
 import com.project.movie.utils.Neo4jUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class GraphServiceImpl implements GraphService {
     @Resource
     Neo4jUtil neo4jUtil;

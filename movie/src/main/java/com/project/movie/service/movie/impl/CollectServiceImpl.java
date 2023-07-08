@@ -5,13 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
 import com.project.movie.mapper.movie.CollectMapper;
 import com.project.movie.service.movie.CollectService;
-import com.project.movie.utils.Neo4jUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
+@Service
 public class CollectServiceImpl implements CollectService {
 
     @Resource

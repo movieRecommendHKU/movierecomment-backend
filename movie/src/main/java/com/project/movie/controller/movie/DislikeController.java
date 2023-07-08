@@ -23,7 +23,7 @@ public class DislikeController {
     @PostMapping("/dislike")
     public BaseResponse dislike(@RequestBody Dislike dislike) {
         Integer id = dislikeService.dislike(dislike);
-        graphService.takeAction()
+        graphService.takeAction(dislike.getUserId(), dislike.getMovieId(), GraphService.REL_DISLIKE);
         return id != null ?
                 new BaseResponse().setStatus(true).setContent("Dislike successfully.") :
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");
