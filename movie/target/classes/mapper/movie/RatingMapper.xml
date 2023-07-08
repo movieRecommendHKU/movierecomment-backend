@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.movie.mapper.movie.RatingMapper">
+
+
+    <insert id="rate" parameterType="com.project.movie.domain.DO.Rating" useGeneratedKeys="true"
+            keyProperty="ratingId" keyColumn="ratingId">
+        INSERT INTO Rating (userId, movieId, rating, timestamp)
+        VALUES (#{userId}, #{movieId}, #{rating}, now())
+    </insert>
+
+    <update id="changeRating" parameterType="com.project.movie.domain.DO.Rating">
+        UPDATE Rating
+        SET rating=#{rating},
+            timestamp=NOW()
+        WHERE ratingId = #{ratingId}
+    </update>
+
+    <select id="getMovieRatingByUser" parameterType="Integer">
+        SELECT rating
+        FROM Rating
+        WHERE userId = #{userId}
+          AND movieId = #{movieId}
+    </select>
+
+
+    <select id="getMovieAvgRating" parameterType="Integer" resultType="Double">
+        SELECT avg(rating)
+        FROM Rating
+        WHERE movieId = #{movieId}
+    </select>
+
+    <select id="getAllMovieAvgRating" resultType="com.project.movie.domain.DO.Rating">
+        SELECT movieId, userId, avg(rating) as rating
+        FROM Rating
+        GROUP BY movieId
+    </select>
+
+</mapper>
