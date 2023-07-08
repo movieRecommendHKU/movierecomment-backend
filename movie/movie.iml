@@ -41,7 +41,12 @@
     <orderEntry type="library" name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apiguardian:apiguardian-api:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher-dsl:2022.8.3" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:5.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:6.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:6.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:3.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:5.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.90.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.90.Final" level="project" />
@@ -52,11 +57,6 @@
     <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.90.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-tcnative-classes:2.0.59.Final" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.5.4" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:6.0.7" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:6.0.7" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-tx:6.0.7" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:3.0.4" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.7" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:3.0.5-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:3.0.5-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.2" level="project" />

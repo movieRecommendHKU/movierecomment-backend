@@ -7,9 +7,9 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @Accessors(chain = true)
-public class Director {
-    private Integer directorId;
-    private String directorName;
+public class Cast {
+    private Integer castId;
+    private String castName;
     private Integer gender;
     private String profilePath;
 }
