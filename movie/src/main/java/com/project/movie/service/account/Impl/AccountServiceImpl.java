@@ -23,27 +23,27 @@ public class AccountServiceImpl implements AccountService {
     public BaseResponse login(String email, String password) {
         User user = accountMapper.findByEmail(email);
         if (user == null)
-            return new BaseResponse().setStatus(false).setMsg(EMPTY_ACCOUNT);
+            return BaseResponse.error(EMPTY_ACCOUNT);
         if (!user.getPassword().equals(password))
-            return new BaseResponse().setStatus(false).setMsg(PASSWORD_ERROR);
+            return BaseResponse.error(PASSWORD_ERROR);
         else {
             UserLoginVO loginVO = new UserLoginVO()
                     .setUserId(user.getUserId())
                     .setUserName(user.getUserName())
                     .setEmail(user.getEmail());
-            return new BaseResponse().setStatus(true).setMsg("Login successfully!").setContent(loginVO);
+            return BaseResponse.success("登录成功！", loginVO);
         }
     }
 
     @Override
     public BaseResponse register(UserLoginVO loginVO) {
         User user = accountMapper.findByEmail(loginVO.getEmail());
-        if (user != null)
-            return new BaseResponse().setStatus(false).setMsg(ACCOUNT_EXIST);
+        if(user != null)
+            return BaseResponse.error(ACCOUNT_EXIST);
         User newUser = new User().setUserName(loginVO.getUserName())
                 .setPassword(loginVO.getPassword())
                 .setEmail(loginVO.getEmail());
         accountMapper.insertAccount(newUser);
-        return new BaseResponse().setStatus(true).setMsg("Register successfully").setContent(loginVO);
+        return BaseResponse.success("注册成功", loginVO);
     }
 }
