@@ -1,6 +1,5 @@
 package com.project.movie.service.movie;
 
-import com.project.movie.domain.DO.Movie;
 import com.project.movie.domain.DO.User;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,7 @@ public interface GraphService {
 
     boolean insertUser(User user);
 
-    boolean takeAction(User user, Movie movie, String action);
+    boolean takeAction(Integer userId, Integer movieId, String action);
 
-    boolean deleteAction(User user, Movie movie, String action);
+    boolean deleteAction(Integer userId, Integer movieId, String action);
 }

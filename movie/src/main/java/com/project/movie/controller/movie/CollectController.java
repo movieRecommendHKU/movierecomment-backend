@@ -27,8 +27,8 @@ public class CollectController {
 
         boolean dbCollect = res != null;
         boolean kgCollect = graphService.takeAction(
-                new User().setUserId(collect.getUserId()),
-                new Movie().setMovieId(collect.getMovieId()),
+                collect.getUserId(),
+                collect.getMovieId(),
                 GraphService.REL_COLLECT);
 
         if (dbCollect && kgCollect) {
@@ -44,8 +44,8 @@ public class CollectController {
                     .setMsg("KG collect failed.");
         } else if (kgCollect) {
             boolean rm = graphService.deleteAction(
-                    new User().setUserId(collect.getUserId()),
-                    new Movie().setMovieId(collect.getMovieId()),
+                    collect.getUserId(),
+                    collect.getMovieId(),
                     GraphService.REL_COLLECT);
             log.error("Remove KG collect: {}.", rm);
             return new BaseResponse()
@@ -62,8 +62,8 @@ public class CollectController {
     public BaseResponse removeCollect(@RequestBody Collect collect) {
         boolean dbRemove = collectService.removeCollect(collect.getCollectId());
         boolean kgRemove = graphService.deleteAction(
-                new User().setUserId(collect.getUserId()),
-                new Movie().setMovieId(collect.getMovieId()),
+                collect.getUserId(),
+                collect.getMovieId(),
                 GraphService.REL_COLLECT);
         if (dbRemove && kgRemove) {
             return new BaseResponse()
@@ -78,8 +78,8 @@ public class CollectController {
                     .setContent(rc);
         } else if (kgRemove) {
             boolean rc = graphService.takeAction(
-                    new User().setUserId(collect.getUserId()),
-                    new Movie().setMovieId(collect.getMovieId()),
+                    collect.getUserId(),
+                    collect.getMovieId(),
                     GraphService.REL_COLLECT);
             log.error("Recover remove KG collect: {}.", rc);
             return new BaseResponse()
