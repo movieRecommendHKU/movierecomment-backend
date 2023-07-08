@@ -14,6 +14,10 @@ public class BaseResponse {
         return new BaseResponse(true, content, msg);
     }
 
+    public static BaseResponse success(String msg) {
+        return new BaseResponse(true, null, msg);
+    }
+
     public static BaseResponse error(String msg) {
         return new BaseResponse(false, null, msg);
     }

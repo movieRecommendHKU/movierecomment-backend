@@ -13,37 +13,20 @@ public class AccountServiceImpl implements AccountService {
     @Resource
     private AccountMapper accountMapper;
 
-    final private static String EMPTY_ACCOUNT = "Account not exist！";
-
-    final private static String PASSWORD_ERROR = "Wrong account or password！";
-
-    final private static String ACCOUNT_EXIST = "Account existed！";
-
     @Override
-    public BaseResponse login(String email, String password) {
-        User user = accountMapper.findByEmail(email);
-        if (user == null)
-            return BaseResponse.error(EMPTY_ACCOUNT);
-        if (!user.getPassword().equals(password))
-            return BaseResponse.error(PASSWORD_ERROR);
-        else {
-            UserLoginVO loginVO = new UserLoginVO()
-                    .setUserId(user.getUserId())
-                    .setUserName(user.getUserName())
-                    .setEmail(user.getEmail());
-            return BaseResponse.success("登录成功！", loginVO);
-        }
+    public User login(String email, String password) {
+        return accountMapper.findByEmail(email);
     }
 
     @Override
-    public BaseResponse register(UserLoginVO loginVO) {
+    public boolean register(UserLoginVO loginVO) {
         User user = accountMapper.findByEmail(loginVO.getEmail());
         if(user != null)
-            return BaseResponse.error(ACCOUNT_EXIST);
+            return false;
         User newUser = new User().setUserName(loginVO.getUserName())
                 .setPassword(loginVO.getPassword())
                 .setEmail(loginVO.getEmail());
         accountMapper.insertAccount(newUser);
-        return BaseResponse.success("注册成功", loginVO);
+        return true;
     }
 }

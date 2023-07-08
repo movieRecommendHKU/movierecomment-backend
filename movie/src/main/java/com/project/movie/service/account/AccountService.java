@@ -1,10 +1,11 @@
 package com.project.movie.service.account;
 
+import com.project.movie.domain.DO.User;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.domain.VO.UserLoginVO;
 
 public interface AccountService {
-    BaseResponse login(String email, String password);
+    User login(String email, String password);
 
-    BaseResponse register(UserLoginVO userLoginVO);
+    boolean register(UserLoginVO userLoginVO);
 }

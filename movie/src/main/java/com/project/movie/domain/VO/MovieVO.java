@@ -25,5 +25,5 @@ public class MovieVO {
 
 	private Director director;
 	private Producer producer;
-	private List<Cast> castList;
+	private List<Cast> casts;
 }

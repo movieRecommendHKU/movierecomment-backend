@@ -9,6 +9,6 @@ public interface AccountMapper {
 
     User findByEmail(@Param("email") String email);
 
-    void insertAccount(User user);
+    User insertAccount(User user);
 
 }
