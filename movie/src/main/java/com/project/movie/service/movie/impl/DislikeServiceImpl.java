@@ -13,18 +13,8 @@ public class DislikeServiceImpl implements DislikeService {
     DislikeMapper dislikeMapper;
 
     @Override
-    public Dislike dislike(Dislike dislike) {
-        dislikeMapper.dislike(dislike);
-        return dislike;
+    public Integer dislike(Dislike dislike) {
+        return dislikeMapper.dislike(dislike);
     }
 
-    @Override
-    public boolean removeDislike(Integer dislikeId) {
-        return 1 == dislikeMapper.removeDislike(dislikeId);
-    }
-
-    @Override
-    public List<Dislike> getDislikesByUser(Integer userId) {
-        return dislikeMapper.getDislikesByUser(userId);
-    }
 }

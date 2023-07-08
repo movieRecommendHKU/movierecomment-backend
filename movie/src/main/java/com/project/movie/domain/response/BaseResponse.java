@@ -1,20 +1,16 @@
 package com.project.movie.domain.response;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
 import java.util.HashMap;
 
+@Data
+@Accessors(chain = true)
 public class BaseResponse {
-
-    BaseResponse(boolean status, Object content, String msg) {
-    }
-
-    public static BaseResponse success(String msg, Object content) {
-        return new BaseResponse(true, content, msg);
-    }
-
-    public static BaseResponse error(String msg) {
-        return new BaseResponse(false, null, msg);
-    }
+    boolean status;
+    String msg;
+    Object content;
 }

@@ -1,21 +1,25 @@
 package com.project.movie.service.movie.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.project.movie.domain.DO.Collect;
 import com.project.movie.domain.DO.Comment;
 import com.project.movie.mapper.movie.CommentMapper;
 import com.project.movie.service.movie.CommentService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     @Resource
     CommentMapper commentMapper;
 
     @Override
-    public Comment comment(Comment comment) {
-        commentMapper.comment(comment);
-        return comment;
+    public Integer comment(Comment comment) {
+        return commentMapper.comment(comment);
     }
 
     @Override
@@ -24,12 +28,26 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getCommentsByMovie(Integer movieId) {
-        return commentMapper.getCommentsByMovie(movieId);
+    public PageInfo<Comment> getCommentsByMovie(Integer page, Integer pageSize, Integer movieId) {
+        PageHelper.startPage(page, pageSize);
+        try {
+            List<Comment> commentList = commentMapper.getCommentsByMovie(movieId);
+            return new PageInfo<>(commentList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public List<Comment> getCommentsByUser(Integer userId) {
-        return commentMapper.getCommentsByUser(userId);
+    public PageInfo<Comment> getCommentsByUser(Integer page, Integer pageSize, Integer userId) {
+        PageHelper.startPage(page, pageSize);
+        try {
+            List<Comment> commentList = commentMapper.getCommentsByUser(userId);
+            return new PageInfo<>(commentList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 }

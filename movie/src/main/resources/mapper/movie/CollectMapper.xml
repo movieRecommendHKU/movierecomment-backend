@@ -22,6 +22,7 @@
         SELECT *
         FROM Collect
         WHERE userId = #{userId}
+        ORDER BY collectId DESC
     </select>
 
 

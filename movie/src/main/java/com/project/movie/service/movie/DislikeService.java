@@ -7,9 +7,5 @@ import java.util.List;
 
 @Service
 public interface DislikeService {
-    Dislike dislike(Dislike dislike);
-
-    boolean removeDislike(Integer dislikeId);
-
-    List<Dislike> getDislikesByUser(Integer userId);
+    Integer dislike(Dislike dislike);
 }

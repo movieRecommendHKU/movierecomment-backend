@@ -5,17 +5,14 @@ import com.project.movie.mapper.movie.RatingMapper;
 import com.project.movie.service.movie.RatingService;
 import jakarta.annotation.Resource;
 
-import java.util.List;
-
 public class RatingServiceImpl implements RatingService {
 
     @Resource
     RatingMapper ratingMapper;
 
     @Override
-    public Rating rate(Rating rating) {
-        ratingMapper.rate(rating);
-        return rating;
+    public boolean rate(Rating rating) {
+        return null != ratingMapper.rate(rating);
     }
 
     @Override
@@ -24,17 +21,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public double getMovieRatingByUser(Integer userId, Integer movieId) {
-        return ratingMapper.getMovieRatingByUser(userId, movieId);
-    }
-
-    @Override
-    public double getMovieAvgRating(Integer movieId) {
-        return ratingMapper.getMovieAvgRating(movieId);
-    }
-
-    @Override
-    public List<Rating> getAllMovieAvgRating() {
-        return ratingMapper.getAllMovieAvgRating();
+    public Double getUserMovieRating(Integer userId, Integer movieId) {
+        return ratingMapper.getUserMovieRating(userId, movieId);
     }
 }

@@ -32,29 +32,64 @@ public class CollectController {
                 GraphService.REL_COLLECT);
 
         if (dbCollect && kgCollect) {
-            return BaseResponse.success("Collect successfully.", res);
+            return new BaseResponse()
+                    .setStatus(true)
+                    .setMsg("Collect successfully.")
+                    .setContent(res);
         } else if (dbCollect) {
             boolean rm = collectService.removeCollect(collect.getCollectId());
             log.error("Remove DB collect id = {}: {}.", collect.getCollectId(), rm);
-            return BaseResponse.error("KG collect failed.");
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("KG collect failed.");
         } else if (kgCollect) {
             boolean rm = graphService.deleteAction(
                     new User().setUserId(collect.getUserId()),
                     new Movie().setMovieId(collect.getMovieId()),
                     GraphService.REL_COLLECT);
             log.error("Remove KG collect: {}.", rm);
-            return BaseResponse.error("DB collect failed.");
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("DB collect failed.");
         } else {
-            return BaseResponse.error("Collect failed.");
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("Collect failed.");
         }
     }
 
     @PostMapping("/rm_collect")
-    public BaseResponse removeCollect(@RequestParam Integer collectId) {
-        boolean res = collectService.removeCollect(collectId);
-        return res ?
-                BaseResponse.success("Remove collect successfully.", true) :
-                BaseResponse.error("Remove collect failed.");
+    public BaseResponse removeCollect(@RequestBody Collect collect) {
+        boolean dbRemove = collectService.removeCollect(collect.getCollectId());
+        boolean kgRemove = graphService.deleteAction(
+                new User().setUserId(collect.getUserId()),
+                new Movie().setMovieId(collect.getMovieId()),
+                GraphService.REL_COLLECT);
+        if (dbRemove && kgRemove) {
+            return new BaseResponse()
+                    .setStatus(true)
+                    .setMsg("Remove collect successfully.");
+        } else if (dbRemove) {
+            Collect rc = collectService.collect(collect);
+            log.error("Recover remove DB collect, new id = {}: {}.", collect.getCollectId(), rc);
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("KG collect failed, collect id renewed.")
+                    .setContent(rc);
+        } else if (kgRemove) {
+            boolean rc = graphService.takeAction(
+                    new User().setUserId(collect.getUserId()),
+                    new Movie().setMovieId(collect.getMovieId()),
+                    GraphService.REL_COLLECT);
+            log.error("Recover remove KG collect: {}.", rc);
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("DB collect failed.");
+        } else {
+            return new BaseResponse()
+                    .setStatus(false)
+                    .setMsg("Collect failed.");
+        }
     }
 
     @GetMapping("/get_user_collection")
@@ -63,7 +98,7 @@ public class CollectController {
                                              @RequestParam Integer userId) {
         PageInfo<Collect> res = collectService.getCollectionsByUser(page, pageSize, userId);
         return res != null ?
-                BaseResponse.success("Get collections.", res) :
-                BaseResponse.error("Get collections. failed.");
+                new BaseResponse().setStatus(true).setMsg("Get collections.").setContent(res) :
+                new BaseResponse().setStatus(true).setMsg("Get collections. failed.");
     }
 }
