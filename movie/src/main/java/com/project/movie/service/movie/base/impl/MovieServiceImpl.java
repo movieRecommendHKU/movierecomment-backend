@@ -1,16 +1,14 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.base.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.project.movie.domain.DO.Cast;
 import com.project.movie.domain.DO.Movie;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.mapper.cast.CastMapper;
 import com.project.movie.mapper.director.DirectorMapper;
 import com.project.movie.mapper.movie.MovieMapper;
 import com.project.movie.mapper.producer.ProducerMapper;
-import com.project.movie.service.movie.MovieService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.movie.service.movie.base.MovieService;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 //import javax.annotation.Resource;

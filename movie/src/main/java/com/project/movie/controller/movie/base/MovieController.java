@@ -1,9 +1,9 @@
-package com.project.movie.controller.movie;
+package com.project.movie.controller.movie.base;
 
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.domain.response.BaseResponse;
-import com.project.movie.service.movie.MovieService;
+import com.project.movie.service.movie.base.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

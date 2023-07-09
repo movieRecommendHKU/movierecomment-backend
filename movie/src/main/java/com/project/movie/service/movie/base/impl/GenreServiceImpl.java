@@ -1,10 +1,9 @@
-package com.project.movie.service.movie.impl;
+package com.project.movie.service.movie.base.impl;
 
 import com.project.movie.domain.DO.Genre;
 import com.project.movie.mapper.movie.GenreMapper;
-import com.project.movie.service.movie.GenreService;
+import com.project.movie.service.movie.base.GenreService;
 //import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

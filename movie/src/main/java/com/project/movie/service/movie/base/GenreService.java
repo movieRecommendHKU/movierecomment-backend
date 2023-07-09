@@ -1,4 +1,4 @@
-package com.project.movie.service.movie;
+package com.project.movie.service.movie.base;
 
 import com.project.movie.domain.DO.Genre;
 
