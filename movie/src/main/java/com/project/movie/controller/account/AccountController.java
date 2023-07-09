@@ -22,20 +22,20 @@ public class AccountController {
         User user =  accountService.login(email, password);
         if(user != null) {
             if(user.getPassword().equals(password)) {
-                return BaseResponse.success("Login success!", user);
+                return new BaseResponse().setStatus(true).setMsg("Login success").setContent(user);
             } else {
-                return BaseResponse.error(PASSWORD_ERROR);
+                return new BaseResponse().setStatus(false).setMsg(PASSWORD_ERROR);
             }
         } else {
-            return BaseResponse.error(EMPTY_ACCOUNT);
+            return new BaseResponse().setStatus(false).setMsg(EMPTY_ACCOUNT);
         }
     }
 
     @PostMapping("/register")
     public BaseResponse register(@RequestBody UserLoginVO vo) {
         if(accountService.register(vo))
-            return BaseResponse.success("Sign Up success!");
+            return new BaseResponse().setStatus(true).setMsg("Sign Up success!");
         else
-            return BaseResponse.error(ACCOUNT_EXIST);
+            return new BaseResponse().setStatus(false).setMsg(ACCOUNT_EXIST);
     }
 }

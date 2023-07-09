@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    @Qualifier
+    @Autowired
+    @Qualifier("accountMapper")
     private AccountMapper accountMapper;
 
     @Override

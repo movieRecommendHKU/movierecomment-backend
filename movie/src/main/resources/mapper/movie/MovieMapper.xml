@@ -4,6 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.movie.mapper.movie.MovieMapper">
     <select id="getMovieList" resultType="com.project.movie.domain.DO.Movie">
-        SELECT * FROM Movie
+        SELECT * FROM Movie LIMIT 100
     </select>
 </mapper>

@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Qualifier
+    @Autowired
     CommentMapper commentMapper;
 
     @Override

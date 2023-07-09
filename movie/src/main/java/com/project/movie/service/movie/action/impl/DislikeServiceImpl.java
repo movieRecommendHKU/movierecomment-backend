@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DislikeServiceImpl implements DislikeService {
 
-    @Qualifier
+    @Autowired
     DislikeMapper dislikeMapper;
 
     @Override

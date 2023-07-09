@@ -9,23 +9,26 @@ import com.project.movie.mapper.director.DirectorMapper;
 import com.project.movie.mapper.movie.MovieMapper;
 import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.base.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 //import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class MovieServiceImpl implements MovieService {
-	@Qualifier
+	@Autowired
 	MovieMapper movieMapper;
 
-	@Qualifier
+	@Autowired
 	CastMapper castMapper;
 
-	@Qualifier
+	@Autowired
 	DirectorMapper directorMapper;
 
-	@Qualifier
+	@Autowired
 	ProducerMapper producerMapper;
 
 	/*

@@ -17,9 +17,9 @@ public class MovieController {
 	@GetMapping("/list")
 	BaseResponse getCompleteMovieList(@RequestParam(defaultValue = "1") int pageNum,
 									  @RequestParam(defaultValue = "10") int pageSize,
-									  @RequestParam String orderBy) {
+									  @RequestParam(required = false) String orderBy) {
 		PageInfo<MovieVO> res = movieService.getMovieCompleteList(pageNum, pageSize, orderBy);
-		return res == null ? BaseResponse.error("Get Movies Failure! ")
-				: BaseResponse.success("Get movies success", res);
+		return res == null ? new BaseResponse().setStatus(false).setMsg("Get Movies Failure! ")
+				: new BaseResponse().setStatus(true).setMsg("Get movies success").setContent(res);
 	}
 }

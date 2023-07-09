@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class CollectServiceImpl implements CollectService {
 
-    @Qualifier
+    @Autowired
     CollectMapper collectMapper;
 
     @Override

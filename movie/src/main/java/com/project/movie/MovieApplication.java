@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(basePackages = {"com.project.movie"})
+@MapperScan(basePackages = {"com.project.movie.mapper"})
 public class MovieApplication {
 
 	public static void main(String[] args) {
