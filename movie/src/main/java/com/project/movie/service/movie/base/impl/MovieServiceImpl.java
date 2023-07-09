@@ -58,7 +58,6 @@ public class MovieServiceImpl implements MovieService {
                         .setVoteCount(info.getVoteCount());
                 movies.add(vo);
             }
-            PageHelper.startPage(pageNum, pageSize, orderBy);
             return new PageInfo<>(movies);
         } catch (Exception e) {
             e.printStackTrace();

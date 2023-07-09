@@ -4,6 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.movie.mapper.cast.CastMapper">
     <select id="getCastsByMovieId" parameterType="Integer" resultType="com.project.movie.domain.DO.Cast">
-        SELECT * FROM MovieCast WHERE movieId = #{movieId}
+<!--        SELECT * FROM MovieCast WHERE movieId = #{movieId}-->
+        SELECT * FROM Cast c
+        INNER JOIN MovieCast mc ON c.castId = mc.castId
+        WHERE movieId = #{mc.movieId}
     </select>
 </mapper>

@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.movie.mapper.producer.ProducerMapper">
     <select id="getProducerByMovieId" parameterType="Integer" resultType="com.project.movie.domain.DO.Producer">
-        SELECT * FROM MovieProducer WHERE movieId = #{movieId}
+        SELECT * FROM Producer p
+        INNER JOIN MovieProducer mp ON p.producerId = mp.producerId
+        WHERE movieId = #{mp.movieId}
     </select>
 </mapper>
