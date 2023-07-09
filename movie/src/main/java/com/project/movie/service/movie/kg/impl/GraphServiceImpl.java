@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class GraphServiceImpl implements GraphService {
-    @Qualifier
+    @Autowired
     Neo4jUtil neo4jUtil;
 
     @Override

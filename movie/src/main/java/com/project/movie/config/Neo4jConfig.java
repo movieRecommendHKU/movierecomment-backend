@@ -28,6 +28,4 @@ public class Neo4jConfig {
         return GraphDatabase.driver(url, AuthTokens.basic(username, password));
     }
 
-
-
 }
