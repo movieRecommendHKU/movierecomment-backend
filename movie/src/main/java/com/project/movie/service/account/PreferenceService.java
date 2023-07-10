@@ -1,10 +1,14 @@
 package com.project.movie.service.account;
 
-import com.project.movie.domain.DO.User;
-import com.project.movie.domain.VO.UserLoginVO;
+import com.project.movie.domain.DO.Genre;
+import com.project.movie.domain.DTO.Preference;
+
+import java.util.List;
 
 public interface PreferenceService {
-    User login(String email, String password);
+    List<Genre> getUserPreference(Integer userId);
 
-    boolean register(UserLoginVO userLoginVO);
+    boolean batchInsert(Preference preference);
+
+    boolean batchDelete(Preference preference);
 }

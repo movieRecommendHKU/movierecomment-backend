@@ -7,6 +7,7 @@ import com.project.movie.mapper.movie.CollectMapper;
 import com.project.movie.service.movie.action.CollectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
