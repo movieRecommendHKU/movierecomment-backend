@@ -17,7 +17,7 @@
 		<java.version>18</java.version>
 		<maven.compiler.source>18</maven.compiler.source>
 		<maven.compiler.target>18</maven.compiler.target>
-		<elasticsearch.version>8.2.0</elasticsearch.version>
+		<elasticsearch.version>7.17.10</elasticsearch.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>co.elastic.clients</groupId>
 			<artifactId>elasticsearch-java</artifactId>
-			<version>8.2.0</version>
+			<version>7.17.10</version>
 		</dependency>
 
 		<dependency>
