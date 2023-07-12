@@ -6,11 +6,23 @@ import java.util.List;
 public abstract class AbsRecommender {
 //	HashMap<String, AbsRecommender> register;
 
+	// TODO: 我认为getAll和getOne应该是只能写在RecommendService中的
+	//  并不需要像昨天讨论说的使用下面这两个方法
+	//  可以直接在RecommendService做List<movieId> transfer to List<Movie>
+	//  Select * from movie where movieId in {movieIdList}
 	public List<Integer> getAll(Integer userId) {
 		return null;
 	}
 
 	public List<Integer> getOne(Integer userId) {
+		return null;
+	}
+
+	public List<Integer> startFlow() {
+		// recall
+		// filter
+		// sort
+		// resort
 		return null;
 	}
 
@@ -30,14 +42,6 @@ public abstract class AbsRecommender {
 	}
 
 	private List<Integer> resort(List<Object> sortResult) {
-		return null;
-	}
-
-	private List<Integer> startFlow() {
-		// recall
-		// filter
-		// sort
-		// resort
 		return null;
 	}
 
