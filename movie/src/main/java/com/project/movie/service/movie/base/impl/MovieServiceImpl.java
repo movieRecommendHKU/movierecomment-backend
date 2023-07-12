@@ -43,15 +43,15 @@ public class MovieServiceImpl implements MovieService {
             List<Movie> moviesBaseInfo = movieMapper.getMovieList();
             List<MovieVO> movies = new ArrayList<>();
             for (Movie info : moviesBaseInfo) {
-                int movieId = info.getMovieId();
+                // TODO: movie-director, movie-producer是一对一关系，直接通过movie.xxId得到对象
                 MovieVO vo = new MovieVO()
-                        .setMovieId(movieId)
+                        .setMovieId(info.getMovieId())
                         .setMovieName(info.getMovieName())
                         .setOverview(info.getOverview())
-                        .setCasts(castMapper.getCastsByMovieId(movieId))
-                        .setDirector(directorMapper.getDirectorByMovieId(movieId))
+                        .setCasts(castMapper.getCastsByMovieId(info.getMovieId()))
+                        .setDirector(directorMapper.getDirectorByMovie(info.getDirector()))
                         .setPopularity(info.getPopularity())
-                        .setProducer(producerMapper.getProducerByMovieId(movieId))
+                        .setProducer(producerMapper.getProducerByMovie(info.getProducer()))
                         .setRating(info.getRating())
                         .setPosterPath(info.getPosterPath())
                         .setRating(info.getRating())
