@@ -16,7 +16,8 @@ public abstract class AbsRecommender {
 
 	private void setPolicy() {}
 
-	private List<Object> recall(Integer userId) {
+	// TODO: protected or private ?
+	protected List<Object> recall(Integer userId) {
 		return null;
 	}
 
@@ -39,4 +40,5 @@ public abstract class AbsRecommender {
 		// resort
 		return null;
 	}
+
 }
