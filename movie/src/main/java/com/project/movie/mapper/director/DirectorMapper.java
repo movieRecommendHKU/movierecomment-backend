@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DirectorMapper {
 
-	Director getDirectorByMovieId(int movieId);
+	Director getDirectorByMovie(int directorId);
 }

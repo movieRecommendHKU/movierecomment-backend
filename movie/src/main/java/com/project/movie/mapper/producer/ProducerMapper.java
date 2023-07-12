@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProducerMapper {
 
-	Producer getProducerByMovieId(int movieId);
+	Producer getProducerByMovie(int producerId);
 }
