@@ -21,6 +21,6 @@ public class MovieForSearch {
     private List<String> castNames;
     private List<String> keyWords;
     private List<String> genres;
-    //private dense_vector wordVectors;
-    //private List<Double> sentenceVectors;
+    private List<Double> wordVectors;
+    private List<Double> sentenceVectors;
 }

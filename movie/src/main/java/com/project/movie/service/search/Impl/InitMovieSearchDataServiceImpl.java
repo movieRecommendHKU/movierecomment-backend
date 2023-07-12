@@ -1,5 +1,9 @@
 package com.project.movie.service.search.Impl;
 
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
+import com.project.movie.config.EsUtilConfigClint;
 import com.project.movie.domain.DO.MovieForSearch;
 import com.project.movie.service.search.InitMovieSearchDataService;
 import net.sf.json.JSONArray;
@@ -9,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -21,6 +26,8 @@ import java.util.Map;
 
 @Service
 public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataService {
+    @Autowired
+    private EsUtilConfigClint clint;
 
     public List<Map<String,String>> readXlsx(File file) throws Exception{
         InputStream in = Files.newInputStream(file.toPath());
@@ -129,6 +136,24 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
                 if (genresItem.size() == 0) genresItem.add("");
                 movieForSearch.setGenres(genresItem);
 
+                // 11. read wordVectors
+                List<Double> wordVectorsItem = new ArrayList<>();
+                String stringWordVector = stringStringMap.get("vector1");
+                String[] stringWordVectorList =  stringWordVector.split(" ");
+                for (String s : stringWordVectorList) {
+                    wordVectorsItem.add(Double.valueOf(s));
+                }
+                movieForSearch.setWordVectors(wordVectorsItem);
+
+                // 12. read sentenceVectors
+                List<Double> sentenceVectorsItem = new ArrayList<>();
+                String stringSentenceVector = stringStringMap.get("vector2");
+                String[] stringSentenceVectorList =  stringSentenceVector.split(" ");
+                for (String s : stringSentenceVectorList) {
+                    sentenceVectorsItem.add(Double.valueOf(s));
+                }
+                movieForSearch.setSentenceVectors(sentenceVectorsItem);
+
                 movieForSearchList.add(movieForSearch);
             } catch (Exception ignored) {
             }
@@ -138,12 +163,28 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
 
     @Override
     public Integer addMovieToElasticSearch(String contentPath) throws Exception {
-        contentPath = "/Users/chengdonghuang/Desktop/movies_es_done.xlsx";
+        contentPath = "/Users/chengdonghuang/Desktop/test.xlsx";
         File file = new File(contentPath);
         if (!file.exists()){
             throw new Exception("文件不存在!");
         }
         List<MovieForSearch> MovieForSearchList = getMovieForSearchList(file);
+        System.out.println(MovieForSearchList);
+        BulkRequest.Builder bk = new BulkRequest.Builder();
+        for (MovieForSearch movieForSearch : MovieForSearchList) {
+            bk.operations(op -> op.index(i -> i.index("newindex2")
+                    .id(String.valueOf(movieForSearch.getMovieId()))
+                    .document(movieForSearch)));
+        }
+        BulkResponse response = clint.configClint().bulk(bk.build());
+        if (response.errors()) {
+            System.out.println("Bulk had errors");
+            for (BulkResponseItem item: response.items()) {
+                if (item.error() != null) {
+                    System.out.println(item.error().reason());
+                }
+            }
+        }
         return MovieForSearchList.size();
     }
 }
