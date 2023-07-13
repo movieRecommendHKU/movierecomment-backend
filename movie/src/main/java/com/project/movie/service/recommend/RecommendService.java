@@ -10,4 +10,5 @@ public interface RecommendService {
 	List<Movie> getAllMovies(Integer userId);
 
 	List<Movie> getMoviesByPolicy(Integer userId, String policy);
+
 }

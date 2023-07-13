@@ -1,48 +1,65 @@
 package com.project.movie.service.recommend;
 
-import java.util.HashMap;
-import java.util.List;
+import com.project.movie.domain.DTO.MovieRecommend;
+import com.project.movie.domain.enums.RecommenderEnum;
+import org.apache.commons.compress.utils.Lists;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
-public abstract class AbsRecommender {
-//	HashMap<String, AbsRecommender> register;
+import javax.annotation.Nullable;
+import java.util.*;
 
-	// TODO: 我认为getAll和getOne应该是只能写在RecommendService中的
-	//  并不需要像昨天讨论说的使用下面这两个方法
-	//  可以直接在RecommendService做List<movieId> transfer to List<Movie>
-	//  Select * from movie where movieId in {movieIdList}
-	public List<Integer> getAll(Integer userId) {
-		return null;
-	}
 
-	public List<Integer> getOne(Integer userId) {
-		return null;
-	}
+public abstract class AbsRecommender implements InitializingBean {
 
-	public List<Integer> startFlow() {
-		// recall
-		// filter
-		// sort
-		// resort
-		return null;
-	}
+    static protected HashMap<RecommenderEnum, AbsRecommender> RECOMMENDERS = new HashMap<>();
 
-	private void setPolicy() {}
+    public static List<AbsRecommender> getRecommenders() {
+        return Lists.newArrayList(RECOMMENDERS.values().iterator());
+    }
 
-	// TODO: protected or private ?
-	protected List<Object> recall(Integer userId) {
-		return null;
-	}
+    @Nullable
+    public static AbsRecommender getRecommenderByProtocol(RecommenderEnum protocol) {
+        return RECOMMENDERS.get(protocol);
+    }
 
-	private List<Object> filter(List<Object> recallResult) {
-		return null;
-	}
+    @Override
+    public void afterPropertiesSet() {
+        register();
+    }
 
-	private List<Object> sort(List<Object> filterResult) {
-		return null;
-	}
+    abstract protected void register();
 
-	private List<Integer> resort(List<Object> sortResult) {
-		return null;
-	}
+    /**
+     * Recommend movies for user
+     *
+     * @param userId
+     * @param recommender
+     * @return
+     */
+    public static List<Integer> recommend(Integer userId, AbsRecommender recommender) {
+        return recommender.sort(
+                recommender.filter(
+                        recommender.recall(userId)));
+    }
+
+    abstract protected List<MovieRecommend> recall(Integer userId);
+
+    abstract protected List<MovieRecommend> filter(List<MovieRecommend> recallResult);
+
+    abstract protected List<Integer> sort(List<MovieRecommend> filterResult);
+
+    /**
+     * default resort
+     *
+     * @param recommendLists
+     * @return movie ids
+     */
+    public static List<Integer> resort(List<List<Integer>> recommendLists) {
+        HashSet<Integer> ids = new HashSet<>();
+        for (List<Integer> recommendList : recommendLists)
+            ids.addAll(recommendList);
+        return ids.stream().toList();
+    }
 
 }
