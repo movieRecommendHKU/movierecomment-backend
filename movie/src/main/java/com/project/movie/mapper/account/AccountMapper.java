@@ -11,4 +11,6 @@ public interface AccountMapper {
 
     void insertAccount(User user);
 
+    void login(User user);
+
 }

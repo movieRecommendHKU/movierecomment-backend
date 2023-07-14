@@ -19,18 +19,22 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public User login(String email, String password) {
-        return accountMapper.findByEmail(email);
+        User user = accountMapper.findByEmail(email);
+        if (user != null) {
+            accountMapper.login(user);
+        }
+        return user;
     }
 
     @Override
-    public boolean register(UserLoginVO loginVO) {
+    public User register(UserLoginVO loginVO) {
         User user = accountMapper.findByEmail(loginVO.getEmail());
-        if(user != null)
-            return false;
+        if (user != null)
+            return null;
         User newUser = new User().setUserName(loginVO.getUserName())
                 .setPassword(loginVO.getPassword())
                 .setEmail(loginVO.getEmail());
         accountMapper.insertAccount(newUser);
-        return true;
+        return newUser;
     }
 }

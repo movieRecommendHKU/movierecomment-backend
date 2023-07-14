@@ -18,5 +18,11 @@
         WHERE email = #{email}
     </select>
 
+    <update id="login" parameterType="com.project.movie.domain.DO.User">
+        UPDATE Account
+        SET lastLogin = now()
+        WHERE userId = #{userId}
+    </update>
+
 
 </mapper>

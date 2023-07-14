@@ -23,7 +23,6 @@ public class AccountController {
     @PostMapping("/login")
     public BaseResponse login(@RequestBody UserLoginVO vo) {
         User user = accountService.login(vo.getEmail(), vo.getPassword());
-        graphService.insertUser(user);
 
         if (user != null) {
             if (user.getPassword().equals(vo.getPassword())) {
@@ -38,9 +37,12 @@ public class AccountController {
 
     @PostMapping("/register")
     public BaseResponse register(@RequestBody UserLoginVO vo) {
-        if (accountService.register(vo))
+        User user = accountService.register(vo);
+        if (user != null) {
+            graphService.insertUser(user);
             return new BaseResponse().setStatus(true).setMsg("Sign Up success!");
-        else
+        } else {
             return new BaseResponse().setStatus(false).setMsg(ACCOUNT_EXIST);
+        }
     }
 }

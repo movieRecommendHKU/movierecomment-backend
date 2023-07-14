@@ -7,5 +7,6 @@ import com.project.movie.domain.VO.UserLoginVO;
 public interface AccountService {
     User login(String email, String password);
 
-    boolean register(UserLoginVO userLoginVO);
+    User register(UserLoginVO userLoginVO);
+
 }
