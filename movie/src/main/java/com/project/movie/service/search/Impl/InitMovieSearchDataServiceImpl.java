@@ -1,8 +1,5 @@
 package com.project.movie.service.search.Impl;
 
-import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.BulkResponse;
-import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import com.project.movie.config.EsUtilConfigClint;
 import com.project.movie.domain.DO.MovieForSearch;
 import com.project.movie.service.search.InitMovieSearchDataService;
@@ -29,6 +26,9 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
     @Autowired
     private EsUtilConfigClint clint;
 
+    final Integer WORD_VECTOR_TYPE = 1;
+    final Integer SENTENCE_VECTOR_TYPE = 2;
+
     public List<Map<String,String>> readXlsx(File file) throws Exception{
         InputStream in = Files.newInputStream(file.toPath());
         // read Excel
@@ -41,7 +41,7 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         // get each line
         for (int i = 1; i < sheetAt.getPhysicalNumberOfRows(); i++) {
             XSSFRow row = sheetAt.getRow(i);
-            // read each row
+            // read each cell
             Map<String,String> map = new HashMap<>();
             for (int index = 0; index < row.getPhysicalNumberOfCells(); index++) {
                 XSSFCell titleCell = titleRow.getCell(index);
@@ -62,14 +62,13 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
             }
             mapList.add(map);
         }
-        //System.out.println(JSON.toJSONString(mapList));
         return mapList;
     }
 
     @Override
-    public List<MovieForSearch> getMovieForSearchList(File file) throws Exception {
+    public Map<Integer,MovieForSearch> getMovieForSearchMap(File file) throws Exception {
         List<Map<String, String>> parseXlsxResult = readXlsx(file);
-        List<MovieForSearch> movieForSearchList = new ArrayList<>();
+        Map<Integer,MovieForSearch> movieForSearchMap = new HashMap<>();
         for (Map<String, String> stringStringMap : parseXlsxResult) {
             try {
                 MovieForSearch movieForSearch = new MovieForSearch();
@@ -136,55 +135,119 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
                 if (genresItem.size() == 0) genresItem.add("");
                 movieForSearch.setGenres(genresItem);
 
-                // 11. read wordVectors
-                List<Double> wordVectorsItem = new ArrayList<>();
-                String stringWordVector = stringStringMap.get("vector1");
-                String[] stringWordVectorList =  stringWordVector.split(" ");
-                for (String s : stringWordVectorList) {
-                    wordVectorsItem.add(Double.valueOf(s));
+                if(!movieForSearchMap.containsKey(movieForSearch.getMovieId())){
+                    movieForSearchMap.put(movieForSearch.getMovieId(),movieForSearch);
                 }
-                movieForSearch.setWordVectors(wordVectorsItem);
-
-                // 12. read sentenceVectors
-                List<Double> sentenceVectorsItem = new ArrayList<>();
-                String stringSentenceVector = stringStringMap.get("vector2");
-                String[] stringSentenceVectorList =  stringSentenceVector.split(" ");
-                for (String s : stringSentenceVectorList) {
-                    sentenceVectorsItem.add(Double.valueOf(s));
-                }
-                movieForSearch.setSentenceVectors(sentenceVectorsItem);
-
-                movieForSearchList.add(movieForSearch);
             } catch (Exception ignored) {
             }
         }
-        return movieForSearchList;
+        return movieForSearchMap;
     }
+
+//    @Override
+//    public void setDirectorNameForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception {
+//        List<Map<String, String>> parseXlsxResult = readXlsx(file);
+//        for (Map<String, String> stringStringMap : parseXlsxResult){
+//            try{
+//                Integer movieId = Integer.valueOf(stringStringMap.get("movie_id"));
+//                JSONObject director = JSONObject.fromObject(stringStringMap.get("director").replaceAll("None", "\"None\""));
+//                String directorName = director.get("name").toString();
+//                if (movieForSearchMap.containsKey(movieId)){
+//                    MovieForSearch movieForSearch = movieForSearchMap.get(movieId);
+//                    movieForSearch.setDirectorName(directorName);
+//                }
+//            }catch (Exception ignored){
+//            }
+//        }
+//    }
+
+    @Override
+    public void setVectorForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap, Integer vectorType) throws Exception {
+        List<Map<String, String>> parseXlsxResult = readXlsx(file);
+        for (Map<String, String> stringStringMap : parseXlsxResult){
+            try{
+                Integer movieId = Integer.valueOf(stringStringMap.get("movie_id"));
+                List<Double> vectorsItem = new ArrayList<>();
+                String stringVector = stringStringMap.get("embedding_data");
+                String[] stringVectorList =  stringVector.split(",");
+                for (String s : stringVectorList) {
+                    vectorsItem.add(Double.valueOf(s));
+                }
+                if (movieForSearchMap.containsKey(movieId)){
+                    MovieForSearch movieForSearch = movieForSearchMap.get(movieId);
+                    if(vectorType.equals(1)){
+                        movieForSearch.setWordVectors(vectorsItem);
+                    } else if (vectorType.equals(2)) {
+                        movieForSearch.setSentenceVectors(vectorsItem);
+                    }
+                }
+            }catch (Exception ignored){
+            }
+        }
+    }
+
 
     @Override
     public Integer addMovieToElasticSearch(String contentPath) throws Exception {
+        // movies before 2017
         contentPath = "/Users/chengdonghuang/Desktop/test.xlsx";
-        File file = new File(contentPath);
-        if (!file.exists()){
+        File movie_file = new File(contentPath);
+        if (!movie_file.exists()){
             throw new Exception("文件不存在!");
         }
-        List<MovieForSearch> MovieForSearchList = getMovieForSearchList(file);
-        System.out.println(MovieForSearchList);
-        BulkRequest.Builder bk = new BulkRequest.Builder();
-        for (MovieForSearch movieForSearch : MovieForSearchList) {
-            bk.operations(op -> op.index(i -> i.index("newindex2")
-                    .id(String.valueOf(movieForSearch.getMovieId()))
-                    .document(movieForSearch)));
+        Map<Integer,MovieForSearch> MovieForSearchMap = getMovieForSearchMap(movie_file);
+
+//        // movies after 2017
+//        String newContentPath = "/Users/chengdonghuang/Desktop/test2.xlsx";
+//        File new_file = new File(newContentPath);
+//        if (!new_file.exists()){
+//            throw new Exception("文件不存在!");
+//        }
+//        Map<Integer,MovieForSearch> MovieForSearchMap2 = getMovieForSearchMap(new_file);
+//        System.out.println(MovieForSearchMap2);
+//
+//        // merge two map
+//        MovieForSearchMap2.forEach((k, v) -> MovieForSearchMap1.merge(k, v, (v1, v2) -> v1));
+//        System.out.println(MovieForSearchMap1.size());
+//        System.out.println(MovieForSearchMap2.size());
+        System.out.println(MovieForSearchMap);
+
+
+        // set word embedding vector for movies
+        String WordFilePath = "/Users/chengdonghuang/Desktop/word_embedding.xlsx";
+        File word_embedding_file = new File(WordFilePath);
+        if (!word_embedding_file.exists()){
+            throw new Exception("文件不存在!");
         }
-        BulkResponse response = clint.configClint().bulk(bk.build());
-        if (response.errors()) {
-            System.out.println("Bulk had errors");
-            for (BulkResponseItem item: response.items()) {
-                if (item.error() != null) {
-                    System.out.println(item.error().reason());
-                }
-            }
+        setVectorForMovie(word_embedding_file, MovieForSearchMap, WORD_VECTOR_TYPE);
+
+
+        // set sentence embedding vector for movies
+        String SentenceFilePath = "/Users/chengdonghuang/Desktop/sentence_embedding.xlsx";
+        File sentence_embedding_file = new File(SentenceFilePath);
+        if (!sentence_embedding_file.exists()){
+            throw new Exception("文件不存在!");
         }
-        return MovieForSearchList.size();
+        setVectorForMovie(sentence_embedding_file, MovieForSearchMap, SENTENCE_VECTOR_TYPE);
+
+
+
+//        BulkRequest.Builder bk = new BulkRequest.Builder();
+//        for (MovieForSearch movieForSearch : MovieForSearchList) {
+//            bk.operations(op -> op.index(i -> i.index("newindex2")
+//                    .id(String.valueOf(movieForSearch.getMovieId()))
+//                    .document(movieForSearch)));
+//        }
+//        BulkResponse response = clint.configClint().bulk(bk.build());
+//        if (response.errors()) {
+//            System.out.println("Bulk had errors");
+//            for (BulkResponseItem item: response.items()) {
+//                if (item.error() != null) {
+//                    System.out.println(item.error().reason());
+//                }
+//            }
+//        }
+        return 1;
     }
+
 }
