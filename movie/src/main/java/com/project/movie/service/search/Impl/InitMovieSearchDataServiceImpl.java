@@ -1,5 +1,8 @@
 package com.project.movie.service.search.Impl;
 
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import com.project.movie.config.EsUtilConfigClint;
 import com.project.movie.domain.DO.MovieForSearch;
 import com.project.movie.service.search.InitMovieSearchDataService;
@@ -230,23 +233,22 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         }
         setVectorForMovie(sentence_embedding_file, MovieForSearchMap, SENTENCE_VECTOR_TYPE);
 
-
-
-//        BulkRequest.Builder bk = new BulkRequest.Builder();
-//        for (MovieForSearch movieForSearch : MovieForSearchList) {
-//            bk.operations(op -> op.index(i -> i.index("newindex2")
-//                    .id(String.valueOf(movieForSearch.getMovieId()))
-//                    .document(movieForSearch)));
-//        }
-//        BulkResponse response = clint.configClint().bulk(bk.build());
-//        if (response.errors()) {
-//            System.out.println("Bulk had errors");
-//            for (BulkResponseItem item: response.items()) {
-//                if (item.error() != null) {
-//                    System.out.println(item.error().reason());
-//                }
-//            }
-//        }
+        List<MovieForSearch> MovieForSearchList = new ArrayList<>(MovieForSearchMap.values());
+        BulkRequest.Builder bk = new BulkRequest.Builder();
+        for (MovieForSearch movieForSearch : MovieForSearchList) {
+            bk.operations(op -> op.index(i -> i.index("newindex")
+                    .id(String.valueOf(movieForSearch.getMovieId()))
+                    .document(movieForSearch)));
+        }
+        BulkResponse response = clint.configClint().bulk(bk.build());
+        if (response.errors()) {
+            System.out.println("Bulk had errors");
+            for (BulkResponseItem item: response.items()) {
+                if (item.error() != null) {
+                    System.out.println(item.error().reason());
+                }
+            }
+        }
         return 1;
     }
 
