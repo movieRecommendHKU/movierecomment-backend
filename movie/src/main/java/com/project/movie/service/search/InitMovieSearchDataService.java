@@ -16,7 +16,7 @@ public interface InitMovieSearchDataService {
 
     Integer addMovieToElasticSearch(String contentPath) throws Exception;
 
-//    void setDirectorNameForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception;
+    void updateKeywordsForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception;
 
     void setVectorForMovie(File file, Map<Integer,MovieForSearch> movieForSearchMap, Integer vectorType) throws Exception;
 

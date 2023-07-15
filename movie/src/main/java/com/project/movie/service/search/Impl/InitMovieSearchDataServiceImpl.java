@@ -147,22 +147,27 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         return movieForSearchMap;
     }
 
-//    @Override
-//    public void setDirectorNameForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception {
-//        List<Map<String, String>> parseXlsxResult = readXlsx(file);
-//        for (Map<String, String> stringStringMap : parseXlsxResult){
-//            try{
-//                Integer movieId = Integer.valueOf(stringStringMap.get("movie_id"));
-//                JSONObject director = JSONObject.fromObject(stringStringMap.get("director").replaceAll("None", "\"None\""));
-//                String directorName = director.get("name").toString();
-//                if (movieForSearchMap.containsKey(movieId)){
-//                    MovieForSearch movieForSearch = movieForSearchMap.get(movieId);
-//                    movieForSearch.setDirectorName(directorName);
-//                }
-//            }catch (Exception ignored){
-//            }
-//        }
-//    }
+    @Override
+    public void updateKeywordsForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception {
+        List<Map<String, String>> parseXlsxResult = readXlsx(file);
+        for (Map<String, String> stringStringMap : parseXlsxResult){
+            try{
+                Integer movieId = Integer.valueOf(stringStringMap.get("movie_id"));
+                String stringKeywords = stringStringMap.get("keywords");
+                stringKeywords = stringKeywords.substring(1, stringKeywords.length()-1);
+                String[] keywords = stringKeywords.split(", ");
+                List<String> Keywords = new ArrayList<>();
+                for (String keyword : keywords) {
+                    Keywords.add(keyword.substring(1, keyword.length() - 1));
+                }
+                if (movieForSearchMap.containsKey(movieId)){
+                    MovieForSearch movieForSearch = movieForSearchMap.get(movieId);
+                    movieForSearch.setKeyWords(Keywords);
+                }
+            }catch (Exception ignored){
+            }
+        }
+    }
 
     @Override
     public void setVectorForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap, Integer vectorType) throws Exception {
@@ -170,17 +175,22 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         for (Map<String, String> stringStringMap : parseXlsxResult){
             try{
                 Integer movieId = Integer.valueOf(stringStringMap.get("movie_id"));
-                List<Double> vectorsItem = new ArrayList<>();
-                String stringVector = stringStringMap.get("embedding_data");
-                String[] stringVectorList =  stringVector.split(",");
-                for (String s : stringVectorList) {
-                    vectorsItem.add(Double.valueOf(s));
-                }
                 if (movieForSearchMap.containsKey(movieId)){
+                    List<Double> vectorsItem = new ArrayList<>();
+                    String stringVector = stringStringMap.get("embedding_data");
                     MovieForSearch movieForSearch = movieForSearchMap.get(movieId);
                     if(vectorType.equals(1)){
+                        stringVector = stringVector.substring(1,stringVector.length()-1);
+                        String[] stringVectorList =  stringVector.split(", ");
+                        for (String s : stringVectorList) {
+                            vectorsItem.add(Double.valueOf(s));
+                        }
                         movieForSearch.setWordVectors(vectorsItem);
                     } else if (vectorType.equals(2)) {
+                        String[] stringVectorList =  stringVector.split(",");
+                        for (String s : stringVectorList) {
+                            vectorsItem.add(Double.valueOf(s));
+                        }
                         movieForSearch.setSentenceVectors(vectorsItem);
                     }
                 }
@@ -193,45 +203,39 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
     @Override
     public Integer addMovieToElasticSearch(String contentPath) throws Exception {
         // movies before 2017
-        contentPath = "/Users/chengdonghuang/Desktop/test.xlsx";
+        contentPath = "/Users/chengdonghuang/Desktop/test/test.xlsx";
         File movie_file = new File(contentPath);
         if (!movie_file.exists()){
             throw new Exception("文件不存在!");
         }
         Map<Integer,MovieForSearch> MovieForSearchMap = getMovieForSearchMap(movie_file);
+        System.out.println(MovieForSearchMap.keySet());
 
-//        // movies after 2017
-//        String newContentPath = "/Users/chengdonghuang/Desktop/test2.xlsx";
-//        File new_file = new File(newContentPath);
-//        if (!new_file.exists()){
-//            throw new Exception("文件不存在!");
-//        }
-//        Map<Integer,MovieForSearch> MovieForSearchMap2 = getMovieForSearchMap(new_file);
-//        System.out.println(MovieForSearchMap2);
-//
-//        // merge two map
-//        MovieForSearchMap2.forEach((k, v) -> MovieForSearchMap1.merge(k, v, (v1, v2) -> v1));
-//        System.out.println(MovieForSearchMap1.size());
-//        System.out.println(MovieForSearchMap2.size());
+        // update keywords for the movies
+        String keyPath = "/Users/chengdonghuang/Desktop/real_data/merged_movies_data.xlsx";
+        File key_file = new File(keyPath);
+        if (!key_file.exists()){
+            throw new Exception("文件不存在!");
+        }
+        updateKeywordsForMovie(key_file, MovieForSearchMap);
         System.out.println(MovieForSearchMap);
 
-
         // set word embedding vector for movies
-        String WordFilePath = "/Users/chengdonghuang/Desktop/word_embedding.xlsx";
+        String WordFilePath = "/Users/chengdonghuang/Desktop/real_data/word_embedding_data.xlsx";
         File word_embedding_file = new File(WordFilePath);
         if (!word_embedding_file.exists()){
             throw new Exception("文件不存在!");
         }
         setVectorForMovie(word_embedding_file, MovieForSearchMap, WORD_VECTOR_TYPE);
 
-
         // set sentence embedding vector for movies
-        String SentenceFilePath = "/Users/chengdonghuang/Desktop/sentence_embedding.xlsx";
+        String SentenceFilePath = "/Users/chengdonghuang/Desktop/real_data/sentence_embedding_data.xlsx";
         File sentence_embedding_file = new File(SentenceFilePath);
         if (!sentence_embedding_file.exists()){
             throw new Exception("文件不存在!");
         }
         setVectorForMovie(sentence_embedding_file, MovieForSearchMap, SENTENCE_VECTOR_TYPE);
+        System.out.println(MovieForSearchMap);
 
         List<MovieForSearch> MovieForSearchList = new ArrayList<>(MovieForSearchMap.values());
         BulkRequest.Builder bk = new BulkRequest.Builder();
