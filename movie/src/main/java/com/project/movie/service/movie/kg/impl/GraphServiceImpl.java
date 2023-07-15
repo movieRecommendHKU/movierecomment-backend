@@ -1,17 +1,21 @@
 package com.project.movie.service.movie.kg.impl;
 
 import com.project.movie.domain.DO.User;
+import com.project.movie.domain.DTO.GraphNode;
+import com.project.movie.domain.enums.UserMovieAction;
 import com.project.movie.service.movie.kg.GraphService;
 import com.project.movie.utils.Neo4jUtil;
 //import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.neo4j.driver.Record;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-//import javax.annotation.Resource;
+
+import java.util.*;
+
 @Slf4j
 @Service
-public class GraphServiceImpl implements GraphService {
+public class GraphServiceImpl extends GraphService {
     @Autowired
     Neo4jUtil neo4jUtil;
 
@@ -20,7 +24,7 @@ public class GraphServiceImpl implements GraphService {
         try {
             String cql = "CREATE (e: %s {%s:%d})";
             cql = String.format(cql,
-                    TAG_USER,
+                    LABEL_USER,
                     PROP_USER_ID,
                     user.getUserId());
             log.info("insertUser: {}", cql);
@@ -40,8 +44,8 @@ public class GraphServiceImpl implements GraphService {
                     + "WHERE e1.%s=%d AND e2.%s=%d "
                     + "CREATE (e1)-[r:%s]->(e2)";
             cql = String.format(cql,
-                    TAG_USER,
-                    TAG_MOVIE,
+                    LABEL_USER,
+                    LABEL_MOVIE,
                     PROP_USER_ID,
                     userId,
                     PROP_MOVIE_ID,
@@ -63,9 +67,9 @@ public class GraphServiceImpl implements GraphService {
                     + "WHERE e1.%s=%d AND e2.%s=%d "
                     + "DELETE r";
             cql = String.format(cql,
-                    TAG_USER,
+                    LABEL_USER,
                     action,
-                    TAG_MOVIE,
+                    LABEL_MOVIE,
                     PROP_USER_ID,
                     userId,
                     PROP_MOVIE_ID,
@@ -77,5 +81,115 @@ public class GraphServiceImpl implements GraphService {
             log.error(e.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public Map<UserMovieAction, List<GraphNode>> getUserActionsToMovies(Integer userId) {
+        List<Record> res;
+        try {
+            String cql = "MATCH (e1: %s)-[r]-(e2: %s) "
+                    + "WHERE e1.%s=%d "
+                    + "RETURN e2.%s as %s, labels(e2) as %s, type(r) as %s";
+            cql = String.format(cql,
+                    LABEL_USER,
+                    LABEL_MOVIE,
+                    PROP_USER_ID,
+                    userId,
+                    PROP_MOVIE_ID,
+                    PROP_USER_ID,
+                    LABEL_GENRES,
+                    LABEL_ACTION);
+            log.info("getUserActionsToMovies: {}", cql);
+            res = neo4jUtil.executeCypherSql(cql);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+        Map<UserMovieAction, List<GraphNode>> actionMovieMap = new HashMap<>() {{
+            this.put(UserMovieAction.COLLECT, new ArrayList<>());
+            this.put(UserMovieAction.HIGH_RATE, new ArrayList<>());
+            this.put(UserMovieAction.LOW_RATE, new ArrayList<>());
+            this.put(UserMovieAction.DISLIKE, new ArrayList<>());
+        }};
+
+        for (Record record : res) {
+            Map<String, Object> recordMap = record.asMap();
+            UserMovieAction action = UserMovieAction.valueOf(recordMap.get(LABEL_ACTION).toString());
+            Integer movieId = Integer.parseInt(recordMap.get(PROP_MOVIE_ID).toString());
+            List<String> genres = convertLabelList(recordMap.get(LABEL_GENRES));
+            genres.remove(LABEL_MOVIE);
+
+            actionMovieMap.get(action)
+                    .add(new GraphNode()
+                            .setNodeId(movieId)
+                            .setLabels(genres)
+                            .setType(LABEL_MOVIE));
+        }
+        return actionMovieMap;
+    }
+
+    @Override
+    public List<String> getUserPreference(Integer userId) {
+        try {
+            String cql = "MATCH (e1: %s) "
+                    + "WHERE e1.%s=%d "
+                    + "RETURN labels(e1) as %s";
+            cql = String.format(cql,
+                    LABEL_USER,
+                    PROP_USER_ID,
+                    userId,
+                    LABEL_GENRES);
+            log.info("getUserPreference: {}", cql);
+            List<Record> res = neo4jUtil.executeCypherSql(cql);
+
+            if (res.isEmpty()) throw new Exception("GraphService: getUserPreference: No user with id " + userId);
+
+            Map<String, Object> record = res.get(0).asMap();
+            List<String> genres = convertLabelList(record.get(LABEL_GENRES));
+            genres.remove(LABEL_USER);
+            return genres;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public boolean updateUserPreference(Integer userId, List<String> remove, List<String> insert) {
+        if (remove.isEmpty() && insert.isEmpty()) return true;
+        try {
+            String removeLabels = String.join(":", remove);
+            String insertLabels = String.join(":", insert);
+
+            String cql = "MATCH (e1: %s) WHERE e1.%s=%d ";
+            cql = String.format(cql,
+                    LABEL_USER,
+                    PROP_USER_ID,
+                    userId);
+
+            if (!remove.isEmpty()) {
+                cql = cql + "REMOVE e1:%s ";
+                cql = String.format(cql, removeLabels);
+            }
+            if (!insert.isEmpty()) {
+                cql = cql + "INSERT e1:%s ";
+                cql = String.format(cql, insertLabels);
+            }
+
+            log.info("updateUserPreference: {}", cql);
+            neo4jUtil.executeCypherSql(cql);
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    private List<String> convertLabelList(Object rawLabels) {
+        if (rawLabels instanceof List<?>) {
+            return ((List<?>) rawLabels).stream().map(Object::toString).toList();
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

@@ -24,5 +24,9 @@
         WHERE userId = #{userId}
     </update>
 
-
+    <select id="getUsersByLastLogin" parameterType="java.util.Date" resultType="com.project.movie.domain.DO.User">
+        SELECT *
+        FROM Account
+        WHERE lastLogin >= #{lastLogin}
+    </select>
 </mapper>

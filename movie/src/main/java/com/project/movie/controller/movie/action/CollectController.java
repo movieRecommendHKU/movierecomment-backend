@@ -2,6 +2,7 @@ package com.project.movie.controller.movie.action;
 
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Collect;
+import com.project.movie.domain.enums.UserMovieAction;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.movie.action.CollectService;
 import com.project.movie.service.movie.kg.GraphService;
@@ -27,7 +28,7 @@ public class CollectController {
         boolean kgCollect = graphService.takeAction(
                 collect.getUserId(),
                 collect.getMovieId(),
-                GraphService.REL_COLLECT);
+                UserMovieAction.COLLECT.name());
 
         if (dbCollect && kgCollect) {
             return new BaseResponse()
@@ -44,7 +45,7 @@ public class CollectController {
             boolean rm = graphService.deleteAction(
                     collect.getUserId(),
                     collect.getMovieId(),
-                    GraphService.REL_COLLECT);
+                    UserMovieAction.COLLECT.name());
             log.error("Remove KG collect: {}.", rm);
             return new BaseResponse()
                     .setStatus(false)
@@ -62,7 +63,7 @@ public class CollectController {
         boolean kgRemove = graphService.deleteAction(
                 collect.getUserId(),
                 collect.getMovieId(),
-                GraphService.REL_COLLECT);
+                UserMovieAction.COLLECT.name());
         if (dbRemove && kgRemove) {
             return new BaseResponse()
                     .setStatus(true)
@@ -78,7 +79,7 @@ public class CollectController {
             boolean rc = graphService.takeAction(
                     collect.getUserId(),
                     collect.getMovieId(),
-                    GraphService.REL_COLLECT);
+                    UserMovieAction.COLLECT.name());
             log.error("Recover remove KG collect: {}.", rc);
             return new BaseResponse()
                     .setStatus(false)

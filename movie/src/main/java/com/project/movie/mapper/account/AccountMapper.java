@@ -4,6 +4,9 @@ import com.project.movie.domain.DO.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 @Repository
 public interface AccountMapper {
 
@@ -12,5 +15,7 @@ public interface AccountMapper {
     void insertAccount(User user);
 
     void login(User user);
+
+    List<User> getUsersByLastLogin(Date LastLogin);
 
 }

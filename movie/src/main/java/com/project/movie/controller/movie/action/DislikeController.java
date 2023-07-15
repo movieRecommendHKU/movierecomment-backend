@@ -1,6 +1,7 @@
 package com.project.movie.controller.movie.action;
 
 import com.project.movie.domain.DO.Dislike;
+import com.project.movie.domain.enums.UserMovieAction;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.kg.GraphService;
@@ -25,7 +26,7 @@ public class DislikeController {
         boolean kgRes = graphService.takeAction(
                 dislike.getUserId(),
                 dislike.getMovieId(),
-                GraphService.REL_DISLIKE);
+                UserMovieAction.DISLIKE.name());
         return dbRes && kgRes ?
                 new BaseResponse().setStatus(true).setContent("Dislike successfully.") :
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");
