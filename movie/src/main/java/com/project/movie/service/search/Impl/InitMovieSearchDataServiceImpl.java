@@ -8,11 +8,18 @@ import com.project.movie.domain.DO.MovieForSearch;
 import com.project.movie.service.search.InitMovieSearchDataService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -203,7 +210,8 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
     @Override
     public Integer addMovieToElasticSearch(String contentPath) throws Exception {
         // movies before 2017
-        contentPath = "/Users/chengdonghuang/Desktop/test/test.xlsx";
+        contentPath = "../movie_es_all.xlsx";
+//        contentPath = "/Users/jackwu/Desktop/HKU/Project/movies_es_all.xlsx";
         File movie_file = new File(contentPath);
         if (!movie_file.exists()){
             throw new Exception("文件不存在!");
@@ -212,7 +220,8 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         System.out.println(MovieForSearchMap.keySet());
 
         // update keywords for the movies
-        String keyPath = "/Users/chengdonghuang/Desktop/real_data/merged_movies_data.xlsx";
+        String keyPath = "../merged_movies_data.xlsx";
+//        String keyPath = "/Users/jackwu/Desktop/HKU/Project/merged_movies_data.xlsx";
         File key_file = new File(keyPath);
         if (!key_file.exists()){
             throw new Exception("文件不存在!");
@@ -221,7 +230,8 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         System.out.println(MovieForSearchMap);
 
         // set word embedding vector for movies
-        String WordFilePath = "/Users/chengdonghuang/Desktop/real_data/word_embedding_data.xlsx";
+        String WordFilePath = "../word_embedding_data.xlsx";
+//        String WordFilePath = "/Users/jackwu/Desktop/HKU/Project/word_embedding_data.xlsx";
         File word_embedding_file = new File(WordFilePath);
         if (!word_embedding_file.exists()){
             throw new Exception("文件不存在!");
@@ -229,7 +239,8 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         setVectorForMovie(word_embedding_file, MovieForSearchMap, WORD_VECTOR_TYPE);
 
         // set sentence embedding vector for movies
-        String SentenceFilePath = "/Users/chengdonghuang/Desktop/real_data/sentence_embedding_data.xlsx";
+        String SentenceFilePath = "../sentence_embedding_data.xlsx";
+//        String SentenceFilePath = "/Users/jackwu/Desktop/HKU/Project/sentence_embedding_data.xlsx";
         File sentence_embedding_file = new File(SentenceFilePath);
         if (!sentence_embedding_file.exists()){
             throw new Exception("文件不存在!");
@@ -238,6 +249,13 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         System.out.println(MovieForSearchMap);
 
         List<MovieForSearch> MovieForSearchList = new ArrayList<>(MovieForSearchMap.values());
+
+//        String host = "121.43.150.228";
+//        int port = 9200;
+//        String username = "elastic";
+//        String password = "Wtc@0229";
+//        RestHighLevelClient client = createElasticsearchClient(host, port, username, password);
+
         BulkRequest.Builder bk = new BulkRequest.Builder();
         for (MovieForSearch movieForSearch : MovieForSearchList) {
             bk.operations(op -> op.index(i -> i.index("newindex")
@@ -256,4 +274,16 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         return 1;
     }
 
+    // 创建带有身份验证的Elasticsearch客户端连接
+//    private RestHighLevelClient createElasticsearchClient(String host, int port, String username, String password) {
+//        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+//        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
+//
+//        RestClientBuilder builder = RestClient.builder(new HttpHost(host, port, "https"))
+//                .setHttpClientConfigCallback(httpClientBuilder ->
+//                        httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
+//
+//        RestHighLevelClient client = new RestHighLevelClient(builder);
+//        return client;
+//    }
 }
