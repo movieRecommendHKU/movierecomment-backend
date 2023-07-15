@@ -12,7 +12,6 @@ import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.base.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 //import javax.annotation.Resource;
@@ -68,6 +67,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieSimilarity> getSimilarMovies(Integer movieId) {
         return movieMapper.getSimilarMovies(movieId);
+    }
+
+    @Override
+    public 	List<Movie> getHotMoviesThisYear() {
+        return movieMapper.getThisYearHotMovies();
     }
 
 }

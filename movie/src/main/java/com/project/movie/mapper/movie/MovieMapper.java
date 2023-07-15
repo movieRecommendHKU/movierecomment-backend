@@ -13,4 +13,5 @@ public interface MovieMapper {
 
 	List<MovieSimilarity> getSimilarMovies(Integer movieId);
 
+	List<Movie> getThisYearHotMovies();
 }
