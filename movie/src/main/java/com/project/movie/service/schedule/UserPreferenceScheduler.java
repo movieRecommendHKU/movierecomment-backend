@@ -4,6 +4,7 @@ import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
 import com.project.movie.mapper.account.AccountMapper;
+import com.project.movie.service.account.AccountService;
 import com.project.movie.service.movie.kg.GraphService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,8 @@ import java.util.*;
 @Component
 @Slf4j
 public class UserPreferenceScheduler {
-    @Resource
-    AccountMapper accountMapper;
+    @Autowired
+    AccountService accountService;
 
     @Autowired
     GraphService graphService;
@@ -34,7 +35,7 @@ public class UserPreferenceScheduler {
      */
     @Scheduled(cron = "0 0 1 1 * ?")
     public void updateUserPreference() {
-        List<User> users = accountMapper.getUsersByLastLogin(getLastMonth());
+        List<User> users = accountService.getUsersByLastLogin(getLastMonth());
         log.info("UserPreferenceScheduler: update {} user.", users.size());
         for (User user : users) {
             Integer userId = user.getUserId();

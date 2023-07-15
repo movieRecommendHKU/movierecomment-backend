@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 //import javax.annotation.Resource;
 
 @Service
@@ -36,5 +39,10 @@ public class AccountServiceImpl implements AccountService {
                 .setEmail(loginVO.getEmail());
         accountMapper.insertAccount(newUser);
         return newUser;
+    }
+
+    @Override
+    public List<User> getUsersByLastLogin(Date lastLogin) {
+        return accountMapper.getUsersByLastLogin(lastLogin);
     }
 }
