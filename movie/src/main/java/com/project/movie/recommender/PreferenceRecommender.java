@@ -74,6 +74,7 @@ public class PreferenceRecommender extends AbsRecommender {
                         .orElse(null))
                 .filter(Objects::nonNull)
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
+                .limit(GENRE_RECALL_MOVIE_LIMIT)
                 .toList();
         return filterResult;
     }
