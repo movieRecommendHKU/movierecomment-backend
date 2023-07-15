@@ -40,4 +40,14 @@ public class CollectServiceImpl implements CollectService {
             return null;
         }
     }
+
+    @Override
+    public List<Collect> getRecentCollectionsByUser(Integer userId) {
+        return collectMapper.getRecentByUser(userId);
+    }
+
+    @Override
+    public List<Collect> getRecentBySimilarUsers(List<Integer> similarUsers) {
+        return collectMapper.getRecentBySimilarUsers(similarUsers);
+    }
 }
