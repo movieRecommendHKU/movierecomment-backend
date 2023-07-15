@@ -1,7 +1,6 @@
-package com.project.movie.service.movie.kg.impl;
+package com.project.movie.service.movie.kg;
 
 import com.project.movie.domain.DO.User;
-import com.project.movie.service.movie.kg.GraphService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.test.annotation.Rollback;
 import java.util.List;
 
 @SpringBootTest
-public class GraphServiceImplTest {
+public class GraphServiceTest {
     @Autowired
     GraphService graphService;
 

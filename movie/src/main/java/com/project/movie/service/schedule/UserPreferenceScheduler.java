@@ -23,10 +23,10 @@ public class UserPreferenceScheduler {
     GraphService graphService;
 
     private static final Map<UserMovieAction, Double> ACTION_SCORE_MAP = new HashMap<>() {{
-        this.put(UserMovieAction.COLLECT, 2.0);
-        this.put(UserMovieAction.HIGH_RATE, 1.5);
-        this.put(UserMovieAction.LOW_RATE, -0.5);
-        this.put(UserMovieAction.DISLIKE, -2.0);
+        this.put(UserMovieAction.collect, 2.0);
+        this.put(UserMovieAction.high_rate, 1.5);
+        this.put(UserMovieAction.low_rate, -0.5);
+        this.put(UserMovieAction.dislike, -2.0);
     }};
 
     /**

@@ -26,7 +26,7 @@ public class DislikeController {
         boolean kgRes = graphService.takeAction(
                 dislike.getUserId(),
                 dislike.getMovieId(),
-                UserMovieAction.DISLIKE.name());
+                UserMovieAction.dislike.name());
         return dbRes && kgRes ?
                 new BaseResponse().setStatus(true).setContent("Dislike successfully.") :
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");

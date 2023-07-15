@@ -4,33 +4,35 @@ import com.project.movie.config.Common;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public abstract class GraphService {
     // labels
-    protected String LABEL_GENRES = "genres";
-    protected String LABEL_ACTION = "action";
-    protected String LABEL_MOVIE = "movie";
-    protected String LABEL_PERSON = "person";
-    protected String LABEL_USER = "user";
+    protected static final String LABEL_GENRES = "genres";
+    protected static final String LABEL_ACTION = "action";
+    protected static final String LABEL_MOVIE = "movie";
+    protected static final String LABEL_PERSON = "person";
+    protected static final String LABEL_USER = "user";
 
     // properties
-    protected String PROP_USER_ID = "userId";
-    protected String PROP_MOVIE_ID = "movieId";
+    protected static final String PROP_USER_ID = "userId";
+    protected static final String PROP_MOVIE_ID = "movieId";
 
     // relations: person -> movie
-    protected String REL_ACT = "act";
-    protected String REL_DIRECT = "direct";
+    protected static final String REL_ACT = "act";
+    protected static final String REL_DIRECT = "direct";
 
     // relations: user -> movie
-    protected String REL_COLLECT = UserMovieAction.COLLECT.name();
-    protected static final String REL_HIGH_RATE = UserMovieAction.HIGH_RATE.name();
-    protected static final String REL_LOW_RATE = UserMovieAction.LOW_RATE.name();
-    protected static final String REL_DISLIKE = UserMovieAction.DISLIKE.name();
+    protected static final String REL_COLLECT = UserMovieAction.collect.name();
+    protected static final String REL_HIGH_RATE = UserMovieAction.high_rate.name();
+    protected static final String REL_LOW_RATE = UserMovieAction.low_rate.name();
+    protected static final String REL_DISLIKE = UserMovieAction.dislike.name();
 
     public abstract boolean insertUser(User user);
 
@@ -45,6 +47,7 @@ public abstract class GraphService {
     public abstract boolean updateUserPreference(Integer userId, List<String> remove, List<String> insert);
 
     public static String getRateRelName(double rate) {
+        log.info("rate:{}, high rate threshold:{}, low rate threshold:{}", rate, Common.HIGH_RATING, Common.LOW_RATING);
         if (rate >= Common.HIGH_RATING) return REL_HIGH_RATE;
         else if (rate <= Common.LOW_RATING) return REL_LOW_RATE;
         else return null;

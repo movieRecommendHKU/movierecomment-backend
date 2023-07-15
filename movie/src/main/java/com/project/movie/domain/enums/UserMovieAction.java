@@ -1,11 +1,10 @@
 package com.project.movie.domain.enums;
 
-public enum UserMovieAction {
-    COLLECT("collect"),
-    HIGH_RATE("high_rate"),
-    LOW_RATE("low_rate"),
-    DISLIKE("dislike");
+import lombok.Data;
 
-    UserMovieAction(String name) {
-    }
+public enum UserMovieAction {
+    collect,
+    high_rate,
+    low_rate,
+    dislike;
 }

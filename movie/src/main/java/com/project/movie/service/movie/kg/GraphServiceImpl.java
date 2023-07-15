@@ -1,11 +1,9 @@
-package com.project.movie.service.movie.kg.impl;
+package com.project.movie.service.movie.kg;
 
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
-import com.project.movie.service.movie.kg.GraphService;
 import com.project.movie.utils.Neo4jUtil;
-//import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.driver.Record;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +94,7 @@ public class GraphServiceImpl extends GraphService {
                     PROP_USER_ID,
                     userId,
                     PROP_MOVIE_ID,
-                    PROP_USER_ID,
+                    PROP_MOVIE_ID,
                     LABEL_GENRES,
                     LABEL_ACTION);
             log.info("getUserActionsToMovies: {}", cql);
@@ -106,18 +104,17 @@ public class GraphServiceImpl extends GraphService {
             return null;
         }
         Map<UserMovieAction, List<GraphNode>> actionMovieMap = new HashMap<>() {{
-            this.put(UserMovieAction.COLLECT, new ArrayList<>());
-            this.put(UserMovieAction.HIGH_RATE, new ArrayList<>());
-            this.put(UserMovieAction.LOW_RATE, new ArrayList<>());
-            this.put(UserMovieAction.DISLIKE, new ArrayList<>());
+            this.put(UserMovieAction.collect, new ArrayList<>());
+            this.put(UserMovieAction.high_rate, new ArrayList<>());
+            this.put(UserMovieAction.low_rate, new ArrayList<>());
+            this.put(UserMovieAction.dislike, new ArrayList<>());
         }};
 
         for (Record record : res) {
             Map<String, Object> recordMap = record.asMap();
             UserMovieAction action = UserMovieAction.valueOf(recordMap.get(LABEL_ACTION).toString());
             Integer movieId = Integer.parseInt(recordMap.get(PROP_MOVIE_ID).toString());
-            List<String> genres = convertLabelList(recordMap.get(LABEL_GENRES));
-            genres.remove(LABEL_MOVIE);
+            List<String> genres = convertLabelList(recordMap.get(LABEL_GENRES), Collections.singletonList(LABEL_MOVIE));
 
             actionMovieMap.get(action)
                     .add(new GraphNode()
@@ -145,8 +142,7 @@ public class GraphServiceImpl extends GraphService {
             if (res.isEmpty()) throw new Exception("GraphService: getUserPreference: No user with id " + userId);
 
             Map<String, Object> record = res.get(0).asMap();
-            List<String> genres = convertLabelList(record.get(LABEL_GENRES));
-            genres.remove(LABEL_USER);
+            List<String> genres = convertLabelList(record.get(LABEL_GENRES), Collections.singletonList(LABEL_USER));
             return genres;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -158,8 +154,8 @@ public class GraphServiceImpl extends GraphService {
     public boolean updateUserPreference(Integer userId, List<String> remove, List<String> insert) {
         if (remove.isEmpty() && insert.isEmpty()) return true;
         try {
-            String removeLabels = String.join(":", remove);
-            String insertLabels = String.join(":", insert);
+            String removeLabels = "`" + String.join("`:`", remove) + "`";
+            String insertLabels = "`" + String.join("`:`", insert) + "`";
 
             String cql = "MATCH (e1: %s) WHERE e1.%s=%d ";
             cql = String.format(cql,
@@ -172,7 +168,7 @@ public class GraphServiceImpl extends GraphService {
                 cql = String.format(cql, removeLabels);
             }
             if (!insert.isEmpty()) {
-                cql = cql + "INSERT e1:%s ";
+                cql = cql + "SET e1:%s ";
                 cql = String.format(cql, insertLabels);
             }
 
@@ -185,9 +181,12 @@ public class GraphServiceImpl extends GraphService {
         }
     }
 
-    private List<String> convertLabelList(Object rawLabels) {
+    private List<String> convertLabelList(Object rawLabels, List<String> remove) {
         if (rawLabels instanceof List<?>) {
-            return ((List<?>) rawLabels).stream().map(Object::toString).toList();
+            return ((List<?>) rawLabels).stream()
+                    .map(Object::toString)
+                    .filter(label -> !remove.contains(label))
+                    .toList();
         } else {
             return Collections.emptyList();
         }

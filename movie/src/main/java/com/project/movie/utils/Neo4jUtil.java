@@ -37,7 +37,7 @@ public class Neo4jUtil {
         try (Session session = neo4jDriver.session()) {
             Transaction tx = session.beginTransaction();
             result = tx.run(cypherSql).list();
-            log.info("executeCypherSql result: {}", result);
+//            log.info("executeCypherSql result: {}", result);
             tx.commit();
         } catch (Exception e) {
             log.warn("executeCypherSql:{}", e.getMessage());

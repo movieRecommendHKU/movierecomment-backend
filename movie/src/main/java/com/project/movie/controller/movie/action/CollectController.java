@@ -28,7 +28,7 @@ public class CollectController {
         boolean kgCollect = graphService.takeAction(
                 collect.getUserId(),
                 collect.getMovieId(),
-                UserMovieAction.COLLECT.name());
+                UserMovieAction.collect.name());
 
         if (dbCollect && kgCollect) {
             return new BaseResponse()
@@ -45,7 +45,7 @@ public class CollectController {
             boolean rm = graphService.deleteAction(
                     collect.getUserId(),
                     collect.getMovieId(),
-                    UserMovieAction.COLLECT.name());
+                    UserMovieAction.collect.name());
             log.error("Remove KG collect: {}.", rm);
             return new BaseResponse()
                     .setStatus(false)
@@ -63,7 +63,7 @@ public class CollectController {
         boolean kgRemove = graphService.deleteAction(
                 collect.getUserId(),
                 collect.getMovieId(),
-                UserMovieAction.COLLECT.name());
+                UserMovieAction.collect.name());
         if (dbRemove && kgRemove) {
             return new BaseResponse()
                     .setStatus(true)
@@ -79,7 +79,7 @@ public class CollectController {
             boolean rc = graphService.takeAction(
                     collect.getUserId(),
                     collect.getMovieId(),
-                    UserMovieAction.COLLECT.name());
+                    UserMovieAction.collect.name());
             log.error("Recover remove KG collect: {}.", rc);
             return new BaseResponse()
                     .setStatus(false)
