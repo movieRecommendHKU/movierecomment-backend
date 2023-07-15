@@ -1,5 +1,6 @@
-package com.project.movie.service.schedule;
+package com.project.movie.schedule;
 
+import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
@@ -40,7 +41,7 @@ public class UserPreferenceScheduler {
         for (User user : users) {
             Integer userId = user.getUserId();
             log.info("UserPreferenceScheduler: update user userId = {}", userId);
-            List<String> oldGenres = graphService.getUserPreference(userId);
+            List<String> oldGenres = graphService.getUserPreferenceLabel(userId);
             List<String> newGenres = getUserPreferenceGenres(userId);
             List<String> removeGenres = oldGenres.stream().filter(genre -> !newGenres.contains(genre)).toList();
             List<String> insertGenres = newGenres.stream().filter(genre -> !oldGenres.contains(genre)).toList();

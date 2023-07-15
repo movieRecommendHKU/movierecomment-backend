@@ -8,4 +8,6 @@ import java.util.List;
 @Service
 public interface DislikeService {
     Integer dislike(Dislike dislike);
+
+    List<Dislike> getUserDislikes(Integer userId);
 }

@@ -1,12 +1,11 @@
 package com.project.movie.service.recommend.impl;
 
 import com.project.movie.domain.DO.Movie;
-import com.project.movie.service.recommend.AbsRecommender;
+import com.project.movie.recommender.AbsRecommender;
 import com.project.movie.service.recommend.RecommendService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service

@@ -1,8 +1,7 @@
-package com.project.movie.service.recommend.impl;
+package com.project.movie.recommender;
 
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
-import com.project.movie.service.recommend.AbsRecommender;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class ItemBasedRecommender extends AbsRecommender {
     }
 
     @Override
-    protected List<MovieRecommend> filter(List<MovieRecommend> recallResult) {
+    protected List<MovieRecommend> filter(List<MovieRecommend> recallResult, Integer userId) {
         return null;
     }
 

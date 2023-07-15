@@ -8,5 +8,5 @@ import lombok.experimental.Accessors;
 public class MovieRecommend {
     Integer movieId;
     Double weight;
-    Integer repeatCount;
+    Integer count;
 }

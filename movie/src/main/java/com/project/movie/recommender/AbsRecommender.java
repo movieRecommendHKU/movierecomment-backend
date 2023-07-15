@@ -1,10 +1,9 @@
-package com.project.movie.service.recommend;
+package com.project.movie.recommender;
 
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -38,14 +37,15 @@ public abstract class AbsRecommender implements InitializingBean {
      * @return
      */
     public static List<Integer> recommend(Integer userId, AbsRecommender recommender) {
-        return recommender.sort(
-                recommender.filter(
-                        recommender.recall(userId)));
+        List<MovieRecommend> recallResult = recommender.recall(userId);
+        List<MovieRecommend> filterResult = recommender.filter(recallResult, userId);
+        List<Integer> sortResult = recommender.sort(filterResult);
+        return sortResult;
     }
 
     abstract protected List<MovieRecommend> recall(Integer userId);
 
-    abstract protected List<MovieRecommend> filter(List<MovieRecommend> recallResult);
+    abstract protected List<MovieRecommend> filter(List<MovieRecommend> recallResult, Integer userId);
 
     abstract protected List<Integer> sort(List<MovieRecommend> filterResult);
 

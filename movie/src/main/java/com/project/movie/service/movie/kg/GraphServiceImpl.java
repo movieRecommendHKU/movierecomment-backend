@@ -1,5 +1,6 @@
 package com.project.movie.service.movie.kg;
 
+import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
@@ -126,7 +127,7 @@ public class GraphServiceImpl extends GraphService {
     }
 
     @Override
-    public List<String> getUserPreference(Integer userId) {
+    public List<String> getUserPreferenceLabel(Integer userId) {
         try {
             String cql = "MATCH (e1: %s) "
                     + "WHERE e1.%s=%d "
@@ -142,12 +143,19 @@ public class GraphServiceImpl extends GraphService {
             if (res.isEmpty()) throw new Exception("GraphService: getUserPreference: No user with id " + userId);
 
             Map<String, Object> record = res.get(0).asMap();
-            List<String> genres = convertLabelList(record.get(LABEL_GENRES), Collections.singletonList(LABEL_USER));
-            return genres;
-        } catch (Exception e) {
+            List<String> genreLabels = convertLabelList(record.get(LABEL_GENRES), Collections.singletonList(LABEL_USER));
+            return genreLabels;
+        } catch (
+                Exception e) {
             log.error(e.getMessage());
             return Collections.emptyList();
         }
+
+    }
+
+    @Override
+    public List<Genre> getUserPreferenceGenre(Integer userId) {
+        return getUserPreferenceLabel(userId).stream().map(GraphService::labelToGenre).toList();
     }
 
     @Override
@@ -181,14 +189,23 @@ public class GraphServiceImpl extends GraphService {
         }
     }
 
-    private List<String> convertLabelList(Object rawLabels, List<String> remove) {
-        if (rawLabels instanceof List<?>) {
-            return ((List<?>) rawLabels).stream()
-                    .map(Object::toString)
-                    .filter(label -> !remove.contains(label))
-                    .toList();
-        } else {
+    @Override
+    public List<Integer> getMoviesByGenre(Genre genre, int limit) {
+        try {
+            String cql = "MATCH (e1:%s:`%s`) return e1.%s limit %d";
+            cql = String.format(cql,
+                    LABEL_MOVIE,
+                    genreToLabel(genre),
+                    PROP_MOVIE_ID,
+                    limit);
+
+            log.info("updateUserPreference: {}", cql);
+            List<Record> res = neo4jUtil.executeCypherSql(cql);
+            return res.stream().map(record -> record.get(PROP_MOVIE_ID).asInt()).toList();
+        } catch (Exception e) {
+            log.error(e.getMessage());
             return Collections.emptyList();
         }
     }
+
 }
