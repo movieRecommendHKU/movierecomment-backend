@@ -22,8 +22,7 @@ public class GraphServiceImpl extends GraphService {
     public boolean insertUser(User user) {
         try {
             String cql = "CREATE (e: %s {%s:%d})";
-            cql = String.format(cql,
-                    LABEL_USER,
+            cql = String.format(cql, LABEL_USER,
                     PROP_USER_ID,
                     user.getUserId());
             log.info("insertUser: {}", cql);
@@ -40,15 +39,13 @@ public class GraphServiceImpl extends GraphService {
     public boolean takeAction(Integer userId, Integer movieId, String action) {
         try {
             String cql = "MATCH (e1: %s), (e2: %s) "
-                    + "WHERE e1.%s=%d AND e2.%s=%d "
+                    + "WHERE e1.%s=%d "
+                    + "AND e2.%s=%d "
                     + "CREATE (e1)-[r:%s]->(e2)";
             cql = String.format(cql,
-                    LABEL_USER,
-                    LABEL_MOVIE,
-                    PROP_USER_ID,
-                    userId,
-                    PROP_MOVIE_ID,
-                    movieId,
+                    LABEL_USER, LABEL_MOVIE,
+                    PROP_USER_ID, userId,
+                    PROP_MOVIE_ID, movieId,
                     action);
             log.info("takeAction: {}", cql);
             neo4jUtil.executeCypherSql(cql);
@@ -63,16 +60,13 @@ public class GraphServiceImpl extends GraphService {
     public boolean deleteAction(Integer userId, Integer movieId, String action) {
         try {
             String cql = "MATCH (e1: %s)-[r:%s]->(e2: %s) "
-                    + "WHERE e1.%s=%d AND e2.%s=%d "
+                    + "WHERE e1.%s=%d "
+                    + "AND e2.%s=%d "
                     + "DELETE r";
             cql = String.format(cql,
-                    LABEL_USER,
-                    action,
-                    LABEL_MOVIE,
-                    PROP_USER_ID,
-                    userId,
-                    PROP_MOVIE_ID,
-                    movieId);
+                    LABEL_USER, action, LABEL_MOVIE,
+                    PROP_USER_ID, userId,
+                    PROP_MOVIE_ID, movieId);
             log.info("deleteAction: {}", cql);
             neo4jUtil.executeCypherSql(cql);
             return true;
@@ -88,14 +82,13 @@ public class GraphServiceImpl extends GraphService {
         try {
             String cql = "MATCH (e1: %s)-[r]-(e2: %s) "
                     + "WHERE e1.%s=%d "
-                    + "RETURN e2.%s as %s, labels(e2) as %s, type(r) as %s";
+                    + "RETURN e2.%s as %s, "
+                    + "labels(e2) as %s, "
+                    + "type(r) as %s";
             cql = String.format(cql,
-                    LABEL_USER,
-                    LABEL_MOVIE,
-                    PROP_USER_ID,
-                    userId,
-                    PROP_MOVIE_ID,
-                    PROP_MOVIE_ID,
+                    LABEL_USER, LABEL_MOVIE,
+                    PROP_USER_ID, userId,
+                    PROP_MOVIE_ID, PROP_MOVIE_ID,
                     LABEL_GENRES,
                     LABEL_ACTION);
             log.info("getUserActionsToMovies: {}", cql);
@@ -134,8 +127,7 @@ public class GraphServiceImpl extends GraphService {
                     + "RETURN labels(e1) as %s";
             cql = String.format(cql,
                     LABEL_USER,
-                    PROP_USER_ID,
-                    userId,
+                    PROP_USER_ID, userId,
                     LABEL_GENRES);
             log.info("getUserPreference: {}", cql);
             List<Record> res = neo4jUtil.executeCypherSql(cql);
@@ -168,8 +160,7 @@ public class GraphServiceImpl extends GraphService {
             String cql = "MATCH (e1: %s) WHERE e1.%s=%d ";
             cql = String.format(cql,
                     LABEL_USER,
-                    PROP_USER_ID,
-                    userId);
+                    PROP_USER_ID, userId);
 
             if (!remove.isEmpty()) {
                 cql = cql + "REMOVE e1:%s ";
@@ -192,14 +183,37 @@ public class GraphServiceImpl extends GraphService {
     @Override
     public List<Integer> getMoviesByGenre(Genre genre, int limit) {
         try {
-            String cql = "MATCH (e1:%s:`%s`) return e1.%s limit %d";
+            String cql = "MATCH (e1:%s:`%s`) "
+                    + "RETURN e1.%s "
+                    + "LIMIT %d";
             cql = String.format(cql,
-                    LABEL_MOVIE,
-                    genreToLabel(genre),
+                    LABEL_MOVIE, genreToLabel(genre),
                     PROP_MOVIE_ID,
                     limit);
 
-            log.info("updateUserPreference: {}", cql);
+            log.info("getMoviesByGenre: {}", cql);
+            List<Record> res = neo4jUtil.executeCypherSql(cql);
+            return res.stream().map(record -> record.get(PROP_MOVIE_ID).asInt()).toList();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Integer> getMoviesInDepth(Integer startMovieId, int depth, int limit) {
+        try {
+            String cql = "MATCH (e1:%s)-[*0..%d]-(e2:%s) "
+                    + "WHERE e1.%s=%d "
+                    + "RETURN e2.%s "
+                    + "LIMIT %d";
+            cql = String.format(cql,
+                    LABEL_MOVIE, depth, LABEL_MOVIE,
+                    PROP_MOVIE_ID, startMovieId,
+                    PROP_MOVIE_ID,
+                    limit);
+
+            log.info("getMoviesInDepth: {}", cql);
             List<Record> res = neo4jUtil.executeCypherSql(cql);
             return res.stream().map(record -> record.get(PROP_MOVIE_ID).asInt()).toList();
         } catch (Exception e) {

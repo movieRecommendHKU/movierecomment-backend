@@ -10,5 +10,5 @@ public interface CollectService {
 
     boolean removeCollect(Integer collectId);
 
-    PageInfo<Collect> getCollectionsByUser(Integer page, Integer pageSize, Integer userId);
+    PageInfo<Collect> getCollectionsByUser(Integer page, Integer pageSize, String order, Integer userId);
 }

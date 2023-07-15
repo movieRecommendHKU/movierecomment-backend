@@ -94,8 +94,9 @@ public class CollectController {
     @GetMapping("/get_user_collection")
     public BaseResponse getCollectionsByUser(@RequestParam Integer page,
                                              @RequestParam Integer pageSize,
+                                             @RequestParam String order,
                                              @RequestParam Integer userId) {
-        PageInfo<Collect> res = collectService.getCollectionsByUser(page, pageSize, userId);
+        PageInfo<Collect> res = collectService.getCollectionsByUser(page, pageSize, order, userId);
         return res != null ?
                 new BaseResponse().setStatus(true).setMsg("Get collections.").setContent(res) :
                 new BaseResponse().setStatus(true).setMsg("Get collections. failed.");

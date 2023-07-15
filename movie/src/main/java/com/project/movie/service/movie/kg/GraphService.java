@@ -52,6 +52,8 @@ public abstract class GraphService {
 
     public abstract List<Integer> getMoviesByGenre(Genre genre, int limit);
 
+    public abstract List<Integer> getMoviesInDepth(Integer startMovieId, int depth, int limit);
+
     public static String getRateRelName(double rate) {
         log.info("rate:{}, high rate threshold:{}, low rate threshold:{}", rate, Common.HIGH_RATING, Common.LOW_RATING);
         if (rate >= Common.HIGH_RATING) return REL_HIGH_RATE;

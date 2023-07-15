@@ -7,7 +7,6 @@ import com.project.movie.mapper.movie.CollectMapper;
 import com.project.movie.service.movie.action.CollectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +30,8 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public PageInfo<Collect> getCollectionsByUser(Integer page, Integer pageSize, Integer userId) {
-        PageHelper.startPage(page, pageSize);
+    public PageInfo<Collect> getCollectionsByUser(Integer page, Integer pageSize, String order, Integer userId) {
+        PageHelper.startPage(page, pageSize, order);
         try {
             List<Collect> collectList = collectMapper.getCollectionsByUser(userId);
             return new PageInfo<>(collectList);
