@@ -15,5 +15,4 @@ public interface CollectMapper {
 
     List<Collect> getRecentByUser(Integer userId);
 
-    List<Collect> getRecentBySimilarUsers(List<Integer> users);
 }

@@ -19,10 +19,4 @@ public interface CollectService {
      */
     List<Collect> getRecentCollectionsByUser(Integer userId);
 
-    /**
-     *
-     * @param similarUsers
-     * @return 20 similar users' 10 recent collected movies
-     */
-    List<Collect> getRecentBySimilarUsers(List<Integer> similarUsers);
 }

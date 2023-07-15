@@ -45,9 +45,4 @@ public class CollectServiceImpl implements CollectService {
     public List<Collect> getRecentCollectionsByUser(Integer userId) {
         return collectMapper.getRecentByUser(userId);
     }
-
-    @Override
-    public List<Collect> getRecentBySimilarUsers(List<Integer> similarUsers) {
-        return collectMapper.getRecentBySimilarUsers(similarUsers);
-    }
 }
