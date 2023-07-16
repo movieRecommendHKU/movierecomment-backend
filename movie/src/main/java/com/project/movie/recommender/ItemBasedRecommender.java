@@ -43,7 +43,7 @@ public class ItemBasedRecommender extends AbsRecommender {
         List<MovieRecommend> recallResult = collections.stream()
                 .flatMap(collectMovieId -> movieService.getSimilarMovies(collectMovieId).stream())
                 .map(movieSimilarity -> new MovieRecommend()
-                        .setMovieId(movieSimilarity.getMovieId())
+                        .setMovieId(movieSimilarity.getSimilarId())
                         .setCount(1)
                         .setWeight(movieSimilarity.getSimilarity()))
                 .toList();
@@ -68,7 +68,6 @@ public class ItemBasedRecommender extends AbsRecommender {
                 })
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
                 .distinct()
-                .limit(ITEM_BASED_RECALL_MOVIE_LIMIT) // TODO: really need it?
                 .toList();
 
         return filterResult;
@@ -83,6 +82,7 @@ public class ItemBasedRecommender extends AbsRecommender {
                         .thenComparing(MovieRecommend::getWeight, Comparator.reverseOrder())
                 )
                 .map(MovieRecommend::getMovieId)
+                .limit(ITEM_BASED_RECALL_MOVIE_LIMIT)
                 .toList();
         return sortResult;
     }

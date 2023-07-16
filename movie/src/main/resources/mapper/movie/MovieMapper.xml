@@ -16,7 +16,7 @@
         SELECT *
         FROM Movie
         WHERE YEAR(releaseDate) = YEAR(CURDATE())
-        ORDER BY popularity
+        ORDER BY popularity DESC
         LIMIT 50
     </select>
 </mapper>

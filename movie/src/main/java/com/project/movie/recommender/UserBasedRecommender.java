@@ -71,7 +71,6 @@ public class UserBasedRecommender extends AbsRecommender{
 				})
 				.filter(movie -> !dislikes.contains(movie.getMovieId()))
 				.distinct()
-				.limit(USER_BASED_RECALL_MOVIE_LIMIT)
 				.toList();
 		return filterResult;
 	}
@@ -83,6 +82,7 @@ public class UserBasedRecommender extends AbsRecommender{
 						.comparingDouble((MovieRecommend movie) -> movie.getCount() * movie.getWeight())
 						.reversed())
 				.map(MovieRecommend::getMovieId)
+				.limit(USER_BASED_RECALL_MOVIE_LIMIT)
 				.toList();
 		return sortedResult;
 	}
