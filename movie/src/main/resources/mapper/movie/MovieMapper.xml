@@ -7,4 +7,16 @@
         SELECT *
         FROM Movie
     </select>
+
+    <select id="getSimilarMovies" parameterType="Integer" resultType="com.project.movie.domain.DO.MovieSimilarity">
+        SELECT * FROM MovieSimilarity WHERE movieId = #{movieId}
+    </select>
+
+    <select id="getThisYearHotMovies" resultType="com.project.movie.domain.DO.Movie">
+        SELECT *
+        FROM Movie
+        WHERE YEAR(releaseDate) = YEAR(CURDATE())
+        ORDER BY popularity
+        LIMIT 50
+    </select>
 </mapper>

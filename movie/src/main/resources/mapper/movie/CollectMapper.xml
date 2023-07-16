@@ -25,5 +25,19 @@
         ORDER BY collectId DESC
     </select>
 
+    <select id="getRecentByUser" parameterType="Integer" resultType="com.project.movie.domain.DO.Collect">
+        SELECT * FROM Collect WHERE userId = #{userId} ORDER BY collectId DESC LIMIT 10
+    </select>
+
+<!--    <select id="getRecentBySimilarUsers" parameterType="java.util.List" resultType="com.project.movie.domain.DO.Collect">-->
+<!--        SELECT collectId, userId, movieId-->
+<!--        FROM-->
+<!--            (SELECT collectId, userId, movieId,-->
+<!--            ROW_NUMBER() OVER (PARTITION BY userId ORDER BY collectId DESC) as rowNum-->
+<!--        FROM Collect-->
+<!--        ) AS subquery-->
+<!--        WHERE rowNum &lt;= 10 and userId IN #{users}-->
+<!--        ORDER BY userId, collectId DESC-->
+<!--    </select>-->
 
 </mapper>

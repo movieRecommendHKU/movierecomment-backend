@@ -41,6 +41,7 @@ public class PreferenceRecommender extends AbsRecommender {
         List<Genre> settingPreference = preferenceService.getUserPreference(userId);
         List<Genre> graphPreference = graphService.getUserPreferenceGenre(userId);
 
+        // TODO: setting uses graphService ?
         List<MovieRecommend> settingRecommend = settingPreference.stream()
                 .flatMap(genre -> graphService.getMoviesByGenre(genre, EACH_GENRE_RECALL_MOVIE_LIMIT).stream())
                 .map(movieId -> new MovieRecommend()

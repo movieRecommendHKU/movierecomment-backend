@@ -12,4 +12,7 @@ public interface CollectMapper {
     int removeCollect(Integer collectId);
 
     List<Collect> getCollectionsByUser(Integer userId);
+
+    List<Collect> getRecentByUser(Integer userId);
+
 }

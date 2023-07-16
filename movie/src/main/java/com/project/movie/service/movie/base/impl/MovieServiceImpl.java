@@ -3,6 +3,7 @@ package com.project.movie.service.movie.base.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Movie;
+import com.project.movie.domain.DO.MovieSimilarity;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.mapper.cast.CastMapper;
 import com.project.movie.mapper.director.DirectorMapper;
@@ -11,7 +12,6 @@ import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.base.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 //import javax.annotation.Resource;
@@ -43,7 +43,6 @@ public class MovieServiceImpl implements MovieService {
             List<Movie> moviesBaseInfo = movieMapper.getMovieList();
             List<MovieVO> movies = new ArrayList<>();
             for (Movie info : moviesBaseInfo) {
-                // TODO: movie-director, movie-producer是一对一关系，直接通过movie.xxId得到对象
                 MovieVO vo = new MovieVO()
                         .setMovieId(info.getMovieId())
                         .setMovieName(info.getMovieName())
@@ -63,6 +62,16 @@ public class MovieServiceImpl implements MovieService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public List<MovieSimilarity> getSimilarMovies(Integer movieId) {
+        return movieMapper.getSimilarMovies(movieId);
+    }
+
+    @Override
+    public 	List<Movie> getHotMoviesThisYear() {
+        return movieMapper.getThisYearHotMovies();
     }
 
 }
