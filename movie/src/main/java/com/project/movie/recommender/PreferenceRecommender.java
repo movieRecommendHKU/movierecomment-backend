@@ -31,7 +31,7 @@ public class PreferenceRecommender extends AbsRecommender {
 
     private static final int EACH_GENRE_RECALL_MOVIE_LIMIT = 20;
 
-    private static final int GENRE_RECALL_MOVIE_LIMIT = 100;
+    private static final int PREFERENCE_MOVIE_LIMIT = 100;
 
     @Override
     protected void register() {
@@ -78,7 +78,6 @@ public class PreferenceRecommender extends AbsRecommender {
                         .orElse(null))
                 .filter(Objects::nonNull)
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
-                .limit(GENRE_RECALL_MOVIE_LIMIT)
                 .toList();
 
         log.info("filter: {}", filterResult);
@@ -87,12 +86,12 @@ public class PreferenceRecommender extends AbsRecommender {
 
     @Override
     protected List<Integer> sort(List<MovieRecommend> filterResult) {
-        List<Integer> movies = filterResult.stream()
+        List<MovieRecommend> sortResult = filterResult.stream()
                 .sorted(Comparator.comparing(MovieRecommend::getCount).reversed())
                 .sorted(Comparator.comparing(MovieRecommend::getWeight).reversed())
-                .map(MovieRecommend::getMovieId)
+                .limit(PREFERENCE_MOVIE_LIMIT)
                 .toList();
-        log.info("sort: {}", movies);
-        return movies;
+        log.info("sort: {}", sortResult);
+        return sortResult.stream().map(MovieRecommend::getMovieId).toList();
     }
 }

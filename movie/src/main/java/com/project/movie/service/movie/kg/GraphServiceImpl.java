@@ -185,6 +185,7 @@ public class GraphServiceImpl extends GraphService {
         try {
             String cql = "MATCH (e1:%s:`%s`) "
                     + "RETURN e1.%s as %s "
+                    + "ORDER BY RAND() "
                     + "LIMIT %d";
             cql = String.format(cql,
                     LABEL_MOVIE, genreToLabel(genre),
@@ -206,6 +207,7 @@ public class GraphServiceImpl extends GraphService {
             String cql = "MATCH (e1:%s)-[*0..%d]-(e2:%s) "
                     + "WHERE e1.%s=%d "
                     + "RETURN e2.%s as %s "
+                    + "ORDER BY RAND() "
                     + "LIMIT %d";
             cql = String.format(cql,
                     LABEL_MOVIE, depth, LABEL_MOVIE,

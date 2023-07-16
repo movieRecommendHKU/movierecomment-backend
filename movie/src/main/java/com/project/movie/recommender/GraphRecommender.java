@@ -2,10 +2,8 @@ package com.project.movie.recommender;
 
 import com.project.movie.domain.DO.Collect;
 import com.project.movie.domain.DO.Dislike;
-import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
-import com.project.movie.service.account.PreferenceService;
 import com.project.movie.service.movie.action.CollectService;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.kg.GraphService;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +34,7 @@ public class GraphRecommender extends AbsRecommender {
 
     private static final int GRAPH_SEARCH_DEPTH = 2;
 
-    private static final int GRAPH_RECALL_MOVIE_LIMIT = 100;
+    private static final int GRAPH_MOVIE_LIMIT = 100;
 
     @Override
     protected void register() {
@@ -73,7 +70,6 @@ public class GraphRecommender extends AbsRecommender {
                         .orElse(null))
                 .filter(Objects::nonNull)
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
-                .limit(GRAPH_RECALL_MOVIE_LIMIT)
                 .toList();
         log.info("filter: {}", filterResult);
         return filterResult;
@@ -81,11 +77,11 @@ public class GraphRecommender extends AbsRecommender {
 
     @Override
     protected List<Integer> sort(List<MovieRecommend> filterResult) {
-        List<Integer> movies = filterResult.stream()
+        List<MovieRecommend> sortResult = filterResult.stream()
                 .sorted(Comparator.comparing(MovieRecommend::getCount).reversed())
-                .map(MovieRecommend::getMovieId)
+                .limit(GRAPH_MOVIE_LIMIT)
                 .toList();
-        log.info("sort: {}", movies);
-        return movies;
+        log.info("sort: {}", sortResult);
+        return sortResult.stream().map(MovieRecommend::getMovieId).toList();
     }
 }

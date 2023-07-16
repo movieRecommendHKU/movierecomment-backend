@@ -10,10 +10,9 @@ import java.util.List;
 public class GraphRecommenderTest {
     @Test
     public void test() {
-        Integer userId = 3;
         AbsRecommender recommender = AbsRecommender.getRecommenderByProtocol(RecommenderEnum.KG_BASED);
         assert recommender != null;
-        List<Integer> movieId = AbsRecommender.recommend(3, recommender);
+        List<Integer> movieId = AbsRecommender.recommend(4, recommender);
         System.out.println(movieId);
     }
 }
