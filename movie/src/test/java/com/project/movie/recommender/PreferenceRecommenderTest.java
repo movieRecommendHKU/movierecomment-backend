@@ -12,7 +12,7 @@ public class PreferenceRecommenderTest {
     public void test() {
         AbsRecommender recommender = AbsRecommender.getRecommenderByProtocol(RecommenderEnum.PREFERENCE);
         assert recommender != null;
-        List<Integer> movieId = AbsRecommender.recommend(3, recommender);
+        List<Integer> movieId = AbsRecommender.recommend(4, recommender);
         System.out.println(movieId);
     }
 }
