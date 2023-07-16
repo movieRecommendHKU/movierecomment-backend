@@ -6,9 +6,11 @@ import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.base.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class PopularityRecommender extends AbsRecommender {
 
 	@Autowired
