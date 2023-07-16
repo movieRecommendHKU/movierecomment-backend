@@ -1,6 +1,5 @@
 package com.project.movie.utils;
 
-import com.project.movie.config.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.*;

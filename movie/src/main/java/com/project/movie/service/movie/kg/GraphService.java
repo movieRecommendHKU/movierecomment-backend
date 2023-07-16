@@ -1,6 +1,6 @@
 package com.project.movie.service.movie.kg;
 
-import com.project.movie.config.Common;
+import com.project.movie.domain.common.Common;
 import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
