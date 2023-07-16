@@ -5,11 +5,11 @@
 <mapper namespace="com.project.movie.mapper.account.PreferenceMapper">
 
     <select id="getUserPreference" parameterType="Integer" resultType="com.project.movie.domain.DO.Genre">
-        SELECT Genre.genreId as genreId, Genre.genreName as genreName
-        FROM Preference,
-             Genre
+        SELECT g.genreId as genreId, g.genreName as genreName
+        FROM Preference p,
+             Genre g
         WHERE userId = #{userId}
-          AND Preference.genreId = Genre.genreId
+          AND p.genreId = g.genreId
     </select>
 
     <insert id="batchInsert" parameterType="com.project.movie.domain.DTO.Preference">

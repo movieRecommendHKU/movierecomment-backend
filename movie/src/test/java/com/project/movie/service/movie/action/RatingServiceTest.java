@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootTest
-@TestPropertySource("classpath:application.yml")
 public class RatingServiceTest {
     @Autowired
     RatingService ratingService;
@@ -39,8 +38,8 @@ public class RatingServiceTest {
 
     @Test
     public void rating() {
-        User user = accountMapper.findByEmail("test@qq.com");
-        List<MovieVO> movies = movieService.getMovieCompleteList(2, 10, "").getList();
+        User user = accountMapper.findByEmail("celiaf@qq.com");
+        List<MovieVO> movies = movieService.getMovieCompleteList(2, 20, "").getList();
         List<Rating> ratings = movies.stream()
                 .map(movie -> new Rating()
                         .setMovieId(movie.getMovieId())

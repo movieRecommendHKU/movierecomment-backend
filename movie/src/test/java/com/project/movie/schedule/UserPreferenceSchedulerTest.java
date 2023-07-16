@@ -1,6 +1,5 @@
-package com.project.movie.service.movie.schedule;
+package com.project.movie.schedule;
 
-import com.project.movie.schedule.UserPreferenceScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

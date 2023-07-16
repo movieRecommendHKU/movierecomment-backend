@@ -18,7 +18,7 @@ public class GraphServiceTest {
     @Rollback
     public void getUserPreferenceTest() {
         graphService.insertUser(new User().setUserId(2).setUserName("test"));
-        List<String> labels = graphService.getUserPreference(3);
+        List<String> labels = graphService.getUserPreferenceLabel(3);
         Assertions.assertEquals(labels.size(), 0);
     }
 }

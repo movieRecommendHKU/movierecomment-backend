@@ -1,13 +1,10 @@
 package com.project.movie.schedule;
 
-import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.DTO.GraphNode;
 import com.project.movie.domain.enums.UserMovieAction;
-import com.project.movie.mapper.account.AccountMapper;
 import com.project.movie.service.account.AccountService;
 import com.project.movie.service.movie.kg.GraphService;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

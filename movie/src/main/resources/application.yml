@@ -15,7 +15,8 @@ spring:
     authentication:
       username: neo4j
       password: 7507chyfbjhcdwtc_hku
-    uri: bolt://121.43.150.228:7687
+#    uri: bolt://121.43.150.228:7687
+    uri: bolt://localhost:7687
   elasticsearch:
     rest:
       uris: localhost:9200
@@ -31,4 +32,4 @@ server:
 common:
   rate:
     low: 5
-    high: 7
+    high: 7.5

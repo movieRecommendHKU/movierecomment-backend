@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootTest
-@TestPropertySource("classpath:application.yml")
 public class DislikeServiceTest {
     @Autowired
     DislikeService dislikeService;
@@ -38,8 +37,8 @@ public class DislikeServiceTest {
 
     @Test
     public void dislike() {
-        User user = accountMapper.findByEmail("test@qq.com");
-        List<MovieVO> movies = movieService.getMovieCompleteList(3, 10, "").getList();
+        User user = accountMapper.findByEmail("celiaf@qq.com");
+        List<MovieVO> movies = movieService.getMovieCompleteList(2, 10, "").getList();
         List<Dislike> dislikes = movies.stream()
                 .map(movie -> new Dislike()
                         .setMovieId(movie.getMovieId())

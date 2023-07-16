@@ -2,13 +2,14 @@ package com.project.movie.recommender;
 
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-
+@Slf4j
 public abstract class AbsRecommender implements InitializingBean {
 
     static protected HashMap<RecommenderEnum, AbsRecommender> RECOMMENDERS = new HashMap<>();

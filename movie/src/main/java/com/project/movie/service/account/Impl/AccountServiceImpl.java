@@ -1,6 +1,5 @@
 package com.project.movie.service.account.Impl;
 
-import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.domain.DO.User;
 import com.project.movie.domain.VO.UserLoginVO;
 import com.project.movie.mapper.account.AccountMapper;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
-//import javax.annotation.Resource;
 
 @Service
 public class AccountServiceImpl implements AccountService {

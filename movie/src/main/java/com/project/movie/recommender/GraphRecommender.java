@@ -9,6 +9,7 @@ import com.project.movie.service.account.PreferenceService;
 import com.project.movie.service.movie.action.CollectService;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.kg.GraphService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class GraphRecommender extends AbsRecommender {
     @Autowired
     GraphService graphService;
@@ -54,7 +56,7 @@ public class GraphRecommender extends AbsRecommender {
                         .stream())
                 .map(movieId -> new MovieRecommend().setMovieId(movieId).setCount(1).setWeight(1.))
                 .toList();
-
+        log.info("GraphRecommender: recall: {}", recallResult);
         return recallResult;
     }
 
@@ -73,6 +75,7 @@ public class GraphRecommender extends AbsRecommender {
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
                 .limit(GRAPH_RECALL_MOVIE_LIMIT)
                 .toList();
+        log.info("GraphRecommender: filter: {}", filterResult);
         return filterResult;
     }
 
@@ -82,6 +85,7 @@ public class GraphRecommender extends AbsRecommender {
                 .sorted(Comparator.comparing(MovieRecommend::getCount).reversed())
                 .map(MovieRecommend::getMovieId)
                 .toList();
+        log.info("GraphRecommender: sort: {}", movies);
         return movies;
     }
 }
