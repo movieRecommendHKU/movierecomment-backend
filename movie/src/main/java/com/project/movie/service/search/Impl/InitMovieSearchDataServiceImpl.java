@@ -1,11 +1,15 @@
 package com.project.movie.service.search.Impl;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.BulkResponse;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
+import co.elastic.clients.json.JsonpMapper;
 import com.project.movie.config.EsUtilConfigClint;
 import com.project.movie.domain.DO.MovieForSearch;
 import com.project.movie.service.search.InitMovieSearchDataService;
+import jakarta.json.stream.JsonParser;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpHost;
@@ -24,17 +28,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataService {
     @Autowired
     private EsUtilConfigClint clint;
+
+    private final Object lock = new Object();
 
     final Integer WORD_VECTOR_TYPE = 1;
     final Integer SENTENCE_VECTOR_TYPE = 2;
@@ -208,29 +214,26 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
 
 
     @Override
-    public Integer addMovieToElasticSearch(String contentPath) throws Exception {
-        // movies before 2017
-        contentPath = "../movie_es_all.xlsx";
-//        contentPath = "/Users/jackwu/Desktop/HKU/Project/movies_es_all.xlsx";
+    public Integer addMovieToElasticSearch() throws Exception {
+        //String contentPath = "/Users/chengdonghuang/Desktop/test2.xlsx";
+        String contentPath = "/Users/chengdonghuang/Desktop/real_data/movies_es_all.xlsx";
         File movie_file = new File(contentPath);
         if (!movie_file.exists()){
             throw new Exception("文件不存在!");
         }
         Map<Integer,MovieForSearch> MovieForSearchMap = getMovieForSearchMap(movie_file);
-        System.out.println(MovieForSearchMap.keySet());
 
         // update keywords for the movies
-        String keyPath = "../merged_movies_data.xlsx";
+        String keyPath = "/Users/chengdonghuang/Desktop/real_data/merged_movies_data.xlsx";
 //        String keyPath = "/Users/jackwu/Desktop/HKU/Project/merged_movies_data.xlsx";
         File key_file = new File(keyPath);
         if (!key_file.exists()){
             throw new Exception("文件不存在!");
         }
         updateKeywordsForMovie(key_file, MovieForSearchMap);
-        System.out.println(MovieForSearchMap);
 
         // set word embedding vector for movies
-        String WordFilePath = "../word_embedding_data.xlsx";
+        String WordFilePath = "/Users/chengdonghuang/Desktop/real_data/word_embedding_data.xlsx";
 //        String WordFilePath = "/Users/jackwu/Desktop/HKU/Project/word_embedding_data.xlsx";
         File word_embedding_file = new File(WordFilePath);
         if (!word_embedding_file.exists()){
@@ -239,14 +242,14 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         setVectorForMovie(word_embedding_file, MovieForSearchMap, WORD_VECTOR_TYPE);
 
         // set sentence embedding vector for movies
-        String SentenceFilePath = "../sentence_embedding_data.xlsx";
+        String SentenceFilePath = "/Users/chengdonghuang/Desktop/real_data/sentence_embedding_data.xlsx";
 //        String SentenceFilePath = "/Users/jackwu/Desktop/HKU/Project/sentence_embedding_data.xlsx";
         File sentence_embedding_file = new File(SentenceFilePath);
         if (!sentence_embedding_file.exists()){
             throw new Exception("文件不存在!");
         }
         setVectorForMovie(sentence_embedding_file, MovieForSearchMap, SENTENCE_VECTOR_TYPE);
-        System.out.println(MovieForSearchMap);
+        System.out.println(MovieForSearchMap.size());
 
         List<MovieForSearch> MovieForSearchList = new ArrayList<>(MovieForSearchMap.values());
 
@@ -256,9 +259,38 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
 //        String password = "Wtc@0229";
 //        RestHighLevelClient client = createElasticsearchClient(host, port, username, password);
 
+        // set mapping for the index
+        String mappingPath = "/Users/chengdonghuang/Desktop/movie_mappings.json";
+        ElasticsearchClient client = clint.configClint();
+        JsonpMapper mapper = client._transport().jsonpMapper();
+        String mappings_str = new String(Files.readAllBytes(Paths.get(mappingPath)));
+        JsonParser parser = mapper.jsonProvider()
+                .createParser(new StringReader(mappings_str));
+        client.indices()
+                .create(createIndexRequest -> createIndexRequest.index("movie_es_data")
+                        .mappings(TypeMapping._DESERIALIZER.deserialize(parser, mapper)));
+
+        int pre_index = 0;
+        synchronized (lock){
+            while(pre_index < MovieForSearchList.size() ){
+                System.out.println(pre_index);
+                int large_index = pre_index + 500;
+                if (large_index >= MovieForSearchList.size()){
+                    large_index = MovieForSearchList.size();
+                }
+                List<MovieForSearch> bulkMovieList = MovieForSearchList.subList(pre_index, large_index);
+                bulkMovieToElasticSearch(bulkMovieList);
+                pre_index += 500;
+            }
+        }
+
+        return MovieForSearchMap.size();
+    }
+
+    public void bulkMovieToElasticSearch(List<MovieForSearch> bulkList) throws IOException {
         BulkRequest.Builder bk = new BulkRequest.Builder();
-        for (MovieForSearch movieForSearch : MovieForSearchList) {
-            bk.operations(op -> op.index(i -> i.index("newindex")
+        for (MovieForSearch movieForSearch : bulkList) {
+            bk.operations(op -> op.index(i -> i.index("movie_es_data")
                     .id(String.valueOf(movieForSearch.getMovieId()))
                     .document(movieForSearch)));
         }
@@ -271,7 +303,6 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
                 }
             }
         }
-        return 1;
     }
 
     // 创建带有身份验证的Elasticsearch客户端连接

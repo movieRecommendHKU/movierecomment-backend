@@ -15,6 +15,6 @@ public class MovieSearchController {
 
     @GetMapping("/searchMovie")
     public Integer searchMovie() throws Exception {
-        return initMovieSearchDataService.addMovieToElasticSearch("");
+        return initMovieSearchDataService.addMovieToElasticSearch();
     }
 }
