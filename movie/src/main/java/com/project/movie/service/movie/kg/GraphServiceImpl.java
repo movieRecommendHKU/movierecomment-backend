@@ -184,11 +184,11 @@ public class GraphServiceImpl extends GraphService {
     public List<Integer> getMoviesByGenre(Genre genre, int limit) {
         try {
             String cql = "MATCH (e1:%s:`%s`) "
-                    + "RETURN e1.%s "
+                    + "RETURN e1.%s as %s "
                     + "LIMIT %d";
             cql = String.format(cql,
                     LABEL_MOVIE, genreToLabel(genre),
-                    PROP_MOVIE_ID,
+                    PROP_MOVIE_ID, PROP_MOVIE_ID,
                     limit);
 
             log.info("getMoviesByGenre: {}", cql);

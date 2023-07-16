@@ -56,7 +56,7 @@ public class GraphRecommender extends AbsRecommender {
                         .stream())
                 .map(movieId -> new MovieRecommend().setMovieId(movieId).setCount(1).setWeight(1.))
                 .toList();
-        log.info("GraphRecommender: recall: {}", recallResult);
+        log.info("recall: {}", recallResult);
         return recallResult;
     }
 
@@ -75,7 +75,7 @@ public class GraphRecommender extends AbsRecommender {
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
                 .limit(GRAPH_RECALL_MOVIE_LIMIT)
                 .toList();
-        log.info("GraphRecommender: filter: {}", filterResult);
+        log.info("filter: {}", filterResult);
         return filterResult;
     }
 
@@ -85,7 +85,7 @@ public class GraphRecommender extends AbsRecommender {
                 .sorted(Comparator.comparing(MovieRecommend::getCount).reversed())
                 .map(MovieRecommend::getMovieId)
                 .toList();
-        log.info("GraphRecommender: sort: {}", movies);
+        log.info("sort: {}", movies);
         return movies;
     }
 }

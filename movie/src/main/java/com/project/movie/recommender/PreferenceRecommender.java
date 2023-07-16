@@ -7,6 +7,7 @@ import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.service.account.PreferenceService;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.kg.GraphService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class PreferenceRecommender extends AbsRecommender {
     @Autowired
     GraphService graphService;
@@ -41,7 +43,6 @@ public class PreferenceRecommender extends AbsRecommender {
         List<Genre> settingPreference = preferenceService.getUserPreference(userId);
         List<Genre> graphPreference = graphService.getUserPreferenceGenre(userId);
 
-        // TODO: setting uses graphService ?
         List<MovieRecommend> settingRecommend = settingPreference.stream()
                 .flatMap(genre -> graphService.getMoviesByGenre(genre, EACH_GENRE_RECALL_MOVIE_LIMIT).stream())
                 .map(movieId -> new MovieRecommend()
@@ -59,6 +60,8 @@ public class PreferenceRecommender extends AbsRecommender {
         List<MovieRecommend> recallResult = new ArrayList<>();
         recallResult.addAll(settingRecommend);
         recallResult.addAll(graphRecommend);
+
+        log.info("recall: {}", recallResult);
         return recallResult;
     }
 
@@ -77,6 +80,8 @@ public class PreferenceRecommender extends AbsRecommender {
                 .filter(movie -> !dislikes.contains(movie.getMovieId()))
                 .limit(GENRE_RECALL_MOVIE_LIMIT)
                 .toList();
+
+        log.info("filter: {}", filterResult);
         return filterResult;
     }
 
@@ -87,6 +92,7 @@ public class PreferenceRecommender extends AbsRecommender {
                 .sorted(Comparator.comparing(MovieRecommend::getWeight).reversed())
                 .map(MovieRecommend::getMovieId)
                 .toList();
+        log.info("sort: {}", movies);
         return movies;
     }
 }
