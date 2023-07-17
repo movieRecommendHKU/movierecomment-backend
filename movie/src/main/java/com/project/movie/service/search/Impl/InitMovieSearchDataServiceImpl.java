@@ -40,8 +40,6 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
     @Autowired
     private EsUtilConfigClint clint;
 
-    private final Object lock = new Object();
-
     final Integer WORD_VECTOR_TYPE = 1;
     final Integer SENTENCE_VECTOR_TYPE = 2;
 
@@ -260,7 +258,7 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
 //        RestHighLevelClient client = createElasticsearchClient(host, port, username, password);
 
         // set mapping for the index
-        String mappingPath = "/Users/chengdonghuang/Desktop/movie_mappings.json";
+        String mappingPath = "/Users/chengdonghuang/Desktop/real_data/movie_mappings.json";
         ElasticsearchClient client = clint.configClint();
         JsonpMapper mapper = client._transport().jsonpMapper();
         String mappings_str = new String(Files.readAllBytes(Paths.get(mappingPath)));
@@ -271,17 +269,15 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
                         .mappings(TypeMapping._DESERIALIZER.deserialize(parser, mapper)));
 
         int pre_index = 0;
-        synchronized (lock){
-            while(pre_index < MovieForSearchList.size() ){
-                System.out.println(pre_index);
-                int large_index = pre_index + 500;
-                if (large_index >= MovieForSearchList.size()){
-                    large_index = MovieForSearchList.size();
-                }
-                List<MovieForSearch> bulkMovieList = MovieForSearchList.subList(pre_index, large_index);
-                bulkMovieToElasticSearch(bulkMovieList);
-                pre_index += 500;
+        while(pre_index < MovieForSearchList.size() ){
+            System.out.println(pre_index);
+            int large_index = pre_index + 500;
+            if (large_index >= MovieForSearchList.size()){
+                large_index = MovieForSearchList.size();
             }
+            List<MovieForSearch> bulkMovieList = MovieForSearchList.subList(pre_index, large_index);
+            bulkMovieToElasticSearch(bulkMovieList);
+            pre_index += 500;
         }
 
         return MovieForSearchMap.size();
