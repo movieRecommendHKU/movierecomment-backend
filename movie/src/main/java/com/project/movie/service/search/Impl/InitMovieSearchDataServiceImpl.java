@@ -210,6 +210,7 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         }
     }
 
+    @Override
     public void setZeroVectors(List<MovieForSearch> MovieForSearchList){
         int i = 0;
         for (MovieForSearch MFS : MovieForSearchList){

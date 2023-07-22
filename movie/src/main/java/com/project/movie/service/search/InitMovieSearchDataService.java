@@ -17,6 +17,8 @@ public interface InitMovieSearchDataService {
 
     Integer addMovieToElasticSearch() throws Exception;
 
+    void setZeroVectors(List<MovieForSearch> MovieForSearchList);
+
     void updateKeywordsForMovie(File file, Map<Integer, MovieForSearch> movieForSearchMap) throws Exception;
 
     void setVectorForMovie(File file, Map<Integer,MovieForSearch> movieForSearchMap, Integer vectorType) throws Exception;
