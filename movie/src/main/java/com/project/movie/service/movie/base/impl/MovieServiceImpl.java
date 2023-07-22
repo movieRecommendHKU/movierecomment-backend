@@ -3,6 +3,7 @@ package com.project.movie.service.movie.base.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Movie;
+import com.project.movie.domain.DO.MovieSimilarity;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.mapper.cast.CastMapper;
 import com.project.movie.mapper.director.DirectorMapper;
@@ -62,6 +63,26 @@ public class MovieServiceImpl implements MovieService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public MovieVO assembleMovieVO(Movie movie) {
+        return null;
+    }
+
+    @Override
+    public List<MovieVO> batchAssembleMovie(List<Integer> movieIds) {
+        return null;
+    }
+
+    @Override
+    public List<MovieSimilarity> getSimilarMovies(Integer movieId) {
+        return null;
+    }
+
+    @Override
+    public List<Movie> getHotMoviesThisYear() {
+        return null;
     }
 
 }

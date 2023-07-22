@@ -15,7 +15,7 @@ public interface InitMovieSearchDataService {
 
     Map<Integer,MovieForSearch> getMovieForSearchMap(File file) throws Exception;
 
-    Integer addMovieToElasticSearch() throws Exception;
+    Boolean addMovieToElasticSearch() throws Exception;
 
     void setZeroVectors(List<MovieForSearch> MovieForSearchList);
 

@@ -248,7 +248,7 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
 
 
     @Override
-    public Integer addMovieToElasticSearch() throws Exception {
+    public Boolean addMovieToElasticSearch() throws Exception {
         //String contentPath = "/Users/chengdonghuang/Desktop/test2.xlsx";
         String contentPath = "/Users/chengdonghuang/Desktop/real_data/movies_es_all.xlsx";
         File movie_file = new File(contentPath);
@@ -324,8 +324,12 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
             bulkMovieToElasticSearch(bulkMovieList);
             pre_index += 500;
         }
+        Boolean res = false;
+        if (MovieForSearchMap.size()!=0){
+            res = true;
+        }
 
-        return MovieForSearchMap.size();
+        return res;
     }
 
     public void bulkMovieToElasticSearch(List<MovieForSearch> bulkList) throws IOException {
