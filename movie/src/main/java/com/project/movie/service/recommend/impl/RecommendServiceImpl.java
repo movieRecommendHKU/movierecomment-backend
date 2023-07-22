@@ -12,16 +12,16 @@ import java.util.List;
 public class RecommendServiceImpl implements RecommendService {
 
     @Override
-    public List<Movie> getAllMovies(Integer userId) {
+    public List<Integer> getAllMovies(Integer userId) {
         List<List<Integer>> recommendLists = new ArrayList<>();
         for (AbsRecommender recommender : AbsRecommender.getRecommenders())
             recommendLists.add(AbsRecommender.recommend(userId, recommender));
         List<Integer> recommendList = AbsRecommender.resort(recommendLists);
-        return null;
+        return recommendList;
     }
 
     @Override
-    public List<Movie> getMoviesByPolicy(Integer userId, String policy) {
+    public List<Integer> getMoviesByPolicy(Integer userId, String policy) {
         return null;
     }
 }

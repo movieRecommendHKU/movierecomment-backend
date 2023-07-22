@@ -37,10 +37,10 @@ CREATE TABLE `Genre`
 
 CREATE TABLE `MovieGenre`
 (
-    `id`   INT       NOT NULL AUTO_INCREMENT,
+    `id`        INT       NOT NULL AUTO_INCREMENT,
     `genreId`   INT       NOT NULL,
     `genreName` CHAR(255) NOT NULL,
-    `movieId` INT       NOT NULL,
+    `movieId`   INT       NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`genreId`) REFERENCES `Genre` (`genreId`) ON DELETE CASCADE,
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE
@@ -49,30 +49,30 @@ CREATE TABLE `MovieGenre`
 drop table Preference;
 CREATE TABLE `Preference`
 (
-    `userId` INT NOT NULL,
-    `genreId`  INT NOT NULL,
+    `userId`  INT NOT NULL,
+    `genreId` INT NOT NULL,
     FOREIGN KEY (`genreId`) REFERENCES `Genre` (`genreId`) ON DELETE CASCADE,
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Cast`
 (
-    `castId`   INT       NOT NULL AUTO_INCREMENT,
-    `castName` CHAR(255) NOT NULL,
-    `gender`    INT,
+    `castId`      INT       NOT NULL AUTO_INCREMENT,
+    `castName`    CHAR(255) NOT NULL,
+    `gender`      INT,
     `profilePath` CHAR(255),
     PRIMARY KEY (`castId`)
 );
 
 CREATE TABLE MovieCast
 (
-    `id`        INT       NOT NULL AUTO_INCREMENT,
-    `movieId`   INT       NOT NULL,
-    `castId`   INT        NOT NULL,
+    `id`        INT NOT NULL AUTO_INCREMENT,
+    `movieId`   INT NOT NULL,
+    `castId`    INT NOT NULL,
     `castOrder` INT,
     `character` CHAR(255),
     `castName`  CHAR(255),
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`movieId`) REFERENCES `Movie` (`movieId`) ON DELETE CASCADE,
     FOREIGN KEY (`castId`) REFERENCES `Cast` (`castId`) ON DELETE CASCADE
 );
@@ -162,5 +162,15 @@ CREATE TABLE `UserSimilarity`
 (
     `userId`         INT,
     `similarUserIds` char(255),
+    FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
+);
+
+CREATE TABLE `RecommendLog`
+(
+    `recommendId`     INT  NOT NULL AUTO_INCREMENT,
+    `userId`          INT  NOT NULL,
+    `recommendTime`   DATE NOT NULL,
+    `recommendations` blob NOT NULL,
+    PRIMARY KEY (`recommendId`),
     FOREIGN KEY (`userId`) REFERENCES `Account` (`userId`) ON DELETE CASCADE
 );
