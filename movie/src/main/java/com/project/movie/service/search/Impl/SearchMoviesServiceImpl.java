@@ -2,6 +2,10 @@ package com.project.movie.service.search.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.project.movie.domain.DO.Movie;
+import com.project.movie.domain.VO.MovieVO;
+import com.project.movie.service.movie.base.MovieService;
+import com.project.movie.service.movie.base.impl.MovieServiceImpl;
 import com.project.movie.service.search.SearchMoviesService;
 import com.alibaba.fastjson.JSONObject;
 import jakarta.annotation.Resource;
@@ -22,8 +26,11 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
     @Autowired
     private RestTemplateBuilder restTemplateBuilder;
 
+    @Autowired
+    private MovieServiceImpl movieService;
+
     @Override
-    public List<Integer> searchByKeywords(String input_words, Integer k) {
+    public List<MovieVO> searchByKeywords(String input_words, Integer k) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String URL = "http://127.0.0.1:5000/SearchByKeywords";
 
@@ -51,12 +58,13 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
+        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids);
 
-        return movie_Ids;
+        return movies;
     }
 
     @Override
-    public List<Integer> searchBySentences(String input_sentences, Integer k) {
+    public List<MovieVO> searchBySentences(String input_sentences, Integer k) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         String URL = "http://127.0.0.1:5000/SearchBySentences";
 
@@ -84,7 +92,8 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
+        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids);
 
-        return movie_Ids;
+        return movies;
     }
 }

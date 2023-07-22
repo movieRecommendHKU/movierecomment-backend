@@ -1,5 +1,6 @@
 package com.project.movie.service.search;
 
+import com.project.movie.domain.VO.MovieVO;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 @Controller
 public interface SearchMoviesService {
 
-    List<Integer> searchByKeywords(String input_words, Integer k);
+    List<MovieVO> searchByKeywords(String input_words, Integer k);
 
-    List<Integer> searchBySentences(String input_sentences, Integer k);
+    List<MovieVO> searchBySentences(String input_sentences, Integer k);
 }
