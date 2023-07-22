@@ -210,6 +210,41 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         }
     }
 
+    public void setZeroVectors(List<MovieForSearch> MovieForSearchList){
+        int i = 0;
+        for (MovieForSearch MFS : MovieForSearchList){
+            List<Double> MFS_WordVectors = MFS.getWordVectors();
+            List<Double> MFS_SentenceVectors = MFS.getSentenceVectors();
+            boolean w_all_zero = true;
+            for (Double w_vectors: MFS_WordVectors){
+                if (!w_vectors.equals(0.0)) {
+                    w_all_zero = false;
+                    break;
+                }
+            }
+            boolean s_all_zero = true;
+            for (Double s_vectors: MFS_SentenceVectors){
+                if (!s_vectors.equals(0.0)){
+                    s_all_zero = false;
+                    break;
+                }
+            }
+            if (w_all_zero) {
+                i++;
+                List<Double> wordVectors = MFS.getWordVectors();
+                wordVectors.set(0, 0.0001);
+                MFS.setWordVectors(wordVectors);
+            }
+            if (s_all_zero) {
+                i++;
+                List<Double> sentenceVectors = MFS.getSentenceVectors();
+                sentenceVectors.set(0, 0.0001);
+                MFS.setWordVectors(sentenceVectors);
+            }
+        }
+        System.out.println(i);
+    }
+
 
     @Override
     public Integer addMovieToElasticSearch() throws Exception {
@@ -250,6 +285,15 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
         System.out.println(MovieForSearchMap.size());
 
         List<MovieForSearch> MovieForSearchList = new ArrayList<>(MovieForSearchMap.values());
+
+        List<MovieForSearch> MovieNull = new ArrayList<>();
+        for (MovieForSearch MFS : MovieForSearchList){
+            if(MFS.getSentenceVectors() == null || MFS.getWordVectors() == null){
+                MovieNull.add(MFS);
+            }
+        }
+        MovieForSearchList.removeAll(MovieNull);
+        setZeroVectors(MovieForSearchList);
 
 //        String host = "121.43.150.228";
 //        int port = 9200;
@@ -300,17 +344,4 @@ public class InitMovieSearchDataServiceImpl implements InitMovieSearchDataServic
             }
         }
     }
-
-    // 创建带有身份验证的Elasticsearch客户端连接
-//    private RestHighLevelClient createElasticsearchClient(String host, int port, String username, String password) {
-//        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-//        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-//
-//        RestClientBuilder builder = RestClient.builder(new HttpHost(host, port, "https"))
-//                .setHttpClientConfigCallback(httpClientBuilder ->
-//                        httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
-//
-//        RestHighLevelClient client = new RestHighLevelClient(builder);
-//        return client;
-//    }
 }
