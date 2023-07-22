@@ -8,8 +8,19 @@
         FROM Movie
     </select>
 
+    <select id="getMovieListByIds" resultType="com.project.movie.domain.DO.Movie">
+        SELECT *
+        FROM Movie
+        WHERE movieId in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="getSimilarMovies" parameterType="Integer" resultType="com.project.movie.domain.DO.MovieSimilarity">
-        SELECT * FROM MovieSimilarity WHERE movieId = #{movieId}
+        SELECT *
+        FROM MovieSimilarity
+        WHERE movieId = #{movieId}
     </select>
 
     <select id="getThisYearHotMovies" resultType="com.project.movie.domain.DO.Movie">

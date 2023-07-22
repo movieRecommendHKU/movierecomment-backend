@@ -9,12 +9,16 @@ import java.util.List;
 
 public interface MovieService {
 
-	PageInfo<MovieVO> getMovieCompleteList(int pageNum, int pageSize, String orderBy);
+    PageInfo<MovieVO> getMovieCompleteList(int pageNum, int pageSize, String orderBy);
 
-	List<MovieSimilarity> getSimilarMovies(Integer movieId);
+    MovieVO assembleMovieVO(Movie movie);
 
-	/**
-	 * return 50 most popular movies released in this year
-	 */
-	List<Movie> getHotMoviesThisYear();
+    List<Movie> batchAssembleMovie(List<Integer> movieIds);
+
+    List<MovieSimilarity> getSimilarMovies(Integer movieId);
+
+    /**
+     * return 50 most popular movies released in this year
+     */
+    List<Movie> getHotMoviesThisYear();
 }
