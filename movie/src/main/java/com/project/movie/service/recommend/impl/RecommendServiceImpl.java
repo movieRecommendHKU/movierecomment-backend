@@ -1,6 +1,6 @@
 package com.project.movie.service.recommend.impl;
 
-import com.project.movie.domain.DO.Movie;
+import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.recommender.AbsRecommender;
 import com.project.movie.service.recommend.RecommendService;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public List<Integer> getMoviesByPolicy(Integer userId, String policy) {
+    public List<Integer> getMoviesByPolicy(Integer userId, RecommenderEnum policy) {
         return null;
     }
 }
