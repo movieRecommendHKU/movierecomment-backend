@@ -27,7 +27,9 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Override
     public List<Integer> getMoviesByPolicy(Integer userId, RecommenderEnum policy) {
-        return null;
+        AbsRecommender recommender = AbsRecommender.getRecommenderByProtocol(policy);
+        List<Integer> ids = AbsRecommender.recommend(userId, recommender);
+        return ids;
     }
 
     @Override

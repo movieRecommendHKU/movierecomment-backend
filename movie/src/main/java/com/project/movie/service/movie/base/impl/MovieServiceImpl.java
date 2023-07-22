@@ -58,7 +58,7 @@ public class MovieServiceImpl implements MovieService {
                 .setCasts(castMapper.getCastsByMovieId(movie.getMovieId()))
                 .setDirector(directorMapper.getDirectorByMovie(movie.getDirector()))
                 .setPopularity(movie.getPopularity())
-                .setProducer(producerMapper.getProducerByMovie(movie.getProducer()))
+                .setProducer(movie.getProducer() != null ? producerMapper.getProducerByMovie(movie.getProducer()) : null)
                 .setRating(movie.getRating())
                 .setPosterPath(movie.getPosterPath())
                 .setRating(movie.getRating())
@@ -67,8 +67,9 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> batchAssembleMovie(List<Integer> movieIds) {
-        return movieMapper.getMovieListByIds(movieIds);
+    public List<MovieVO> batchAssembleMovie(List<Integer> movieIds) {
+        List<Movie> movies = movieMapper.getMovieListByIds(movieIds);
+        return movies.stream().map(this::assembleMovieVO).toList();
     }
 
     @Override

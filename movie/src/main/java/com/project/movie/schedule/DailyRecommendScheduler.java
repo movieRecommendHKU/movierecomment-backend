@@ -22,7 +22,7 @@ public class DailyRecommendScheduler {
     /**
      * Every Day 4am
      */
-    @Scheduled(cron = "0 0 4 * ? ?")
+    @Scheduled(cron = "0 0 4 * * *")
     public void updateRecommendLog() {
         List<User> users = accountService.getUsersByLastLogin(getLastDate());
         log.info("DailyRecommendScheduler: update {} user.", users.size());
