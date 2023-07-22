@@ -3,7 +3,6 @@ package com.project.movie.service.movie.base.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.project.movie.domain.DO.Movie;
-import com.project.movie.domain.DO.MovieSimilarity;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.mapper.cast.CastMapper;
 import com.project.movie.mapper.director.DirectorMapper;
@@ -12,6 +11,7 @@ import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.base.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 //import javax.annotation.Resource;
@@ -41,45 +41,27 @@ public class MovieServiceImpl implements MovieService {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         try {
             List<Movie> moviesBaseInfo = movieMapper.getMovieList();
-            List<MovieVO> movies = moviesBaseInfo.stream().map(this::assembleMovieVO).toList();
+            List<MovieVO> movies = new ArrayList<>();
+            for (Movie info : moviesBaseInfo) {
+                MovieVO vo = new MovieVO()
+                        .setMovieId(info.getMovieId())
+                        .setMovieName(info.getMovieName())
+                        .setOverview(info.getOverview())
+                        .setCasts(castMapper.getCastsByMovieId(info.getMovieId()))
+                        .setDirector(directorMapper.getDirectorByMovie(info.getDirector()))
+                        .setPopularity(info.getPopularity())
+                        .setProducer(producerMapper.getProducerByMovie(info.getProducer()))
+                        .setRating(info.getRating())
+                        .setPosterPath(info.getPosterPath())
+                        .setRating(info.getRating())
+                        .setVoteCount(info.getVoteCount());
+                movies.add(vo);
+            }
             return new PageInfo<>(movies);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public MovieVO assembleMovieVO(Movie movie) {
-        MovieVO vo = new MovieVO()
-                .setMovieId(movie.getMovieId())
-                .setMovieName(movie.getMovieName())
-                .setOverview(movie.getOverview())
-                .setCasts(castMapper.getCastsByMovieId(movie.getMovieId()))
-                .setDirector(directorMapper.getDirectorByMovie(movie.getDirector()))
-                .setPopularity(movie.getPopularity())
-                .setProducer(movie.getProducer() != null ? producerMapper.getProducerByMovie(movie.getProducer()) : null)
-                .setRating(movie.getRating())
-                .setPosterPath(movie.getPosterPath())
-                .setRating(movie.getRating())
-                .setVoteCount(movie.getVoteCount());
-        return vo;
-    }
-
-    @Override
-    public List<MovieVO> batchAssembleMovie(List<Integer> movieIds) {
-        List<Movie> movies = movieMapper.getMovieListByIds(movieIds);
-        return movies.stream().map(this::assembleMovieVO).toList();
-    }
-
-    @Override
-    public List<MovieSimilarity> getSimilarMovies(Integer movieId) {
-        return movieMapper.getSimilarMovies(movieId);
-    }
-
-    @Override
-    public List<Movie> getHotMoviesThisYear() {
-        return movieMapper.getThisYearHotMovies();
     }
 
 }

@@ -1,7 +1,7 @@
 package com.project.movie.service.search;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
-@Service
+@Controller
 public interface SearchMoviesService {
 }
