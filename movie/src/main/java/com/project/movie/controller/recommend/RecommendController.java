@@ -1,6 +1,7 @@
 package com.project.movie.controller.recommend;
 
 import com.project.movie.domain.DO.User;
+import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.recommend.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class RecommendController {
 
     @GetMapping("/get_all")
     public BaseResponse getRecommends(@RequestBody User user) {
+        recommendService.getMoviesByPolicy(user.getUserId(), RecommenderEnum.POPULARITY);
+        RecommenderEnum.valueOf("POPULARITY");
         return null;
     }
 

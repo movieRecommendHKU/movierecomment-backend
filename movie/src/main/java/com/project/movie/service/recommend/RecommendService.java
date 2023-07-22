@@ -7,8 +7,10 @@ import java.util.List;
 
 @Service
 public interface RecommendService {
-	List<Integer> getAllMovies(Integer userId);
+    List<Integer> getAllMovies(Integer userId);
 
-	List<Integer> getMoviesByPolicy(Integer userId, RecommenderEnum policy);
+    List<Integer> getMoviesByPolicy(Integer userId, RecommenderEnum policy);
+
+    Boolean insetRecommendLog(Integer userId, String log);
 
 }
