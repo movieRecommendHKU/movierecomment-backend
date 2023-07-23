@@ -29,7 +29,7 @@ public class DislikeController {
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");
     }
 
-    @GetMapping("/is_dislike")
+    @PostMapping("/is_dislike")
     public BaseResponse isDislike(@RequestBody Dislike dislike) {
         return dislikeService.isDislike(dislike) ?
                 new BaseResponse().setStatus(true) :
