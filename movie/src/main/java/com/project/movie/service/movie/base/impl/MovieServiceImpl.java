@@ -62,7 +62,8 @@ public class MovieServiceImpl implements MovieService {
                 .setRating(movie.getRating())
                 .setPosterPath(movie.getPosterPath())
                 .setRating(movie.getRating())
-                .setVoteCount(movie.getVoteCount());
+                .setVoteCount(movie.getVoteCount())
+                .setReleaseDate(movie.getReleaseDate());
         return vo;
     }
 
