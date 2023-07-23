@@ -22,9 +22,6 @@ spring:
     uri: bolt://localhost:7687
   elasticsearch:
     rest:
-      uris: localhost:9200
-      username:
-      password:
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
