@@ -68,6 +68,7 @@ public class SearchController {
 
     @GetMapping("/InitializeUserSimilarity")
     public BaseResponse initializeUserSimilarity() {
+        // 初始化创建index
         try {
             Boolean isSuccess = userSearchDataService.initialElasticSearch();
             return isSuccess ? new BaseResponse().setStatus(true).setMsg("Initialize User Success!")
@@ -80,6 +81,7 @@ public class SearchController {
 
     @PostMapping("/addUser")
     public BaseResponse addUserSimilarity(@RequestBody Map<String, Object> maps) {
+        // 本地用来进行加入/更新数据测试接口
         try {
             List<Double> similarity = JSONObject.parseArray(maps.get("similarity").toString(), Double.class);
             Integer id = Integer.valueOf(maps.get("userId").toString());
@@ -95,6 +97,7 @@ public class SearchController {
 
     @PostMapping("/searchByUserSimilarity")
     public BaseResponse searchByUserSimilarity(@RequestBody Map<String, Object> maps){
+        // 本地用来进行搜索数据测试接口
         try {
             List<Double> similarity = JSONObject.parseArray(maps.get("similarity").toString(), Double.class);
             Integer id = Integer.valueOf(maps.get("userId").toString());

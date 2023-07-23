@@ -24,6 +24,8 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
 
     @Override
     public List<Integer> searchByUserSimilarity(UserSimilarityInfo userSimilarityInfo, Integer k) {
+        // 输入UserSimilarityInfo（包括userId和similarity）和k（取多少个相似的）来获得结果
+        // 返回对应相似的userId数组
         RestTemplate restTemplate = restTemplateBuilder.build();
         String URL = "http://127.0.0.1:5000/SearchByUserSimilarity";
 

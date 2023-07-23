@@ -26,9 +26,11 @@ public class UserSearchDataServiceImpl implements UserSearchDataService {
 
     @Override
     public Boolean initialElasticSearch() throws Exception{
+        // 初始化创建index
         Boolean res = false;
         // set mapping for the index
         try {
+            // 确定es的index对应结构，userId(Integer)和similarity（dense_vector)
             String mappingPath = "/Users/chengdonghuang/Desktop/real_data/user_mappings.json";
             ElasticsearchClient client = clint.configClint();
             JsonpMapper mapper = client._transport().jsonpMapper();
@@ -48,6 +50,11 @@ public class UserSearchDataServiceImpl implements UserSearchDataService {
 
     @Override
     public Boolean addUserToElasticSearch(UserSimilarityInfo userSimilarityInfo) throws Exception{
+        // 用来add和update的，集成一体的，es里面没有的userId他就会新加入对应的UserSimilarityInfo（包括userId和similarity），
+        // 假如是有的，就会用当前传入的UserSimilarityInfo进行更新（即更新userId对应的similarity）
+
+        // 判断是否存在该id，使用userId作为es中的id
+        // 记得不要存全0的vector进去，这样会导致cos计算出现NaN的错误
         GetResponse<ObjectNode> response = esClient.get(g -> g
                         .index("user_es_data")
                         .id(String.valueOf(userSimilarityInfo.getUserId())),

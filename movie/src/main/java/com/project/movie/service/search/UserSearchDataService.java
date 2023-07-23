@@ -9,5 +9,4 @@ public interface UserSearchDataService {
 
     Boolean addUserToElasticSearch(UserSimilarityInfo userSimilarityInfo) throws Exception;
 
-
 }
