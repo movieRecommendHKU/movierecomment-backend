@@ -36,7 +36,7 @@ public class CollectController {
                     .setMsg("Collect successfully.")
                     .setContent(res);
         } else if (dbCollect) {
-            boolean rm = collectService.removeCollect(collect.getCollectId());
+            boolean rm = collectService.removeCollect(collect);
             log.error("Remove DB collect id = {}: {}.", collect.getCollectId(), rm);
             return new BaseResponse()
                     .setStatus(false)
@@ -59,7 +59,7 @@ public class CollectController {
 
     @PostMapping("/rm_collect")
     public BaseResponse removeCollect(@RequestBody Collect collect) {
-        boolean dbRemove = collectService.removeCollect(collect.getCollectId());
+        boolean dbRemove = collectService.removeCollect(collect);
         boolean kgRemove = graphService.deleteAction(
                 collect.getUserId(),
                 collect.getMovieId(),
@@ -102,7 +102,7 @@ public class CollectController {
                 new BaseResponse().setStatus(true).setMsg("Get collections. failed.");
     }
 
-    @GetMapping("/is_collected")
+    @PostMapping("/is_collected")
     public BaseResponse isCollected(@RequestBody Collect collect) {
         return collectService.isCollected(collect) ?
                 new BaseResponse().setStatus(true) :

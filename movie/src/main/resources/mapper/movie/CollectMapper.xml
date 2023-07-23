@@ -11,10 +11,10 @@
         VALUES (#{userId}, #{movieId})
     </insert>
 
-    <delete id="removeCollect" parameterType="Integer">
+    <delete id="removeCollect" parameterType="com.project.movie.domain.DO.Collect">
         DELETE
         FROM Collect
-        WHERE collectId = #{collectId}
+        WHERE userId = #{userId} and movieId = #{movieId}
     </delete>
 
 

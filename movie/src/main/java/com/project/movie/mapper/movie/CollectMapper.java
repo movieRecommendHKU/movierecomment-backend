@@ -9,7 +9,7 @@ import java.util.List;
 public interface CollectMapper {
     int collect(Collect collect);
 
-    int removeCollect(Integer collectId);
+    int removeCollect(Collect collect);
 
     List<Collect> getCollectionsByUser(Integer userId);
 

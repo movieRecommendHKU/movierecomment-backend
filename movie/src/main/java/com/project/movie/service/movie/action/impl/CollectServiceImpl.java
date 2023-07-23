@@ -25,8 +25,8 @@ public class CollectServiceImpl implements CollectService {
     }
 
     @Override
-    public boolean removeCollect(Integer collectId) {
-        return 1 == collectMapper.removeCollect(collectId);
+    public boolean removeCollect(Collect collect) {
+        return 1 == collectMapper.removeCollect(collect);
     }
 
     @Override

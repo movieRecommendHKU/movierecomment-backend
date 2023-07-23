@@ -10,7 +10,7 @@ import java.util.List;
 public interface CollectService {
     Collect collect(Collect collect);
 
-    boolean removeCollect(Integer collectId);
+    boolean removeCollect(Collect collect);
 
     PageInfo<Collect> getCollectionsByUser(Integer page, Integer pageSize, String order, Integer userId);
 
