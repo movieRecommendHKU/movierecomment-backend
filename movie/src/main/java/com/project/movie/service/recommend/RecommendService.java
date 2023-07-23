@@ -13,4 +13,6 @@ public interface RecommendService {
 
     Boolean insetRecommendLog(Integer userId, String log);
 
+    List<Integer> getUserRecommendLog(Integer userId);
+
 }

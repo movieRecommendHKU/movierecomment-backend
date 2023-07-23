@@ -24,10 +24,6 @@ public class RecommendController {
     @Autowired
     MovieService movieService;
 
-    @GetMapping("/get_all")
-    public BaseResponse getRecommends(@RequestBody User user) {
-        return null;
-    }
 
     /**
      * used in homepage popular part
@@ -41,6 +37,19 @@ public class RecommendController {
                                               @RequestParam Integer userId,
                                               @RequestParam String policy) {
         List<Integer> ids = recommendService.getMoviesByPolicy(userId, RecommenderEnum.valueOf(policy));
+        return idsToMovieVOPageInfo(pageNum, pageSize, orderBy, ids);
+    }
+
+    @GetMapping("/get_user_recommends")
+    public BaseResponse getRecommendsByUser(@RequestParam(defaultValue = "1") int pageNum,
+                                            @RequestParam(defaultValue = "5") int pageSize,
+                                            @RequestParam(required = false) String orderBy,
+                                            @RequestParam Integer userId) {
+        List<Integer> ids = recommendService.getUserRecommendLog(userId);
+        return idsToMovieVOPageInfo(pageNum, pageSize, orderBy, ids);
+    }
+
+    private BaseResponse idsToMovieVOPageInfo(int pageNum, int pageSize, String orderBy, List<Integer> ids) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         try {
             List<Movie> movieList = movieService.batchAssembleMovie(ids);

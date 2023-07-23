@@ -12,6 +12,8 @@ import java.util.*;
 @Slf4j
 public abstract class AbsRecommender implements InitializingBean {
 
+    static private int RECOMMEND_LIMIT = 200;
+
     static protected HashMap<RecommenderEnum, AbsRecommender> RECOMMENDERS = new HashMap<>();
 
     public static List<AbsRecommender> getRecommenders() {
@@ -60,7 +62,7 @@ public abstract class AbsRecommender implements InitializingBean {
         HashSet<Integer> ids = new HashSet<>();
         for (List<Integer> recommendList : recommendLists)
             ids.addAll(recommendList);
-        return ids.stream().toList();
+        return ids.stream().toList().stream().limit(RECOMMEND_LIMIT).toList();
     }
 
 }

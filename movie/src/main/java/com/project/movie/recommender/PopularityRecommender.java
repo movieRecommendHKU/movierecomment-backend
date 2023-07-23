@@ -13,47 +13,51 @@ import java.util.List;
 @Component
 public class PopularityRecommender extends AbsRecommender {
 
-	@Autowired
-	MovieService movieService;
+    @Autowired
+    MovieService movieService;
 
-	@Autowired
-	DislikeService dislikeService;
+    @Autowired
+    DislikeService dislikeService;
 
-	@Override
-	protected void register() {
-		RECOMMENDERS.put(RecommenderEnum.POPULARITY, this);
-	}
+    private static final int POPULAR_MOVIE_LIMIT = 100;
 
-	/**
-	 *
-	 * @param userId
-	 * @return films in this year
-	 */
-	@Override
-	protected List<MovieRecommend> recall(Integer userId) {
-		List<MovieRecommend> recallResult = movieService.getHotMoviesThisYear().stream()
-				.map(movie -> {
-					return new MovieRecommend()
-							.setMovieId(movie.getMovieId())
-							.setWeight(movie.getPopularity())
-							.setCount(1);
-				})
-				.toList();
-		return recallResult;
-	}
+    @Override
+    protected void register() {
+        RECOMMENDERS.put(RecommenderEnum.POPULARITY, this);
+    }
 
-	@Override
-	protected List<MovieRecommend> filter(List<MovieRecommend> recallResult, Integer userId) {
-		List<Integer> dislikes = dislikeService.getUserDislikes(userId).stream().map(Dislike::getMovieId).toList();
-		List<MovieRecommend> filterResult = recallResult.stream()
-				.filter(movie -> !dislikes.contains(movie.getMovieId()))
-				.toList();
-		return filterResult;
-	}
+    /**
+     * @param userId
+     * @return films in this year
+     */
+    @Override
+    protected List<MovieRecommend> recall(Integer userId) {
+        List<MovieRecommend> recallResult = movieService.getHotMoviesThisYear().stream()
+                .map(movie -> {
+                    return new MovieRecommend()
+                            .setMovieId(movie.getMovieId())
+                            .setWeight(movie.getPopularity())
+                            .setCount(1);
+                })
+                .toList();
+        return recallResult;
+    }
 
-	@Override
-	protected List<Integer> sort(List<MovieRecommend> filterResult) {
-		List<Integer> sortResult = filterResult.stream().map(MovieRecommend::getMovieId).toList();
-		return sortResult;
-	}
+    @Override
+    protected List<MovieRecommend> filter(List<MovieRecommend> recallResult, Integer userId) {
+        List<Integer> dislikes = dislikeService.getUserDislikes(userId).stream().map(Dislike::getMovieId).toList();
+        List<MovieRecommend> filterResult = recallResult.stream()
+                .filter(movie -> !dislikes.contains(movie.getMovieId()))
+                .toList();
+        return filterResult;
+    }
+
+    @Override
+    protected List<Integer> sort(List<MovieRecommend> filterResult) {
+        List<Integer> sortResult = filterResult.stream()
+                .map(MovieRecommend::getMovieId)
+                .limit(POPULAR_MOVIE_LIMIT)
+                .toList();
+        return sortResult;
+    }
 }
