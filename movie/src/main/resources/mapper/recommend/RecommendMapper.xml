@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.movie.mapper.recommend.RecommendMapper">
     <select id="getRecommendLog" resultType="String">
-        SELECT *
+        SELECT recommendations
         FROM RecommendLog
         WHERE userId = #{userId}
         ORDER BY recommendId DESC
