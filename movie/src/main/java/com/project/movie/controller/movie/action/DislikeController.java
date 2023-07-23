@@ -6,10 +6,7 @@ import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.movie.action.DislikeService;
 import com.project.movie.service.movie.kg.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/movie/action/dislike")
@@ -30,5 +27,12 @@ public class DislikeController {
         return dbRes && kgRes ?
                 new BaseResponse().setStatus(true).setContent("Dislike successfully.") :
                 new BaseResponse().setStatus(false).setContent("Dislike failed.");
+    }
+
+    @GetMapping("/is_dislike")
+    public BaseResponse isDislike(@RequestBody Dislike dislike) {
+        return dislikeService.isDislike(dislike) ?
+                new BaseResponse().setStatus(true) :
+                new BaseResponse().setStatus(false);
     }
 }

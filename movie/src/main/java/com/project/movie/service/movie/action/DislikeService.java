@@ -10,4 +10,6 @@ public interface DislikeService {
     Integer dislike(Dislike dislike);
 
     List<Dislike> getUserDislikes(Integer userId);
+
+    boolean isDislike(Dislike dislike);
 }

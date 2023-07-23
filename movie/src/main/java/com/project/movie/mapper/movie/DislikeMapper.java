@@ -11,4 +11,6 @@ public interface DislikeMapper {
     int dislike(Dislike dislike);
 
     List<Dislike> getDislikesByUser(Integer userId);
+
+    Dislike getDislike(Dislike dislike);
 }

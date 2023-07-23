@@ -19,7 +19,7 @@ public class PopularityRecommender extends AbsRecommender {
     @Autowired
     DislikeService dislikeService;
 
-    private static final int POPULAR_MOVIE_LIMIT = 100;
+    private static final int POPULAR_MOVIE_LIMIT = 20;
 
     @Override
     protected void register() {

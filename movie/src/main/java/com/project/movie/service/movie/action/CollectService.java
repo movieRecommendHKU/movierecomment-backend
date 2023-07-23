@@ -19,4 +19,6 @@ public interface CollectService {
      */
     List<Collect> getRecentCollectionsByUser(Integer userId);
 
+    boolean isCollected(Collect collect);
+
 }

@@ -25,5 +25,9 @@
         ORDER BY dislikeId DESC
     </select>
 
+    <select id="getDislike" parameterType="com.project.movie.domain.DO.Dislike" resultType="com.project.movie.domain.DO.Dislike">
+        SELECT * FROM Dislike WHERE userId = #{userId} and movieId = #{movieId}
+    </select>
+
 
 </mapper>

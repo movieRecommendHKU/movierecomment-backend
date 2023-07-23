@@ -101,4 +101,11 @@ public class CollectController {
                 new BaseResponse().setStatus(true).setMsg("Get collections.").setContent(res) :
                 new BaseResponse().setStatus(true).setMsg("Get collections. failed.");
     }
+
+    @GetMapping("/is_collected")
+    public BaseResponse isCollected(@RequestBody Collect collect) {
+        return collectService.isCollected(collect) ?
+                new BaseResponse().setStatus(true) :
+                new BaseResponse().setStatus(false);
+    }
 }

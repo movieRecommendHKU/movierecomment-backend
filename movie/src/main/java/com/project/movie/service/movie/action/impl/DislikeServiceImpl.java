@@ -26,4 +26,8 @@ public class DislikeServiceImpl implements DislikeService {
         return dislikeMapper.getDislikesByUser(userId);
     }
 
+    @Override
+    public boolean isDislike(Dislike dislike) {
+        return dislikeMapper.getDislike(dislike) != null;
+    }
 }

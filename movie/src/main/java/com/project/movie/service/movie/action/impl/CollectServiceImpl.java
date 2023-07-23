@@ -45,4 +45,9 @@ public class CollectServiceImpl implements CollectService {
     public List<Collect> getRecentCollectionsByUser(Integer userId) {
         return collectMapper.getRecentByUser(userId);
     }
+
+    @Override
+    public boolean isCollected(Collect collect) {
+        return collectMapper.getCollect(collect) != null;
+    }
 }

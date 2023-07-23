@@ -40,4 +40,8 @@
 <!--        ORDER BY userId, collectId DESC-->
 <!--    </select>-->
 
+    <select id="getCollect" parameterType="com.project.movie.domain.DO.Collect" resultType="com.project.movie.domain.DO.Collect">
+        SELECT * FROM Collect WHERE userId = #{userId} and movieId = #{movieId}
+    </select>
+
 </mapper>

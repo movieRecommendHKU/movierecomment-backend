@@ -15,4 +15,6 @@ public interface CollectMapper {
 
     List<Collect> getRecentByUser(Integer userId);
 
+    Collect getCollect(Collect collect);
+
 }
