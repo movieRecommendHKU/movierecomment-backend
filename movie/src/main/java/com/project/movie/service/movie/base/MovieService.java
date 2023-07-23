@@ -13,7 +13,7 @@ public interface MovieService {
 
     MovieVO assembleMovieVO(Movie movie);
 
-    List<MovieVO> batchAssembleMovie(List<Integer> movieIds);
+    List<Movie> batchAssembleMovie(List<Integer> movieIds);
 
     List<MovieSimilarity> getSimilarMovies(Integer movieId);
 

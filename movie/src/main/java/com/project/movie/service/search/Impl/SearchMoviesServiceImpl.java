@@ -39,14 +39,14 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
         jsonObject.put("k", k);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type","application/json");
+        headers.add("Content-Type", "application/json");
 
         HttpEntity<String> formEntity = new HttpEntity<String>(JSON.toJSONString(jsonObject), headers);
 
         ResponseEntity<String> stringResponseEntity = null;
         try {
             stringResponseEntity = restTemplate.postForEntity(URL, formEntity, String.class);
-            System.out.println("ResponseEntity----"+stringResponseEntity);
+            System.out.println("ResponseEntity----" + stringResponseEntity);
         } catch (RestClientException e) {
             e.printStackTrace();
         }
@@ -58,7 +58,8 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
-        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids);
+        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids).stream()
+                .map(movie -> movieService.assembleMovieVO(movie)).toList();
 
         return movies;
     }
@@ -73,14 +74,14 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
         jsonObject.put("k", k);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type","application/json");
+        headers.add("Content-Type", "application/json");
 
         HttpEntity<String> formEntity = new HttpEntity<String>(JSON.toJSONString(jsonObject), headers);
 
         ResponseEntity<String> stringResponseEntity = null;
         try {
             stringResponseEntity = restTemplate.postForEntity(URL, formEntity, String.class);
-            System.out.println("ResponseEntity----"+stringResponseEntity);
+            System.out.println("ResponseEntity----" + stringResponseEntity);
         } catch (RestClientException e) {
             e.printStackTrace();
         }
@@ -92,7 +93,8 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
-        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids);
+        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids).stream()
+                .map(movie -> movieService.assembleMovieVO(movie)).toList();
 
         return movies;
     }

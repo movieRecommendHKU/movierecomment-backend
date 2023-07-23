@@ -10,6 +10,7 @@ import com.project.movie.mapper.director.DirectorMapper;
 import com.project.movie.mapper.movie.MovieMapper;
 import com.project.movie.mapper.producer.ProducerMapper;
 import com.project.movie.service.movie.base.MovieService;
+import com.project.movie.utils.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +39,11 @@ public class MovieServiceImpl implements MovieService {
     public PageInfo<MovieVO> getMovieCompleteList(int pageNum, int pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         try {
-            List<Movie> moviesBaseInfo = movieMapper.getMovieList();
-            List<MovieVO> movies = moviesBaseInfo.stream().map(this::assembleMovieVO).toList();
-            return new PageInfo<>(movies);
+            List<Movie> movies = movieMapper.getMovieList();
+            PageInfo<Movie> moviePageInfo = new PageInfo<>(movies);
+            PageInfo<MovieVO> movieVOPageInfo = PageUtil.PageInfo2PageInfoVo(moviePageInfo);
+            movies.forEach(movie->movieVOPageInfo.getList().add(assembleMovieVO(movie)));
+            return movieVOPageInfo;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -66,9 +69,9 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieVO> batchAssembleMovie(List<Integer> movieIds) {
+    public List<Movie> batchAssembleMovie(List<Integer> movieIds) {
         List<Movie> movies = movieMapper.getMovieListByIds(movieIds);
-        return movies.stream().map(this::assembleMovieVO).toList();
+        return movies;
     }
 
     @Override

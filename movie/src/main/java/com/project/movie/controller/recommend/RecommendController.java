@@ -9,6 +9,7 @@ import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.movie.base.MovieService;
 import com.project.movie.service.recommend.RecommendService;
+import com.project.movie.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,20 +31,24 @@ public class RecommendController {
 
     /**
      * used in homepage popular part
+     *
      * @return List<Movie>
      */
     @GetMapping("/get_by_policy")
     public BaseResponse getRecommendsByPolicy(@RequestParam(defaultValue = "1") int pageNum,
-                                             @RequestParam(defaultValue = "5") int pageSize,
-                                             @RequestParam(required = false) String orderBy,
-                                             @RequestParam Integer userId,
-                                             @RequestParam String policy) {
+                                              @RequestParam(defaultValue = "5") int pageSize,
+                                              @RequestParam(required = false) String orderBy,
+                                              @RequestParam Integer userId,
+                                              @RequestParam String policy) {
+        List<Integer> ids = recommendService.getMoviesByPolicy(userId, RecommenderEnum.valueOf(policy));
         PageHelper.startPage(pageNum, pageSize, orderBy);
         try {
-            List<Integer> ids = recommendService.getMoviesByPolicy(userId, RecommenderEnum.valueOf(policy));
-            List<MovieVO> movies = movieService.batchAssembleMovie(ids);
-            return movies == null ? new BaseResponse().setStatus(false).setMsg("No recommend movies!")
-                    : new BaseResponse().setStatus(true).setMsg("Get movies success").setContent(new PageInfo<>(movies));
+            List<Movie> movieList = movieService.batchAssembleMovie(ids);
+            PageInfo<Movie> moviePageInfo = new PageInfo<>(movieList);
+            PageInfo<MovieVO> movieVOPageInfo = PageUtil.PageInfo2PageInfoVo(moviePageInfo);
+            movieList.forEach(movie -> movieVOPageInfo.getList().add(movieService.assembleMovieVO(movie)));
+
+            return new BaseResponse().setStatus(true).setMsg("Get movies success").setContent(movieVOPageInfo);
         } catch (Exception e) {
             return new BaseResponse().setStatus(false).setMsg("Get Movies Failure! ");
         }
