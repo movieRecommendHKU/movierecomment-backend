@@ -15,10 +15,10 @@
         UPDATE Rating
         SET rating=#{rating},
             timestamp=NOW()
-        WHERE ratingId = #{ratingId}
+        WHERE userId = #{userId} and movieId = #{movieId}
     </update>
 
-    <select id="getUserMovieRating" parameterType="Integer">
+    <select id="getUserMovieRating" parameterType="Integer" resultType="java.lang.Double">
         SELECT rating
         FROM Rating
         WHERE userId = #{userId}

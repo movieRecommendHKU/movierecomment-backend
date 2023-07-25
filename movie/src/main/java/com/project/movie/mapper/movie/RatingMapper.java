@@ -12,5 +12,5 @@ public interface RatingMapper {
 
     Integer changeRating(Rating rating);
 
-    double getUserMovieRating(Integer userId, Integer movieId);
+    Double getUserMovieRating(Integer userId, Integer movieId);
 }

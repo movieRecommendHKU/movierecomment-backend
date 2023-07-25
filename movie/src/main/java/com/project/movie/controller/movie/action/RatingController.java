@@ -42,8 +42,8 @@ public class RatingController {
     public BaseResponse getUserMovieRating(@RequestBody Rating rating) {
         Double rate = ratingService.getUserMovieRating(rating.getUserId(), rating.getMovieId());
 
-        return rate == null ?
-                new BaseResponse().setStatus(true).setContent("Rate successfully.") :
-                new BaseResponse().setStatus(false).setContent("Rate failed.");
+        return rate != null ?
+                new BaseResponse().setStatus(true).setMsg("Rate successfully.").setContent(rate) :
+                new BaseResponse().setStatus(false).setMsg("Rate failed.");
     }
 }
