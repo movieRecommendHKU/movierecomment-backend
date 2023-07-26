@@ -44,6 +44,6 @@ public class RatingController {
 
         return rate != null ?
                 new BaseResponse().setStatus(true).setMsg("Rate successfully.").setContent(rate) :
-                new BaseResponse().setStatus(false).setMsg("Rate failed.");
+                new BaseResponse().setStatus(false).setContent("Rate failed.");
     }
 }
