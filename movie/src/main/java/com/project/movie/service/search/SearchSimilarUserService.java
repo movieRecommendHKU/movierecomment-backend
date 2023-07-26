@@ -1,7 +1,6 @@
 package com.project.movie.service.search;
 
-import com.project.movie.domain.DO.UserSimilarityInfo;
-import com.project.movie.domain.VO.MovieVO;
+import com.project.movie.domain.DTO.UserSimilarityInfo;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;

@@ -1,13 +1,14 @@
 package com.project.movie.domain.common;
 
-import lombok.Data;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
+
 @Component
 public class Common {
-    public static double HIGH_RATING ;
+
+    public static double HIGH_RATING;
     public static double LOW_RATING;
 
     @Value("${common.rate.high}")

@@ -1,4 +1,4 @@
-package com.project.movie.domain.DO;
+package com.project.movie.domain.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,5 +13,5 @@ import java.util.List;
 @Accessors(chain = true)
 public class UserSimilarityInfo {
     private Integer userId;
-    private List<Double> similarity;
+    private List<Double> vector;
 }

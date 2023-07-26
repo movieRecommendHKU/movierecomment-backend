@@ -1,7 +1,7 @@
 package com.project.movie.controller.search;
 
 import com.alibaba.fastjson.JSONObject;
-import com.project.movie.domain.DO.UserSimilarityInfo;
+import com.project.movie.domain.DTO.UserSimilarityInfo;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.search.InitMovieSearchDataService;

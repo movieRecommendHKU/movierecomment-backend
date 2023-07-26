@@ -6,7 +6,7 @@ import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.json.JsonpMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.project.movie.config.EsUtilConfigClint;
-import com.project.movie.domain.DO.UserSimilarityInfo;
+import com.project.movie.domain.DTO.UserSimilarityInfo;
 import com.project.movie.service.search.UserSearchDataService;
 import jakarta.json.stream.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;

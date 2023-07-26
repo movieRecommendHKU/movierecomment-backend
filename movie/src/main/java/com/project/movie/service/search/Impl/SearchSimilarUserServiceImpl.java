@@ -2,8 +2,7 @@ package com.project.movie.service.search.Impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.project.movie.domain.DO.UserSimilarityInfo;
-import com.project.movie.domain.VO.MovieVO;
+import com.project.movie.domain.DTO.UserSimilarityInfo;
 import com.project.movie.service.search.SearchSimilarUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,7 +29,7 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
         String URL = "http://127.0.0.1:5000/SearchByUserSimilarity";
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("similarity", userSimilarityInfo.getSimilarity());
+        jsonObject.put("similarity", userSimilarityInfo.getVector());
         jsonObject.put("k", k);
 
         HttpHeaders headers = new HttpHeaders();
