@@ -20,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static com.project.movie.domain.flask.Flask.KEYWORDS_SEARCH;
+import static com.project.movie.domain.flask.Flask.SENTENCES_SEARCH;
+
 @Service
 public class SearchMoviesServiceImpl implements SearchMoviesService {
 
@@ -32,7 +35,6 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
     @Override
     public List<MovieVO> searchByKeywords(String input_words, Integer k) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        String URL = "http://127.0.0.1:5000/SearchByKeywords";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("string_keywords", input_words);
@@ -45,7 +47,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         ResponseEntity<String> stringResponseEntity = null;
         try {
-            stringResponseEntity = restTemplate.postForEntity(URL, formEntity, String.class);
+            stringResponseEntity = restTemplate.postForEntity(KEYWORDS_SEARCH, formEntity, String.class);
             System.out.println("ResponseEntity----" + stringResponseEntity);
         } catch (RestClientException e) {
             e.printStackTrace();
@@ -67,7 +69,6 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
     @Override
     public List<MovieVO> searchBySentences(String input_sentences, Integer k) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        String URL = "http://127.0.0.1:5000/SearchBySentences";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("string_sentences", input_sentences);
@@ -80,7 +81,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         ResponseEntity<String> stringResponseEntity = null;
         try {
-            stringResponseEntity = restTemplate.postForEntity(URL, formEntity, String.class);
+            stringResponseEntity = restTemplate.postForEntity(SENTENCES_SEARCH, formEntity, String.class);
             System.out.println("ResponseEntity----" + stringResponseEntity);
         } catch (RestClientException e) {
             e.printStackTrace();

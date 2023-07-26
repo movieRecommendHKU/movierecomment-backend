@@ -21,7 +21,7 @@ spring:
     uri: bolt://121.43.150.228:7687
 #    uri: bolt://localhost:7687
   elasticsearch:
-    rest:
+    uris: 39.107.230.31:9200
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
@@ -33,3 +33,9 @@ common:
   rate:
     low: 5
     high: 7.5
+
+flask:
+  function:
+    user: "http://39.107.230.31:5000/SearchByUserSimilarity"
+    keywords: "http://39.107.230.31:5000/SearchByKeywords"
+    sentences: "http://39.107.230.31:5000/SearchBySentences"

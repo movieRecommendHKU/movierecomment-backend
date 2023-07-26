@@ -2,11 +2,15 @@ package com.project.movie.service.search.Impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
-import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.elasticsearch.core.DeleteResponse;
+import co.elastic.clients.elasticsearch.core.GetResponse;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch.core.UpdateResponse;
 import co.elastic.clients.json.JsonpMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.project.movie.config.EsUtilConfigClint;
 import com.project.movie.domain.DTO.UserSimilarityInfo;
+import com.project.movie.domain.enums.UserSearchResult;
 import com.project.movie.service.search.UserSearchDataService;
 import jakarta.json.stream.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,31 +29,29 @@ public class UserSearchDataServiceImpl implements UserSearchDataService {
     private ElasticsearchClient esClient;
 
     @Override
-    public Boolean initialElasticSearch() throws Exception{
+    public UserSearchResult initialElasticSearch() throws Exception{
         // 初始化创建index
-        Boolean res = false;
         // set mapping for the index
         try {
             // 确定es的index对应结构，userId(Integer)和similarity（dense_vector)
             String mappingPath = "/Users/chengdonghuang/Desktop/real_data/user_mappings.json";
-            ElasticsearchClient client = clint.configClint();
-            JsonpMapper mapper = client._transport().jsonpMapper();
+            JsonpMapper mapper = esClient._transport().jsonpMapper();
             String mappings_str = new String(Files.readAllBytes(Paths.get(mappingPath)));
             JsonParser parser = mapper.jsonProvider()
                     .createParser(new StringReader(mappings_str));
-            client.indices()
+            esClient.indices()
                     .create(createIndexRequest -> createIndexRequest.index("user_es_data")
                             .mappings(TypeMapping._DESERIALIZER.deserialize(parser, mapper)));
-            res = true;
+            return UserSearchResult.Initial_User_In_ES;
         }catch (Exception e){
             e.printStackTrace();
             ;
         }
-        return res;
+        return UserSearchResult.Not_initial_User_In_ES;
     }
 
     @Override
-    public Boolean addUserToElasticSearch(UserSimilarityInfo userSimilarityInfo) throws Exception{
+    public UserSearchResult addUserToElasticSearch(UserSimilarityInfo userSimilarityInfo) throws Exception{
         // 用来add和update的，集成一体的，es里面没有的userId他就会新加入对应的UserSimilarityInfo（包括userId和similarity），
         // 假如是有的，就会用当前传入的UserSimilarityInfo进行更新（即更新userId对应的similarity）
 
@@ -69,6 +71,12 @@ public class UserSearchDataServiceImpl implements UserSearchDataService {
                     .doc(userSimilarityInfo),
                     UserSimilarityInfo.class
             );
+            System.out.println(response_update.result());
+            if (response_update.result().jsonValue().equals("updated")){
+                return UserSearchResult.User_Update_Success;
+            }else {
+                return UserSearchResult.User_Already_In_ES;
+            }
         }else {
             // add
             IndexResponse response_index = esClient.index(k -> k
@@ -76,8 +84,38 @@ public class UserSearchDataServiceImpl implements UserSearchDataService {
                     .id(String.valueOf(userSimilarityInfo.getUserId()))
                     .document(userSimilarityInfo)
             );
+            System.out.println(response_index.result());
+            if (response_index.result().jsonValue().equals("created")){
+                return UserSearchResult.User_Add_Success;
+            }else {
+                return UserSearchResult.User_Already_In_ES;
+            }
         }
-        return response.found();
+    }
+
+    @Override
+    public UserSearchResult deleteUserInElasticSearch(Integer userId) throws Exception{
+        GetResponse<ObjectNode> response = esClient.get(g -> g
+                        .index("user_es_data")
+                        .id(String.valueOf(userId)),
+                ObjectNode.class
+        );
+
+        if (response.found()) {
+            // update
+            DeleteResponse response_delete = esClient.delete(e -> e
+                            .index("user_es_data")
+                            .id(String.valueOf(userId))
+            );
+            System.out.println(response_delete.result());
+            if (response_delete.result().jsonValue().equals("deleted")){
+                return UserSearchResult.User_Delete_Success;
+            }else {
+                return UserSearchResult.User_Not_In_ES;
+            }
+        }else {
+            return UserSearchResult.User_Not_In_ES;
+        }
     }
 
 }
