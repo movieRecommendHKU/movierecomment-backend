@@ -23,7 +23,7 @@ public class RatingController {
 
     @PostMapping("/rate")
     public BaseResponse rate(@RequestBody Rating rating) {
-        boolean hasRated = null == ratingService.getUserMovieRating(rating.getUserId(), rating.getMovieId());
+        boolean hasRated = null != ratingService.getUserMovieRating(rating.getUserId(), rating.getMovieId());
         boolean res;
 
         if (hasRated) res = ratingService.changeRating(rating);
