@@ -65,7 +65,7 @@ public class UserPreferenceScheduler {
             log.info("insert genres: {}", insertGenres);
 
             unionSettingPreference(userId, genreScoreList);
-            normalize(genreScoreList);
+            genreVectorUtil.normalize(genreScoreList);
             log.info("After normalization: {}", genreScoreList);
             List<Double> preferenceVector = genreVectorUtil.convertGenreVector(genreScoreList);
             try {
@@ -96,13 +96,6 @@ public class UserPreferenceScheduler {
         });
     }
 
-    private void normalize(List<GenreScore> genreScoreList) {
-        double absSum = genreScoreList.stream()
-                .mapToDouble(GenreScore::getScore)
-                .map(Math::abs)
-                .sum();
-        genreScoreList.forEach(genreScore -> genreScore.setScore(genreScore.getScore() / absSum));
-    }
 
     private Date getLastMonth() {
         Calendar calendar = Calendar.getInstance();

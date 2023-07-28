@@ -38,4 +38,18 @@ public class GenreVectorUtil {
             }
         }
     }
+
+    public void normalize(List<GenreScore> genreScoreList) {
+        double maxScore = genreScoreList.stream()
+                .mapToDouble(GenreScore::getScore)
+                .max()
+                .orElse(0);
+        double minScore = genreScoreList.stream()
+                .mapToDouble(GenreScore::getScore)
+                .min()
+                .orElse(0);
+        double delta = maxScore - minScore;
+        final double minMax = delta == 0 ? 1 : delta;
+        genreScoreList.forEach(genreScore -> genreScore.setScore(genreScore.getScore() / minMax));
+    }
 }
