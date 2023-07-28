@@ -19,6 +19,8 @@ import java.util.Map;
 @RequestMapping("/Search")
 public class SearchController {
 
+    final private static Integer SEARCH_RETURN_NUMBER = 20;
+
     @Autowired
     InitMovieSearchDataService initMovieSearchDataService;
 
@@ -44,9 +46,9 @@ public class SearchController {
     }
 
     @PostMapping("/searchByWords")
-    public BaseResponse searchByWords(@RequestBody Map<String, Object> maps) {
+    public BaseResponse searchByWords(@RequestParam String input) {
         try {
-            List<MovieVO> movies = searchMoviesService.searchByKeywords(maps.get("string_keywords").toString(), Integer.valueOf(maps.get("k").toString()));
+            List<MovieVO> movies = searchMoviesService.searchByKeywords(input, SEARCH_RETURN_NUMBER);
             return movies == null ? new BaseResponse().setStatus(false).setMsg("No related movies!")
                     : new BaseResponse().setStatus(true).setMsg("Search Movies Success!").setContent(movies);
         }catch (Exception e){
@@ -56,9 +58,9 @@ public class SearchController {
     }
 
     @PostMapping("/searchBySentences")
-    public BaseResponse searchBySentences(@RequestBody Map<String, Object> maps) {
+    public BaseResponse searchBySentences(@RequestParam String input) {
         try {
-            List<MovieVO> movies = searchMoviesService.searchBySentences(maps.get("string_sentences").toString(), Integer.valueOf(maps.get("k").toString()));
+            List<MovieVO> movies = searchMoviesService.searchBySentences(input, SEARCH_RETURN_NUMBER);
             return movies == null ? new BaseResponse().setStatus(false).setMsg("No related movies!")
                     : new BaseResponse().setStatus(true).setMsg("Search Movies Success!").setContent(movies);
         }catch (Exception e){
