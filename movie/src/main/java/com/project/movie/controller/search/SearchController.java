@@ -1,6 +1,7 @@
 package com.project.movie.controller.search;
 
 import com.alibaba.fastjson.JSONObject;
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.domain.DTO.UserSimilarityInfo;
 import com.project.movie.domain.VO.MovieVO;
 import com.project.movie.domain.enums.UserSearchResult;
@@ -141,9 +142,9 @@ public class SearchController {
         try {
             Integer id = Integer.valueOf(maps.get("userId").toString());
             Integer k = Integer.valueOf(maps.get("k").toString());
-            List<Integer> user_Ids = searchSimilarUserService.searchByUserSimilarity(id,k);
-            return user_Ids == null ? new BaseResponse().setStatus(false).setMsg("No similar users!")
-                    : new BaseResponse().setStatus(true).setMsg("Search Similar Users Success!").setContent(user_Ids);
+            List<UserSimilarity> user_similarity = searchSimilarUserService.searchByUserSimilarity(id,k);
+            return user_similarity == null ? new BaseResponse().setStatus(false).setMsg("No similar users!")
+                    : new BaseResponse().setStatus(true).setMsg("Search Similar Users Success!").setContent(user_similarity);
         }catch (Exception e){
             e.printStackTrace();
             return new BaseResponse().setStatus(false).setMsg("Search Similar Users Fail!");

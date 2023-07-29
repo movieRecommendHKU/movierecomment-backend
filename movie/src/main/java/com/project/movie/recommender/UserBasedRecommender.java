@@ -1,7 +1,7 @@
 package com.project.movie.recommender;
 
 import com.project.movie.domain.DO.Dislike;
-import com.project.movie.domain.DO.UserSimilarity;
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
 import com.project.movie.service.account.SimilarityService;

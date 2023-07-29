@@ -1,5 +1,6 @@
 package com.project.movie.service.search;
 
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.domain.DTO.UserSimilarityInfo;
 import org.springframework.stereotype.Controller;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface SearchSimilarUserService {
 
     List<Double> getVectorByUserId(Integer userId) throws IOException;
-    List<Integer> searchByUserSimilarity(Integer userId, Integer k) throws IOException;
+    List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k) throws IOException;
 
 
 

@@ -5,6 +5,7 @@ import co.elastic.clients.elasticsearch.core.GetResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.service.search.SearchSimilarUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -45,7 +46,7 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
     }
 
     @Override
-    public List<Integer> searchByUserSimilarity(Integer userId, Integer k) throws IOException {
+    public List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k) throws IOException {
         // 输入UserSimilarityInfo（包括userId和similarity）和k（取多少个相似的）来获得结果
         // 返回对应相似的userId数组
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -72,10 +73,10 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
             body = stringResponseEntity.getBody();
         }
 
-        List<Integer> user_Ids = JSONObject.parseArray(body, Integer.class);
-        System.out.println(user_Ids);
+        List<UserSimilarity> user_similarity = JSONObject.parseArray(body, UserSimilarity.class);
+        System.out.println(user_similarity);
 
-        return user_Ids;
+        return user_similarity;
 
     }
 
