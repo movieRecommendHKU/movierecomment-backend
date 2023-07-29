@@ -1,35 +1,40 @@
 package com.project.movie.recommender;
 
 import com.project.movie.domain.DO.Dislike;
-import com.project.movie.domain.DO.UserSimilarity;
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.domain.DTO.MovieRecommend;
 import com.project.movie.domain.enums.RecommenderEnum;
-import com.project.movie.service.account.SimilarityService;
 import com.project.movie.service.movie.action.CollectService;
 import com.project.movie.service.movie.action.DislikeService;
+import com.project.movie.service.search.SearchSimilarUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.project.movie.recommender.AbsRecommender.RECOMMENDERS;
-
 @Component
+@Slf4j
 public class UserBasedRecommender extends AbsRecommender{
 	private static final int USER_BASED_RECALL_MOVIE_LIMIT = 100;
 
+	private static final int SIMILAR_USER_LIMIT = 20;
+
 //	private static final double USER_SIMILARITY_THRESHOLD = 0.6;
 
-	@Autowired
-	SimilarityService similarityService;
 
 	@Autowired
 	CollectService collectService;
 
 	@Autowired
 	DislikeService dislikeService;
+
+	@Autowired
+	SearchSimilarUserService searchSimilarUserService;
 
 	@Override
 	protected void register() {
@@ -39,7 +44,12 @@ public class UserBasedRecommender extends AbsRecommender{
 	@Override
 	protected List<MovieRecommend> recall(Integer userId) {
 		// filter similarity <= 0.6, done in sql
-		List<UserSimilarity> similarUsers = similarityService.getSimilarByUser(userId);
+		List<UserSimilarity> similarUsers= Collections.emptyList();
+		try {
+			searchSimilarUserService.searchByUserSimilarity(userId,SIMILAR_USER_LIMIT);
+		}catch (IOException e){
+			log.error("Get similar user failed, {}",e.getMessage());
+		}
 		// 20 similar users recent collected movies
 		List<MovieRecommend> recallResult = similarUsers.stream()
 				.flatMap(user -> collectService.getRecentCollectionsByUser(user.getUserId()).stream()
