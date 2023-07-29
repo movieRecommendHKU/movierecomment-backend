@@ -26,6 +26,11 @@ public class GenreVectorUtil {
         return vector;
     }
 
+    public synchronized Integer getIndexByGenre(Genre genre) {
+        initGenreMap();
+        return GENRE_ID_TO_VECTOR_INDEX.get(genre.getGenreName());
+    }
+
     private synchronized void initGenreMap() {
         if (GENRE_ID_TO_VECTOR_INDEX == null) {
             GENRE_ID_TO_VECTOR_INDEX = new HashMap<>();
@@ -50,6 +55,14 @@ public class GenreVectorUtil {
                 .orElse(0);
         double delta = maxScore - minScore;
         final double minMax = delta == 0 ? 1 : delta;
-        genreScoreList.forEach(genreScore -> genreScore.setScore(genreScore.getScore() / minMax));
+        genreScoreList.forEach(genreScore -> genreScore.setScore((genreScore.getScore() - minScore) / minMax));
+    }
+
+    public List<Double> normalizeVector(List<Double> vector) {
+        double maxScore = vector.stream().mapToDouble(Double::doubleValue).max().orElse(0.);
+        double minScore = vector.stream().mapToDouble(Double::doubleValue).min().orElse(0.);
+        double delta = maxScore - minScore;
+        final double minMax = delta == 0 ? 1 : delta;
+        return vector.stream().map(score -> (score - minScore) / minMax).toList();
     }
 }

@@ -1,4 +1,4 @@
-package com.project.movie.domain.DO;
+package com.project.movie.domain.DTO;
 
 import lombok.Data;
 import lombok.ToString;
@@ -8,8 +8,6 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 public class UserSimilarity {
-	private Integer id;
 	private Integer userId;
-	private Integer similarUserId;
 	private Double similarity;
 }

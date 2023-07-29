@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.movie.mapper.account.SimilarityMapper">
 
-    <select id="getSimilarUsers" parameterType="Integer" resultType="com.project.movie.domain.DO.UserSimilarity">
+    <select id="getSimilarUsers" parameterType="Integer" resultType="com.project.movie.domain.DTO.UserSimilarity">
         SELECT *
         FROM UserSimilarity
         WHERE userId = #{userId} and similarity > 0.6

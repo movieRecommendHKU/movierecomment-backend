@@ -1,7 +1,6 @@
 package com.project.movie.service.account.Impl;
 
-import com.project.movie.domain.DO.User;
-import com.project.movie.domain.DO.UserSimilarity;
+import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.mapper.account.SimilarityMapper;
 import com.project.movie.service.account.SimilarityService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package com.project.movie.mapper.account;
 
-import com.project.movie.domain.DO.User;
-import com.project.movie.domain.DO.UserSimilarity;
+import com.project.movie.domain.DTO.UserSimilarity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
