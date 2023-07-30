@@ -7,7 +7,7 @@ spring:
 #    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     hihikari:
-      max-lifetime: 1200000
+      max-lifetime: 120000000
 
   servlet:
     multipart:

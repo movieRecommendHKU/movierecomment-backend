@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.project.movie.domain.flask.Flask.KEYWORDS_SEARCH;
@@ -60,9 +61,10 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
-        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids).stream()
-                .map(movie -> movieService.assembleMovieVO(movie)).toList();
-
+        List<MovieVO> movies = new java.util.ArrayList<>(
+                movieService.batchAssembleMovie(movie_Ids).stream()
+                        .map(movie -> movieService.assembleMovieVO(movie)).toList());
+        movies.sort(Comparator.comparingInt(movie -> movie_Ids.indexOf(movie.getMovieId())));
         return movies;
     }
 
@@ -94,8 +96,10 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
-        List<MovieVO> movies = movieService.batchAssembleMovie(movie_Ids).stream()
-                .map(movie -> movieService.assembleMovieVO(movie)).toList();
+        List<MovieVO> movies = new java.util.ArrayList<>(
+                movieService.batchAssembleMovie(movie_Ids).stream()
+                        .map(movie -> movieService.assembleMovieVO(movie)).toList());
+        movies.sort(Comparator.comparingInt(movie -> movie_Ids.indexOf(movie.getMovieId())));
 
         return movies;
     }
