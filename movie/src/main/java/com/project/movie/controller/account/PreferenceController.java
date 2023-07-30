@@ -3,11 +3,13 @@ package com.project.movie.controller.account;
 import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DTO.Preference;
 import com.project.movie.domain.DTO.UserSimilarityInfo;
+import com.project.movie.domain.VO.PreferenceVO;
 import com.project.movie.domain.VO.UserLoginVO;
 import com.project.movie.domain.response.BaseResponse;
 import com.project.movie.service.account.AccountService;
 import com.project.movie.service.account.PreferenceService;
 import com.project.movie.service.movie.base.GenreService;
+import com.project.movie.service.recommend.RecommendService;
 import com.project.movie.service.search.SearchSimilarUserService;
 import com.project.movie.service.search.UserSearchDataService;
 import com.project.movie.utils.GenreVectorUtil;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,6 +39,9 @@ public class PreferenceController {
 
     @Autowired
     private GenreVectorUtil genreVectorUtil;
+
+    @Autowired
+    private RecommendService recommendService;
 
 
     @GetMapping("/get_preference")
@@ -90,6 +96,51 @@ public class PreferenceController {
                 new BaseResponse()
                         .setStatus(false)
                         .setMsg("Batch delete user preference failed.");
+    }
+
+    @PostMapping("/modify")
+    public BaseResponse modify(@RequestBody PreferenceVO preferenceVO) {
+        Integer userId = preferenceVO.getUserId();
+        boolean addRes = preferenceVO.getAddGenres().isEmpty() ||
+                preferenceService.batchInsert(new Preference()
+                        .setGenres(preferenceVO.getAddGenres())
+                        .setUserId(userId));
+        boolean delRes = preferenceVO.getDeleteGenres().isEmpty() ||
+                preferenceService.batchDelete(new Preference()
+                        .setGenres(preferenceVO.getDeleteGenres())
+                        .setUserId(userId));
+        boolean res = addRes && delRes;
+
+
+        List<Double> vector = searchSimilarUserService.getVectorByUserId(preferenceVO.getUserId());
+        vector = vector.isEmpty() ? genreVectorUtil.initGenreVector() : vector;
+        for (Genre genre : preferenceVO.getAddGenres()) {
+            int index = genreVectorUtil.getIndexByGenre(genre);
+            vector.set(index, vector.get(index) + 1);
+        }
+        for (Genre genre : preferenceVO.getDeleteGenres()) {
+            int index = genreVectorUtil.getIndexByGenre(genre);
+            vector.set(index, vector.get(index) - 1);
+        }
+        vector = genreVectorUtil.normalizeVector(vector);
+        try {
+            userSearchDataService.addUserToElasticSearch(new UserSimilarityInfo(preferenceVO.getUserId(), vector));
+        } catch (Exception e) {
+            log.error("Modify user preference vector failed. error: {}", e.getMessage());
+        }
+
+        List<Integer> recommendations = recommendService.getAllMovies(userId);
+        String[] recommendationsArray = recommendations.stream().map(Object::toString).toArray(String[]::new);
+        String recommendLog = String.join(",", recommendationsArray);
+        res = res && recommendService.insetRecommendLog(userId, String.join(",", recommendLog));
+
+        return res ?
+                new BaseResponse()
+                        .setStatus(true)
+                        .setMsg("Modify user preference successfully.") :
+                new BaseResponse()
+                        .setStatus(false)
+                        .setMsg("Modify user preference failed.");
     }
 
     @GetMapping("/get_all_genres")

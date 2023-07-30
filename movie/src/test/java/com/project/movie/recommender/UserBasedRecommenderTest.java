@@ -13,7 +13,7 @@ public class UserBasedRecommenderTest {
 	public void test() {
 		AbsRecommender recommender = AbsRecommender.getRecommenderByProtocol(RecommenderEnum.USER_BASED);
 		assert recommender != null;
-		List<Integer> movieId = AbsRecommender.recommend(1, recommender);
+		List<Integer> movieId = AbsRecommender.recommend(16, recommender);
 		System.out.println(movieId);
 	}
 

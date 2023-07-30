@@ -3,12 +3,14 @@ package com.project.movie.utils;
 import com.project.movie.domain.DO.Genre;
 import com.project.movie.domain.DTO.GenreScore;
 import com.project.movie.service.movie.base.GenreService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@Slf4j
 public class GenreVectorUtil {
 
     @Autowired
@@ -23,6 +25,20 @@ public class GenreVectorUtil {
             int index = GENRE_ID_TO_VECTOR_INDEX.get(genreScore.getGenreName());
             vector.set(index, genreScore.getScore());
         });
+        return vector;
+    }
+
+    private synchronized Integer getVectorSize() {
+        initGenreMap();
+        log.debug("GENRE_ID_TO_VECTOR_INDEX size {}", GENRE_ID_TO_VECTOR_INDEX.size());
+        return GENRE_ID_TO_VECTOR_INDEX.size();
+    }
+
+    public List<Double> initGenreVector() {
+        List<Double> vector = new ArrayList<>();
+        for (int i = 0; i < getVectorSize(); i++) {
+            vector.add(0.);
+        }
         return vector;
     }
 

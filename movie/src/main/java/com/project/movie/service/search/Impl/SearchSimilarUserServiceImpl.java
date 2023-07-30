@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.project.movie.domain.DTO.UserSimilarity;
 import com.project.movie.service.search.SearchSimilarUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -18,11 +19,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.project.movie.domain.flask.Flask.USER_SEARCH;
 
 @Service
+@Slf4j
 public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
 
     @Autowired
@@ -32,21 +35,26 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
     private ElasticsearchClient esClient;
 
     @Override
-    public List<Double> getVectorByUserId(Integer userId) throws IOException {
-        GetResponse<ObjectNode> response = esClient.get(g -> g
-                        .index("user_es_data")
-                        .id(String.valueOf(userId)),
-                ObjectNode.class
-        );
-        List<Double> vector = new ArrayList<>();
-        if (response.source() != null) {
-            vector = JSONObject.parseArray(response.source().get("vector").toString(), Double.class);
+    public List<Double> getVectorByUserId(Integer userId) {
+        try {
+            GetResponse<ObjectNode> response = esClient.get(g -> g
+                            .index("user_es_data")
+                            .id(String.valueOf(userId)),
+                    ObjectNode.class
+            );
+            List<Double> vector = new ArrayList<>();
+            if (response.source() != null) {
+                vector = JSONObject.parseArray(response.source().get("vector").toString(), Double.class);
+            }
+            return vector;
+        } catch (IOException e) {
+            log.error("getVectorByUserId failed, userId {}, error: {}", userId, e.getMessage());
+            return Collections.emptyList();
         }
-        return vector;
     }
 
     @Override
-    public List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k) throws IOException {
+    public List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k) {
         // 输入UserSimilarityInfo（包括userId和similarity）和k（取多少个相似的）来获得结果
         // 返回对应相似的userId数组
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -56,14 +64,14 @@ public class SearchSimilarUserServiceImpl implements SearchSimilarUserService {
         jsonObject.put("k", k);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type","application/json");
+        headers.add("Content-Type", "application/json");
 
         HttpEntity<String> formEntity = new HttpEntity<String>(JSON.toJSONString(jsonObject), headers);
 
         ResponseEntity<String> stringResponseEntity = null;
         try {
             stringResponseEntity = restTemplate.postForEntity(USER_SEARCH, formEntity, String.class);
-            System.out.println("ResponseEntity----"+stringResponseEntity);
+            System.out.println("ResponseEntity----" + stringResponseEntity);
         } catch (RestClientException e) {
             e.printStackTrace();
         }

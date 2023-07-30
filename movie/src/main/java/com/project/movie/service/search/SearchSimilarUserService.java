@@ -10,8 +10,8 @@ import java.util.List;
 @Controller
 public interface SearchSimilarUserService {
 
-    List<Double> getVectorByUserId(Integer userId) throws IOException;
-    List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k) throws IOException;
+    List<Double> getVectorByUserId(Integer userId);
+    List<UserSimilarity> searchByUserSimilarity(Integer userId, Integer k);
 
 
 
