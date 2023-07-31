@@ -4,12 +4,14 @@ import com.project.movie.controller.account.AccountController;
 import com.project.movie.domain.DO.User;
 import com.project.movie.mapper.account.AccountMapper;
 import com.project.movie.service.movie.kg.GraphService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Slf4j
 public class AccountServiceTest {
     @Autowired
     AccountMapper accountMapper;
@@ -21,6 +23,7 @@ public class AccountServiceTest {
         User user = new User().setUserName("celiaf").setEmail("celiaf@qq.com").setPassword("pswd");
         accountMapper.insertAccount(user);
         boolean kgRes = graphService.insertUser(user);
+        log.info("User id: {}", user.getUserId());
         Assertions.assertNotNull(user.getUserId());
         Assertions.assertTrue(kgRes);
     }

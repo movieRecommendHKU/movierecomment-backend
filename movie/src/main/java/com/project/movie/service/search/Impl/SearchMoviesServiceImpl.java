@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
+        if (movie_Ids.isEmpty()) return Collections.emptyList();
         List<MovieVO> movies = new java.util.ArrayList<>(
                 movieService.batchAssembleMovie(movie_Ids).stream()
                         .map(movie -> movieService.assembleMovieVO(movie)).toList());
@@ -96,6 +98,7 @@ public class SearchMoviesServiceImpl implements SearchMoviesService {
 
         List<Integer> movie_Ids = JSONObject.parseArray(body, Integer.class);
         System.out.println(movie_Ids);
+        if (movie_Ids.isEmpty()) return Collections.emptyList();
         List<MovieVO> movies = new java.util.ArrayList<>(
                 movieService.batchAssembleMovie(movie_Ids).stream()
                         .map(movie -> movieService.assembleMovieVO(movie)).toList());
